@@ -3,7 +3,7 @@
 	  	<transition name="form-fade" mode="in-out">
 	  		<section class="form_contianer" v-show="showLogin">
 		  		<div class="manage_tip">
-		  			<p>elm后台管理系统</p>
+		  			<p>供应链后台管理系统</p>
 		  		</div>
 		    	<el-form :model="loginForm" :rules="rules" ref="loginForm">
 					<el-form-item prop="username">
@@ -16,9 +16,9 @@
 				    	<el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
 				  	</el-form-item>
 				</el-form>
-				<p class="tip">温馨提示：</p>
+				<!-- <p class="tip">温馨提示：</p>
 				<p class="tip">未登录过的新用户，自动注册</p>
-				<p class="tip">注册过的用户可凭账号密码登录</p>
+				<p class="tip">注册过的用户可凭账号密码登录</p> -->
 	  		</section>
 	  	</transition>
   	</div>
@@ -48,7 +48,7 @@
 		},
 		mounted(){
 			this.showLogin = true;
-			if (!this.adminInfo.id) {
+			if (!this.adminInfo.username) {
     			this.getAdminData()
     		}
 		},
@@ -60,13 +60,17 @@
 			async submitForm(formName) {
 				this.$refs[formName].validate(async (valid) => {
 					if (valid) {
-						const res = await login({user_name: this.loginForm.username, password: this.loginForm.password})
-						if (res.status == 1) {
+						const res = await login({account: this.loginForm.username, password: this.loginForm.password})
+						if (res.data) {
 							this.$message({
 		                        type: 'success',
 		                        message: '登录成功'
-		                    });
-							this.$router.push('manage')
+							});
+							this.$store.commit('saveAdminInfo',{
+								avatar: this.$store.state.adminInfo.avatar,
+								username: this.loginForm.username
+							})
+							this.$router.push('/manage')
 						}else{
 							this.$message({
 		                        type: 'error',
@@ -86,12 +90,12 @@
 		},
 		watch: {
 			adminInfo: function (newValue){
-				if (newValue.id) {
+				if (newValue.username) {
 					this.$message({
                         type: 'success',
                         message: '检测到您之前登录过，将自动登录'
                     });
-					this.$router.push('manage')
+					this.$router.push('/manage')
 				}
 			}
 		}

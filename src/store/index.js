@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 const state = {
 	adminInfo: {
-		avatar: 'default.jpg'
+		avatar: 'default.jpg',
+		username: ''
 	},
 }
 
@@ -19,8 +20,8 @@ const mutations = {
 const actions = {
 	async getAdminData({commit}){
 		try{
-			const res = await getAdminInfo()
-			if (res.status == 1) {
+			let res = state.adminInfo
+			if (res.username !== '') {
 				commit('saveAdminInfo', res.data);
 			}else{
 				throw new Error(res)

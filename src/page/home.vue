@@ -31,7 +31,7 @@
 	import headTop from '../components/headTop'
 	import tendency from '../components/tendency' 
 	import dtime from 'time-formater'
-	import {apiCount, userCount, orderCount, apiAllCount, getUserCount, getOrderCount, adminDayCount, adminCount} from '@/api/getData'
+	// import {apiCount, userCount, orderCount, apiAllCount, getUserCount, getOrderCount, adminDayCount, adminCount} from '@/api/getData'
     export default {
     	data(){
     		return {
@@ -66,41 +66,41 @@
         },
     	methods: {
     		async initData(){
-    			const today = dtime().format('YYYY-MM-DD')
-    			Promise.all([apiCount(today), userCount(today), orderCount(today), adminDayCount(today), apiAllCount(), getUserCount(), getOrderCount(), adminCount()])
-    			.then(res => {
-    				this.apiCount = res[0].count;
-    				this.userCount = res[1].count;
-    				this.orderCount = res[2].count;
-                    this.adminCount = res[3].count;
-                    this.allApiCount = res[4].count;
-                    this.allUserCount = res[5].count;
-                    this.allOrderCount = res[6].count;
-                    this.allAdminCount = res[7].count;
-    			}).catch(err => {
-    				console.log(err)
-    			})
+    			// const today = dtime().format('YYYY-MM-DD')
+    			// Promise.all([apiCount(today), userCount(today), orderCount(today), adminDayCount(today), apiAllCount(), getUserCount(), getOrderCount(), adminCount()])
+    			// .then(res => {
+    			// 	this.apiCount = res[0].count;
+    			// 	this.userCount = res[1].count;
+    			// 	this.orderCount = res[2].count;
+                //     this.adminCount = res[3].count;
+                //     this.allApiCount = res[4].count;
+                //     this.allUserCount = res[5].count;
+                //     this.allOrderCount = res[6].count;
+                //     this.allAdminCount = res[7].count;
+    			// }).catch(err => {
+    			// 	console.log(err)
+    			// })
     		},
     		async getSevenData(){
-    			const apiArr = [[],[],[],[]];
-    			this.sevenDay.forEach(item => {
-    				apiArr[0].push(apiCount(item))
-    				apiArr[1].push(userCount(item))
-    				apiArr[2].push(orderCount(item))
-                    apiArr[3].push(adminDayCount(item))
-    			})
-    			const promiseArr = [...apiArr[0], ...apiArr[1], ...apiArr[2], ...apiArr[3]]
-    			Promise.all(promiseArr).then(res => {
-    				const resArr = [[],[],[],[]];
-					res.forEach((item, index) => {
-						if (item.status == 1) {
-							resArr[Math.floor(index/7)].push(item.count)
-						}
-					})
-					this.sevenDate = resArr;
-    			}).catch(err => {
-    				console.log(err)
-    			})
+    			// const apiArr = [[],[],[],[]];
+    			// this.sevenDay.forEach(item => {
+    			// 	apiArr[0].push(apiCount(item))
+    			// 	apiArr[1].push(userCount(item))
+    			// 	apiArr[2].push(orderCount(item))
+                //     apiArr[3].push(adminDayCount(item))
+    			// })
+    			// const promiseArr = [...apiArr[0], ...apiArr[1], ...apiArr[2], ...apiArr[3]]
+    			// Promise.all(promiseArr).then(res => {
+    			// 	const resArr = [[],[],[],[]];
+				// 	res.forEach((item, index) => {
+				// 		if (item.status == 1) {
+				// 			resArr[Math.floor(index/7)].push(item.count)
+				// 		}
+				// 	})
+				// 	this.sevenDate = resArr;
+    			// }).catch(err => {
+    			// 	console.log(err)
+    			// })
     		}
     	}
     }

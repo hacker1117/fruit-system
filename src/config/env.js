@@ -9,6 +9,7 @@
 let baseUrl = ''; 
 let routerMode = 'history';
 let baseImgPath = 'http://images.cangdu.org/';
+let basicUrl = 'http://47.94.134.88:8080/echuxianshengshop2'
 
 if (process.env.NODE_ENV == 'development') {
 	//baseUrl = 'http://cangdu.org:8001';
@@ -19,5 +20,6 @@ if (process.env.NODE_ENV == 'development') {
 export {
 	baseUrl,
 	routerMode,
-	baseImgPath
+	baseImgPath,
+	basicUrl
 }

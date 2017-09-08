@@ -6,9 +6,9 @@ Vue.use(Router)
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
 const manage = r => require.ensure([], () => r(require('@/page/manage')), 'manage');
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
-const addShop = r => require.ensure([], () => r(require('@/page/addShop')), 'addShop');
-const addGoods = r => require.ensure([], () => r(require('@/page/addGoods')), 'addGoods');
-const userList = r => require.ensure([], () => r(require('@/page/userList')), 'userList');
+const receiptCount = r => require.ensure([], () => r(require('@/page/receiptCount')), 'receiptCount');
+const bomManage = r => require.ensure([], () => r(require('@/page/bomManage')), 'bomManage');
+const classification = r => require.ensure([], () => r(require('@/page/classification')), 'classification');
 const shopList = r => require.ensure([], () => r(require('@/page/shopList')), 'shopList');
 const foodList = r => require.ensure([], () => r(require('@/page/foodList')), 'foodList');
 const orderList = r => require.ensure([], () => r(require('@/page/orderList')), 'orderList');
@@ -17,9 +17,9 @@ const visitor = r => require.ensure([], () => r(require('@/page/visitor')), 'vis
 const newMember = r => require.ensure([], () => r(require('@/page/newMember')), 'newMember');
 const uploadImg = r => require.ensure([], () => r(require('@/page/uploadImg')), 'uploadImg');
 const vueEdit = r => require.ensure([], () => r(require('@/page/vueEdit')), 'vueEdit');
-const adminSet = r => require.ensure([], () => r(require('@/page/adminSet')), 'adminSet');
 const sendMessage = r => require.ensure([], () => r(require('@/page/sendMessage')), 'sendMessage');
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
+const addBom = r => require.ensure([], () => r(require('@/page/addBom')), 'bomManage');
 
 const routes = [
 	{
@@ -35,17 +35,25 @@ const routes = [
 			component: home,
 			meta: [],
 		},{
-			path: '/addShop',
-			component: addShop,
-			meta: ['添加数据', '添加商铺'],
+			path: '/receiptCount',
+			component: receiptCount,
+			meta: ['生产执行管理', '资源分配管理', '销售订单汇总'],
 		},{
-			path: '/addGoods',
-			component: addGoods,
-			meta: ['添加数据', '添加商品'],
+			path: '/bomManage',
+			component: bomManage,
+			meta: ['生产执行管理', '资源分配管理', 'BOM管理'],
 		},{
-			path: '/userList',
-			component: userList,
-			meta: ['数据管理', '用户列表'],
+			path: '/classification',
+			component: classification,
+			meta: ['生产执行管理', '资源分配管理', '货品分类'],
+		},{
+			path: '/addBom',
+			component: addBom,
+			meta: ['生产执行管理', '资源分配管理', 'BOM管理'],
+		},{
+			path: '/addBom/:pid',
+			component: addBom,
+			meta: ['生产执行管理', '资源分配管理', 'BOM管理'],
 		},{
 			path: '/shopList',
 			component: shopList,
@@ -78,10 +86,6 @@ const routes = [
 			path: '/vueEdit',
 			component: vueEdit,
 			meta: ['编辑', '文本编辑'],
-		},{
-			path: '/adminSet',
-			component: adminSet,
-			meta: ['设置', '管理员设置'],
 		},{
 			path: '/sendMessage',
 			component: sendMessage,

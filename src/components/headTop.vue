@@ -3,9 +3,10 @@
 
 		<el-breadcrumb separator="/">
 			<el-breadcrumb-item :to="{ path: '/manage' }">首页</el-breadcrumb-item>
-			<el-breadcrumb-item v-for="(item, index) in $route.meta" key="index">{{item}}</el-breadcrumb-item>
+			<el-breadcrumb-item v-for="(item, index) in $route.meta" key="index" :key="item.id">{{item}}</el-breadcrumb-item>
 		</el-breadcrumb>
 		<el-dropdown @command="handleCommand" menu-align='start'>
+			<span style="float: left;height: 36px; line-height: 36px;"><h3>您好,{{adminInfo.username}}&nbsp;&nbsp;&nbsp;</h3></span>
 			<img :src="baseImgPath + adminInfo.avatar" class="avator">
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item command="home">首页</el-dropdown-item>
@@ -23,11 +24,11 @@
     export default {
     	data(){
     		return {
-    			baseImgPath,
+				baseImgPath
     		}
     	},
     	created(){
-    		if (!this.adminInfo.id) {
+    		if (!this.adminInfo.username) {
     			this.getAdminData()
     		}
     	},

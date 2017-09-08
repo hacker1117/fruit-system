@@ -8,21 +8,32 @@
                 style="width: 100%">
                 <el-table-column
                   type="index"
-                  width="100">
+                  label="序号">
                 </el-table-column>
                 <el-table-column
                   property="registe_time"
-                  label="注册日期"
-                  width="220">
+                  label="分类ID">
                 </el-table-column>
                 <el-table-column
                   property="username"
-                  label="用户姓名"
-                  width="220">
+                  label="分类名称">
                 </el-table-column>
                 <el-table-column
-                  property="city"
-                  label="注册地址">
+                label="操作">
+                <template scope="scope">
+                    <el-button
+                    size="mini"
+                    @click="handleEdit(scope.$index, scope.row)">增加</el-button>
+                    <el-button
+                    size="mini"
+                    @click="handleDelete(scope.$index, scope.row)">修改</el-button>
+                    <el-button
+                    size="mini"
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    <el-button
+                    size="mini"
+                    @click="handleDelete(scope.$index, scope.row)">添加二级分类</el-button>
+                </template>
                 </el-table-column>
             </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
@@ -30,7 +41,54 @@
                   @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
-                  :page-size="20"
+                  :page-size="5"
+                  layout="total, prev, pager, next"
+                  :total="count">
+                </el-pagination>
+            </div>
+            <el-row style="margin-top: 20px;margin-bottom: 20px;">
+                <el-col :span="24">
+                    <h1>当前分类:蔬菜</h1>
+                </el-col>
+            </el-row>
+            <el-table
+                :data="tableData"
+                highlight-current-row
+                style="width: 100%;margin-top:20px;">
+                <el-table-column
+                  type="index"
+                  label="序号">
+                </el-table-column>
+                <el-table-column
+                  property="registe_time"
+                  label="下级组ID">
+                </el-table-column>
+                <el-table-column
+                  property="username"
+                  label="下级分类">
+                </el-table-column>
+                <el-table-column
+                  property="username"
+                  label="归属分类">
+                </el-table-column>
+                <el-table-column
+                label="操作">
+                <template scope="scope">
+                    <el-button
+                    size="mini"
+                    @click="handleDelete(scope.$index, scope.row)">修改</el-button>
+                    <el-button
+                    size="mini"
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                </template>
+                </el-table-column>
+            </el-table>
+            <div class="Pagination" style="text-align: left;margin-top: 10px;">
+                <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-size="5"
                   layout="total, prev, pager, next"
                   :total="count">
                 </el-pagination>
@@ -64,7 +122,7 @@
                 }],
                 currentRow: null,
                 offset: 0,
-                limit: 20,
+                limit: 5,
                 count: 0,
                 currentPage: 1,
             }

@@ -1,10 +1,11 @@
 import fetch from '@/config/fetch'
+import axio from '@/config/axio'
 
 /**
  * 登陆
  */
 
-export const login = data => fetch('/admin/login', data, 'POST');
+export const login = data => axio('/user/login', data, 'POST');
 
 /**
  * 退出
@@ -226,3 +227,40 @@ export const getAddressById = address_id => fetch('/v1/addresse/' + address_id);
  */
 
 export const getUserCity = () => fetch('/v1/user/city/count');
+
+
+/**
+ * 获取BOM列表
+ */
+
+export const getBomAll = (pageNum, pageSize) => axio('/Bom/findAllParent/',{pageNum, pageSize});
+
+/**
+ * 根据id获取BOM组
+ */
+
+export const getBomGroup = procode => axio('/Bom/queryOneGroup/' + procode);
+
+/**
+ * 根据name模糊查询商品列表
+ */
+
+export const getProList = (pName,pageNum, pageSize) => axio('/Bom/queryProductByName/' + pName ,{pageNum, pageSize})
+
+/**
+ * 根据id获取BOM组
+ */
+
+export const getBomDetail = procode => axio('/Bom/findSingleBom/' + procode);
+
+/**
+ * 插入Bom父节点
+ */
+
+export const insertParentBom = data => axio('/Bom/createParentBom', data, 'POST');
+
+/**
+ * 删除Bom节点（父子均可）
+ */
+
+export const deleteBom = procode => axio('/Bom/deleteBom/' + procode, {}, 'DELETE');
