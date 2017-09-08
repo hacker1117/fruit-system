@@ -7,15 +7,11 @@
                 highlight-current-row
                 style="width: 100%">
                 <el-table-column
-                  type="index"
-                  label="序号">
-                </el-table-column>
-                <el-table-column
-                  property="registe_time"
+                  property="categorycode"
                   label="分类ID">
                 </el-table-column>
                 <el-table-column
-                  property="username"
+                  property="categoryname"
                   label="分类名称">
                 </el-table-column>
                 <el-table-column
@@ -99,7 +95,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getUserList, getUserCount} from '@/api/getData'
+    import {getCategoryAll} from '@/api/getData'
     export default {
         data(){
             return {
@@ -136,13 +132,9 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getUserCount();
-                    if (countData.status == 1) {
-                        this.count = countData.count;
-                    }else{
-                        throw new Error('获取数据失败');
-                    }
-                    this.getUsers();
+                    const countData = await getCategoryAll(1,10);
+                    console.log(countData.data)
+                    this.tableData = countData.data.data.list
                 }catch(err){
                     console.log('获取数据失败', err);
                 }

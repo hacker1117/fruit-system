@@ -20,6 +20,7 @@ const vueEdit = r => require.ensure([], () => r(require('@/page/vueEdit')), 'vue
 const sendMessage = r => require.ensure([], () => r(require('@/page/sendMessage')), 'sendMessage');
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
 const addBom = r => require.ensure([], () => r(require('@/page/addBom')), 'bomManage');
+const receiptDetails = r => require.ensure([], () => r(require('@/page/receiptDetails')), 'receiptCount');
 
 const routes = [
 	{
@@ -37,6 +38,10 @@ const routes = [
 		},{
 			path: '/receiptCount',
 			component: receiptCount,
+			meta: ['生产执行管理', '资源分配管理', '销售订单汇总'],
+		},{
+			path: '/receiptDetails/:id',
+			component: receiptDetails,
 			meta: ['生产执行管理', '资源分配管理', '销售订单汇总'],
 		},{
 			path: '/bomManage',

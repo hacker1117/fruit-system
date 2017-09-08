@@ -264,3 +264,27 @@ export const insertParentBom = data => axio('/Bom/createParentBom', data, 'POST'
  */
 
 export const deleteBom = procode => axio('/Bom/deleteBom/' + procode, {}, 'DELETE');
+
+/**
+ * 获取销售订单列表
+ */
+
+export const getOrderAll = (pageNum, pageSize) => axio('/order/findAll',{pageNum, pageSize});
+
+/**
+ * 查询销售订单
+ */
+
+export const queryOrders = (orderID, status, startTime, endTime, pageNum, pageSize) => axio('/order/queryOrders',{orderID, status, startTime, endTime,pageNum, pageSize});
+
+/**
+ * 获取销售订单详情
+ */
+
+export const getOrderDetails = id => axio('/order/queryOrderListByOrderId/' + id);
+
+/**
+ * 获取货品分类列表
+ */
+
+export const getCategoryAll = (pageNum, pageSize) => axio('/productCategory/queryAllParent',{pageNum, pageSize});
