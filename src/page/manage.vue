@@ -8,41 +8,37 @@
 						<template slot="title"><i class="el-icon-document"></i>A库进销存管理</template>
 						<el-submenu style="background-color: #009a76;" index="7">
 							<template slot="title"><i class="el-icon-plus"></i>采购订单管理</template>
-							<el-menu-item style="background-color: #009a76;" index="/addShop">采购单</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">采购汇总单</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">供应商管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">货品管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/purchaseOrder">采购单</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/purchaseSum">采购汇总单</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/supplier">供应商管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/goods">货品管理</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="8">
 							<template slot="title"><i class="el-icon-plus"></i>库存管理</template>
-							<el-menu-item style="background-color: #009a76;" index="/addShop">入库单</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">虚拟库</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">库存余额表</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">损耗管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/stockInA">入库单</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/virtualStock">虚拟库</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/stockBalanceA">库存余额表</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/waste">损耗管理</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="9">
 							<template slot="title"><i class="el-icon-plus"></i>出库管理</template>
-							<el-menu-item style="background-color: #009a76;" index="/addShop">出库单管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/stockOutA">出库单管理</el-menu-item>
 						</el-submenu>
 					</el-submenu>
 					<el-submenu style="background-color: #009a76;" index="3">
 						<template slot="title"><i class="el-icon-document"></i>B库进销存管理</template>
 						<el-submenu style="background-color: #009a76;" index="10">
 							<template slot="title"><i class="el-icon-plus"></i>入库管理</template>
-							<el-menu-item style="background-color: #009a76;" index="/addShop">入库单管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">入库清单管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">运输损耗</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">采购单管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/stockIn">入库单管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/stockInList">入库清单管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/transportWaste">运输损耗</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/purchase">采购单管理</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="11">
 							<template slot="title"><i class="el-icon-plus"></i>库存管理</template>
-							<el-menu-item style="background-color: #009a76;" index="/addShop">日常损耗管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">分库管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">库存余额表</el-menu-item>
-						</el-submenu>
-						<el-submenu style="background-color: #009a76;" index="12">
-							<template slot="title"><i class="el-icon-plus"></i>出库管理</template>
-							<el-menu-item style="background-color: #009a76;" index="/addShop">出库单管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/dailyWaste">日常损耗管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/branchHouse">分库管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/stockBalance">库存余额表</el-menu-item>
 						</el-submenu>
 					</el-submenu>
 					<el-submenu style="background-color: #009a76;" index="4">
@@ -50,13 +46,13 @@
 						<el-submenu style="background-color: #009a76;" index="13">
 							<template slot="title"><i class="el-icon-plus"></i>资源分配管理</template>
 							<el-menu-item style="background-color: #009a76;" index="/receiptCount">销售订单汇总</el-menu-item>
-							<el-menu-item style="background-color: #009a76;" index="/addGoods">生产计划汇总</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/plannation">生产计划汇总</el-menu-item>
 							<el-menu-item style="background-color: #009a76;" index="/bomManage">BOM管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;" index="/classification">货品分类</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="14">
 							<template slot="title"><i class="el-icon-plus"></i>生产单元分配</template>
-							<el-menu-item style="background-color: #009a76;" index="/addShop">出库单</el-menu-item>
+							<el-menu-item style="background-color: #009a76;" index="/stockOut">出库单</el-menu-item>
 						</el-submenu>
 					</el-submenu>
 					<el-submenu  style="background-color: #009a76;" index="5">

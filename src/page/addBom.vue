@@ -11,17 +11,17 @@
         <el-form :model="form">
             <el-form-item label="料件名称" :label-width="formLabelWidth">
 				<el-autocomplete
-				v-model="form.name"
+				v-model="form.proname"
 				:fetch-suggestions="querySearchAsync"
 				placeholder="请输入名称模糊搜索"
-				@select="handleSelect"
+				@select="handleAddChild"
 				></el-autocomplete>
             </el-form-item>
             <el-form-item label="规格" :label-width="formLabelWidth">
-            <el-input style="width: 195px" v-model="form.standard" auto-complete="off"></el-input>
+            <el-input style="width: 195px" v-model="form.prostandard" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="单位" :label-width="formLabelWidth">
-            <el-select v-model="form.unit" placeholder="请选择计量单位">
+            <el-select v-model="form.prounite" placeholder="请选择计量单位">
                 <el-option label="个" value="个"></el-option>
                 <el-option label="克" value="克"></el-option>
             </el-select>
@@ -105,7 +105,7 @@
 
 <script>
  	import headTop from '@/components/headTop'
-    import { getBomDetail, getProList, getBomGroup, insertParentBom } from '@/api/getData'
+    import {getBomDetail, getProList, getBomGroup, insertParentBom, insertChildBom} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -119,13 +119,16 @@
                 dropDownList: ['个', '克'],
                 dialogFormVisible: false,
                 form: {
-                    name: '',
-					unit: '',
-					standard: '',
-                    count: ''
+					procode: '',
+                    proname: '',
+					prounite: '',
+					prostandard: '',
+					proid: '',
+					count: '',
+					level: ''
                 },
 				formLabelWidth: '120px',
-				pid: this.$route.params.pid,
+				pid: '',
 				childList:[],
 				isDisabled: false
     		}
@@ -134,37 +137,15 @@
     		headTop,
 		},
     	created(){
-    		if (this.$route.query.restaurant_id) {
-    			this.restaurant_id = this.$route.query.restaurant_id;
-    		}else{
-    			this.restaurant_id = Math.ceil(Math.random()*10);
-    			// this.$msgbox({
-		        //   title: '提示',
-		        //   message: '添加食品需要选择一个商铺，先去就去选择商铺吗？',
-		        //   showCancelButton: true,
-		        //   confirmButtonText: '确定',
-		        //   cancelButtonText: '取消',
-		        //   beforeClose: (action, instance, done) => {
-		        //     if (action === 'confirm') {
-		        //       this.$router.push('/shopList');
-		        //       done();
-		        //     } else {
-		        //     	this.$message({
-				//             type: 'info',
-				//             message: '取消'
-				//         });
-		        //       	done();
-		        //     }
-		        //   }
-		        // })
-			}
     		this.initData();
     	},
     	computed: {},
     	methods: {
     		async initData(){
+				console.log('id:',this.$route.params.pid)
     			try{
-					if(this.pid){
+					if(this.$route.params.pid){
+						this.pid = this.$route.params.pid
 						const bomDetail = await getBomDetail(this.pid)
 						// if(bomDetail.data.code === '1111'){
 							this.prostandard = bomDetail.data.data.prostandard
@@ -201,7 +182,7 @@
 					})
 					return false
 				}
-				if(!this.pid){
+				if(this.pid === ''){
 					this.$confirm('录入的BOM信息将会被提交, 是否继续?', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -221,23 +202,34 @@
 			},
 			async insertBom() {
 				const insertStatus = await insertParentBom({
-					proname: this.proname,
-					prostandard: this.prostandard,
-					prounite: this.prounite
+					proname: this.form.proname,
+					prostandard: this.form.prostandard,
+					prounite: this.form.prounite,
 				})
 				console.log(insertStatus)
-				this.$message({
-					type: 'success',
-					message: '提交成功!'
-				})
-				this.isDisabled = true
-				this.dialogFormVisible = true
+				if(insertStatus.data.code === '1111'){
+					this.$message({
+						type: 'success',
+						message: '提交成功!'
+					})
+					this.pid = insertStatus.data.data
+					this.isDisabled = true
+					this.dialogFormVisible = true
+				}else {
+					this.$message({
+						type: 'warning',
+						message: '提交失败，请重新添加!'
+					})
+				}
 			},
 			initForm() {
-				this.form.name = ''
-				this.form.standard = ''
-				this.form.unit = ''
+				this.form.procode = ''
+				this.form.proname = ''
+				this.form.prounite = ''
+				this.form.prostandard = ''
+				this.form.proid = ''
 				this.form.count = ''
+				this.form.level = ''
 			},
 			async querySearchAsync(queryString, cb) {
 				let results=[]
@@ -254,10 +246,40 @@
 				}, 3000 * Math.random());
 			},
 			handleSelect(item) {
-				
+				console.log(item)
+				this.form.proid = item.proid
 			},
-			confirmBomChild() {
-				this.bomChildList.push(this.form)
+			handleAddChild(){
+				this.$confirm('确认新增该料件吗?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.confirmBomChild()
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					}) 
+					return false         
+				})
+			},
+			async confirmBomChild() {
+				const insertStatus = await insertChildBom({
+					proname: this.proname,
+					prostandard: this.prostandard,
+					prounite: this.prounite,
+					proid: this.form.proid,
+					pid: this.pid,
+					count: this.form.count
+				})
+				let childData = insertStatus.data.data
+				childData.level = 2
+				console.log('child:',childData)
+				this.bomChildList.push(childData)
+				this.dialogFormVisible = false
+				this.initForm()
+				console.log(this.pid)
 			}
 		}
     }

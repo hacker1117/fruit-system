@@ -2,73 +2,64 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+        <el-row style="margin-top: 20px;">
+			<el-col :span="8">
+				单据编号：&nbsp;{{receiptData[0].orderid}}
+			</el-col>
+            <el-col :span="8">
+				单据日期：&nbsp;{{receiptData[0].ordertime}}
+			</el-col>
+            <el-col :span="8">
+				默认仓库：&nbsp;{{receiptData[0].defaultrepository}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				采购员：&nbsp;{{receiptData[0].buyhuman}}
+			</el-col>
+            <el-col :span="8">
+				采购类型：&nbsp;{{receiptData[0].buytype}}
+			</el-col>
+            <el-col :span="8">
+				采购部门：&nbsp;{{receiptData[0].buydepartment}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				发运方式：&nbsp;{{receiptData[0].sendtype}}
+			</el-col>
+		</el-row>
 		<el-table 
 			:data="receiptData"
 			stripe
-			style="width: 100%;text-align:left; margin-top: 20px;">
+			style="width: 840px;text-align:left; margin-top: 20px;">
 			<el-table-column
-			prop="orderdetailid" width="120px"
-			label="订单明细ID">
-			</el-table-column>
-			<el-table-column
-			prop="productid" width="120px"
-			label="商品ID">
-			</el-table-column>
-			<el-table-column
-			prop="productfullname" width="120px"
+			prop="goodsname" width="120px"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="ordersid" width="120px"
-			label="订单ID">
+			prop="storagecode" width="120px"
+			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="ordersno" width="120px"
-			label="订单号">
+			prop="storagetype" width="120px"
+			label="商品分类">
 			</el-table-column>
 			<el-table-column
-			prop="memberprice" width="120px"
-			label="成交价格">
+			prop="prostandered" width="120px"
+			label="规格型号">
 			</el-table-column>
 			<el-table-column
-			prop="count" width="120px"
+			prop="prounite" width="120px"
+			label="单位">
+			</el-table-column>
+			<el-table-column
+			prop="repositories" width="120px"
+			label="仓库">
+			</el-table-column>
+			<el-table-column
+			prop="pronumber" width="120px"
 			label="数量">
-			</el-table-column>
-			<el-table-column
-			prop="buytype" width="120px"
-			label="购买类型">
-			</el-table-column>
-			<el-table-column
-			prop="productcode" width="120px"
-			label="商品编号">
-			</el-table-column>
-			<el-table-column
-			prop="brandid" width="120px"
-			label="商品品牌ID">
-			</el-table-column>
-			<el-table-column
-			prop="shopinfoid" width="120px"
-			label="店铺ID">
-			</el-table-column>
-			<el-table-column
-			prop="customerid" width="120px"
-			label="购买人ID">
-			</el-table-column>
-			<el-table-column
-			prop="stockupdate" width="120px"
-			label="预计出货日">
-			</el-table-column>
-			<el-table-column
-			prop="sku" width="120px"
-			label="SKU订货号">
-			</el-table-column>
-            <el-table-column
-			prop="discount" width="120px"
-			label="折扣比例">
-			</el-table-column>
-			<el-table-column
-			prop="createtime" width="120px"
-			label="订单生效时间">
 			</el-table-column>
 		</el-table>
 		<el-row style="margin-top:20px;">
@@ -82,7 +73,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getOrderDetails} from '@/api/getData'
+    import {getStockInListDetails} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -93,7 +84,8 @@
 				input: '',
 				city: {},
                 receiptData: [],
-                id: this.$route.params.id
+                id: this.$route.params.id,
+                headData:{}
     		}
     	},
     	components: {
@@ -105,16 +97,16 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getOrderDetails(this.id)
-					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+                    const dataReceiptDetails = await getStockInListDetails(this.id)
+                    console.log('re: ',dataReceiptDetails.data.data)
+                    this.receiptData.push(dataReceiptDetails.data.data)
     			}catch(err){
     				console.log(err);
     			}
             },
             handleBack(){
                 this.$destroy()
-                this.$router.push('/receiptCount')
+                this.$router.push('/stockInList')
             }
 		}
     }

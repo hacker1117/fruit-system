@@ -233,7 +233,7 @@ export const getUserCity = () => fetch('/v1/user/city/count');
  * 获取BOM列表
  */
 
-export const getBomAll = (pageNum, pageSize) => axio('/Bom/findAllParent/',{pageNum, pageSize});
+export const getBomAll = (pageNum = 1, pageSize = 10) => axio('/Bom/findAllParent/',{pageNum, pageSize});
 
 /**
  * 根据id获取BOM组
@@ -245,7 +245,7 @@ export const getBomGroup = procode => axio('/Bom/queryOneGroup/' + procode);
  * 根据name模糊查询商品列表
  */
 
-export const getProList = (pName,pageNum, pageSize) => axio('/Bom/queryProductByName/' + pName ,{pageNum, pageSize})
+export const getProList = (pName, pageNum = 1, pageSize = 10) => axio('/Bom/queryProductByName/' + pName ,{pageNum, pageSize})
 
 /**
  * 根据id获取BOM组
@@ -260,6 +260,12 @@ export const getBomDetail = procode => axio('/Bom/findSingleBom/' + procode);
 export const insertParentBom = data => axio('/Bom/createParentBom', data, 'POST');
 
 /**
+ * 插入Bom父节点
+ */
+
+export const insertChildBom = data => axio('/Bom/createChildBom', data, 'POST');
+
+/**
  * 删除Bom节点（父子均可）
  */
 
@@ -269,13 +275,13 @@ export const deleteBom = procode => axio('/Bom/deleteBom/' + procode, {}, 'DELET
  * 获取销售订单列表
  */
 
-export const getOrderAll = (pageNum, pageSize) => axio('/order/findAll',{pageNum, pageSize});
+export const getOrderAll = (pageNum = 1, pageSize = 10) => axio('/order/findAll',{pageNum, pageSize});
 
 /**
  * 查询销售订单
  */
 
-export const queryOrders = (orderID, status, startTime, endTime, pageNum, pageSize) => axio('/order/queryOrders',{orderID, status, startTime, endTime,pageNum, pageSize});
+export const queryOrders = (orderID, status, startTime, endTime, pageNum = 1, pageSize = 10) => axio('/order/queryOrders',{orderID, status, startTime, endTime,pageNum, pageSize});
 
 /**
  * 获取销售订单详情
@@ -284,7 +290,157 @@ export const queryOrders = (orderID, status, startTime, endTime, pageNum, pageSi
 export const getOrderDetails = id => axio('/order/queryOrderListByOrderId/' + id);
 
 /**
+ * 获取出库单列表
+ */
+
+export const getStockOutAll = (pageNum = 1, pageSize = 10) => axio('/Outputorderb/findAll',{pageNum, pageSize});
+
+/**
+ * 获取出库单详情头部
+ */
+
+export const getStockOutDetailsHead = data => axio('/Outputorderb/queryOutPutHead/' + data);
+
+/**
+ * 获取出库单详情表格
+ */
+
+export const getStockOutDetailsDetail = data => axio('/Outputorderb/queryOutPutDetail/' + data);
+
+/**
+ * 查询出库单
+ */
+
+export const queryStockOut = (customerID, startDate, endDate, pageNum = 1, pageSize = 10) => axio('/Outputorderb/findBySth',{customerID, startDate, endDate,pageNum, pageSize});
+
+/**
  * 获取货品分类列表
  */
 
-export const getCategoryAll = (pageNum, pageSize) => axio('/productCategory/queryAllParent',{pageNum, pageSize});
+export const getCategoryAll = (pageNum = 1, pageSize = 10) => axio('/productCategory/queryAllParent',{pageNum, pageSize});
+
+/**
+ * 查询货品子分类列表
+ */
+
+export const getCategoryChild = data => axio('/productCategory/findChildByID/' + data);
+
+/**
+ * 删除货品分类（父子均可）
+ */
+
+export const deleteCategory = data => axio('/productCategory/deleteById/' + data);
+
+/**
+ * 获取生产计划列表
+ */
+
+export const getPlanAll = (pageNum = 1, pageSize = 10) => axio('/handlingorder/findbyUnion', {pageNum, pageSize});
+
+/**
+ * 按批次查询生产计划列表
+ */
+
+export const queryPlanByBatch = (bid, pageNum = 1, pageSize = 10) => axio('/handlingorder/findUnionByBatch/' + bid,{pageNum, pageSize});
+
+/**
+ * 按条件查询生产计划列表
+ */
+
+export const queryPlan = (orderID, status, startTime, endTime, pageNum = 1, pageSize = 10) => axio('/handlingorder/findUnionBySth', {orderID, status, startTime, endTime, pageNum, pageSize});
+
+/**
+ * 获取生产批次列表
+ */
+
+export const getBatchAll = () => axio('/handlingorder/findAllBatches');
+
+/**
+ * 获取入库单列表
+ */
+
+export const getStockInAll = (bpid = '',ordertime = '', inrepotype = '', handleperson = '', pageNum = 1, pageSize = 10) => axio('/repositoryb/selectTinstoragebByCondition',{bpid, ordertime, inrepotype, handleperson, pageNum, pageSize});
+
+/**
+ * 获取入库单详情
+ */
+
+export const getStockInDetails = orderId => axio('/innetstorageb/get' , {orderId});
+
+/**
+ * 获取入库清单列表
+ */
+
+export const getStockInListAll = (pageNum = 1, pageSize = 10) => axio('/innetstorageb/getTotal',{pageNum, pageSize});
+
+/**
+ * 获取入库清淡详情
+ */
+
+export const getStockInListDetails = orderid => axio('/innetstorageb/get/'+ orderid );
+
+/**
+ * 查询入库清单
+ */
+
+export const queryStockInList = (orderid, ordertime, orderofcreatehuman, defaultrepository, marklogo, buyhuman, buytype, buydepartment, pageNum = 1, pageSize = 10) => axio('/innetstorageb/get/',{orderid, ordertime, orderofcreatehuman, defaultrepository, marklogo, buyhuman, buytype, buydepartment, pageNum, pageSize});
+
+/**
+ * 获取运输损耗列表
+ */
+
+export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getTotal',{pageNum, pageSize});
+
+/**
+ * 获取运输损耗详情
+ */
+
+export const getTransportWasteDetails = orderid => axio('/innetstorageb/get/'+ orderid );
+
+/**
+ * 查询运输损耗清单
+ */
+
+export const queryTransportWasteList = (procode, pname, wasteproductcode, createhuman, reporttime, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, createhuman, reporttime, pageNum , pageSize});
+
+/**
+ * 获取采购单（A库）列表
+ */
+
+export const getPurchaseOrderAll = (pageNum = 1, pageSize = 10) => axio('/purchaseordera/selectTodaysData',{pageNum, pageSize});
+
+/**
+ * 获取供应商列表
+ */
+
+export const getSupplierAll = (pageNum = 1, pageSize = 10) => axio('/supplierorder/findAllSupplierorder',{pageNum, pageSize});
+
+/**
+ * 获取货品列表
+ */
+
+export const getGoodsAll = (pageNum = 1, pageSize = 10) => axio('/productmanager/findAllProduct',{pageNum, pageSize});
+
+/**
+ * 获取入库单列表
+ */
+
+export const getStockInaAll = (pageNum = 1, pageSize = 10) => axio('/storageordera/findAllData',{pageNum, pageSize});
+
+/**
+ * 获取库存余额列表
+ */
+
+export const getStockBalanceaAll = (pageNum = 1, pageSize = 10) => axio('/abalancerepository/selectAllDatas',{pageNum, pageSize});
+
+/**
+ * 获取损耗列表
+ */
+
+export const getWasteAll = (pageNum = 1, pageSize = 10) => axio('/wastageordera/findAllWorder',{pageNum, pageSize});
+
+/**
+ * 获取损耗列表
+ */
+
+export const getStockOutaAll = (pageNum = 1, pageSize = 10) => axio('/outputordera/ findTodayOutput',{pageNum, pageSize});

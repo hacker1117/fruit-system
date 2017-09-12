@@ -1,87 +1,74 @@
 <template>
     <div>
         <head-top></head-top>
-		<div class="fruit-content" style="overflow:auto;">
+		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-			<el-col :span="20">
-				出库日期：&nbsp;&nbsp;从
-				<el-date-picker
-				v-model="value1"
-				type="date"
-				size="small"
-				format="yyyy-MM-dd"
-				placeholder="选择日期">
-				</el-date-picker>
-				&nbsp;至
-				<el-date-picker
-				v-model="value2"
-				type="date"
-				size="small"
-				format="yyyy-MM-dd"
-				placeholder="选择日期">
-				</el-date-picker>
-			</el-col>
+            <el-col :span="2" style="text-align:right;">商品编号：</el-col>
+			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">商品名称：</el-col>
+			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">损耗商品码：</el-col>
+			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">制单员：</el-col>
+			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
-			<el-col :span="2" style="text-aligh:right;">客户ID</el-col>
-			<el-col :span="6"><el-input v-model="input" placeholder="请输入内容"></el-input></el-col>
-			<el-col :span="16"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+            <el-col :span="2" style="text-align:right;">报损时间：</el-col>
+			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+		</el-row>
+		<el-row>
+			<el-col :span="24">
+                <el-button style="float: right;" @click="handleSearch" type="primary">清空</el-button>
+                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
+                <el-button style="float: right;" @click="handleInsert" type="primary">新增</el-button>
+            </el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
 			stripe
-			style="text-align:left; margin-bottom:20px;">
+			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="ordercode" width="120px"
-			label="销售单号">
+			prop="orderid" width="120px"
+			label="订单号">
 			</el-table-column>
 			<el-table-column
-			prop="outputrepositorycode" width="120px"
-			label="出库编码">
+			prop="procode" width="120px"
+			label="商品编号">
 			</el-table-column>
 			<el-table-column
-			prop="outdate" width="120px"
-			label="出库日期">
+			prop="pname" width="120px"
+			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="operatedate" width="120px"
-			label="订单生成日期">
+			prop="unite" width="120px"
+			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="repositorycode" width="120px"
-			label="仓库编码">
+			prop="wasteproductcode" width="120px"
+			label="损耗商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="acceptanceFormID" width="120px"
-			label="验收单">
+			prop="productcount" width="120px"
+			label="数量">
 			</el-table-column>
 			</el-table-column>
 			<el-table-column
-			prop="consigneeName" width="120px"
-			label="收货人名称">
+			prop="wastetype" width="120px"
+			label="损耗类别">
 			</el-table-column>
 			<el-table-column
-			prop="customer" width="120px"
-			label="客户ID">
+			prop="unincludeelse" width="120px"
+			label="其他">
 			</el-table-column>
 			<el-table-column
-			prop="acceptanceHuman" width="120px"
-			label="验收员">
-			</el-table-column>
-			<el-table-column
-			prop="sendtype" width="120px"
-			label="所属区域">
-			</el-table-column>
-			<el-table-column
-			prop="addressDetail" width="120px"
-			label="详细地址">
-			</el-table-column>
-			<el-table-column
-			label="操作" fixed="right" width="120px">
+			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
 				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+				@click="handleEdit(scope.$index, scope.row)">修改</el-button>
+				<el-button
+				size="small"
+				@click="handleEdit(scope.$index, scope.row)">删除</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
@@ -91,7 +78,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockOutAll, queryStockOut} from '@/api/getData'
+    import {getTransportWasteAll, queryTransportWasteList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -112,7 +99,7 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockOutAll(1,10)
+					const dataReceipt = await getTransportWasteAll()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
     			}catch(err){
@@ -122,17 +109,17 @@
 			handleEdit(index,row) {
 				console.log(index,row)
 				this.$destroy()
-				this.$router.push('/stockOutDetails/'+ row.outputrepositorycode)
+				this.$router.push('/transportWasteDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				let sTime = this.formatter(this.value1)
-				let eTime = this.formatter(this.value2)
-				console.log(sTime)
-				console.log(eTime)
-				console.log(this.input)
-				const resData = await queryStockOut(this.input,sTime,eTime,1,10)
-				this.receiptData = resData.data.data.list
-				console.log(resData.data)
+				// let sTime = this.formatter(this.value1)
+				// let eTime = this.formatter(this.value2)
+				// console.log(sTime)
+				// console.log(eTime)
+				// console.log(this.input)
+				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
+				// this.receiptData = resData.data.data.list
+				// console.log(resData.data)
 			},
 			formatter(date){
 				console.log(date.getMonth())

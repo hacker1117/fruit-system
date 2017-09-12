@@ -3,6 +3,15 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
+			<el-col :span="2" style="text-aligh:right;">批次:</el-col>
+			<el-col :span="6">
+				<el-select v-model="batchID" placeholder="请选择批次">
+					<el-option v-for="(item,index) in batchData" :key="item.id" :label="item" :value="item"></el-option>
+				</el-select>
+			</el-col>
+			<el-col :span="16"><el-button style="float: right;" @click="handleBatchSearch" type="primary">按批次查询</el-button></el-col>
+		</el-row>
+		<el-row style="margin-top: 20px;">
 			<el-col :span="4">
 				<el-radio-group v-model="radio2">
 					<el-radio :label="1">未完成</el-radio>
@@ -31,75 +40,91 @@
 		<el-row>
 			<el-col :span="2" style="text-aligh:right;">订单号：</el-col>
 			<el-col :span="6"><el-input v-model="input" placeholder="请输入内容"></el-input></el-col>
-			<el-col :span="16"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+			<el-col :span="16"><el-button style="float: right;" @click="handleSearch" type="primary">条件查询</el-button></el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="ordersid" width="120px"
+			prop="orderdetailid" width="120px"
+			label="订单明细ID">
+			</el-table-column>
+			<el-table-column
+			prop="ordersId" width="120px"
 			label="订单ID">
 			</el-table-column>
 			<el-table-column
 			prop="customerid" width="120px"
-			label="客户ID">
+			label="购买人ID">
 			</el-table-column>
 			<el-table-column
-			prop="shopinfoid" width="120px"
-			label="店铺ID">
+			prop="proid" width="120px"
+			label="商品ID">
 			</el-table-column>
-			<el-table-column
-			prop="totalordersno" width="120px"
-			label="总订单号">
-			</el-table-column>
-			<el-table-column
+            <el-table-column
 			prop="ordersno" width="120px"
 			label="订单号">
 			</el-table-column>
 			<el-table-column
-			prop="createtime" width="120px"
-			label="订单生成时间">
+			prop="level" width="120px"
+			label="级别">
 			</el-table-column>
 			<el-table-column
-			prop="updatetime" width="120px"
-			label="订单修改时间">
+			prop="productcode" width="120px"
+			label="商品编号">
 			</el-table-column>
 			<el-table-column
-			prop="address" width="120px"
-			label="收货详细地址">
+			prop="brand" width="120px"
+			label="商品品牌">
 			</el-table-column>
 			<el-table-column
-			prop="consignee" width="120px"
-			label="收货人">
+			prop="proname" width="120px"
+			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="bestsenddate" width="120px"
-			label="最佳配送时间">
+			prop="pname" width="120px"
+			label="商品归属">
 			</el-table-column>
 			<el-table-column
-			prop="sendtype" width="120px"
-			label="配送方式">
+			prop="pitposition" width="120px"
+			label="坑位">
 			</el-table-column>
 			<el-table-column
-			prop="comments" width="120px"
-			label="订单附言">
+			prop="streamno" width="120px"
+			label="流水号">
 			</el-table-column>
 			<el-table-column
-			prop="ordersstate" width="120px"
-			label="订单状态">
+			prop="uname" width="120px"
+			label="分拣员">
 			</el-table-column>
 			<el-table-column
-			prop="ordersource" width="120px"
-			label="订单来源">
+			prop="isComplete" width="120px"
+			label="状态">
 			</el-table-column>
 			<el-table-column
-			label="操作" fixed="right" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-			</template>
+			prop="odate" width="120px"
+			label="开始时间">
+			</el-table-column>
+            <el-table-column
+			prop="completiondate" width="120px"
+			label="完成时间">
+			</el-table-column>
+            <el-table-column
+			prop="count" width="120px"
+			label="单品数量">
+			</el-table-column>
+            <el-table-column
+			prop="assemblelinecode" width="120px"
+			label="流水线">
+			</el-table-column>
+            <el-table-column
+			prop="prounite" width="120px"
+			label="单位">
+			</el-table-column>
+            <el-table-column
+			prop="remark" width="120px"
+			label="备注">
 			</el-table-column>
 		</el-table>
 		</div>
@@ -108,7 +133,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getOrderAll, queryOrders} from '@/api/getData'
+    import {getPlanAll, getBatchAll, queryPlanByBatch, queryPlan} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -118,7 +143,9 @@
 				value2: '',
 				input: '',
 				city: {},
-				receiptData: []
+				receiptData: [],
+				batchData:[],
+				batchID:''
     		}
     	},
     	components: {
@@ -130,13 +157,25 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getOrderAll()
-					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					const dataReceipt = await getPlanAll(1,10)
+					if(dataReceipt.data.code === '1111'){
+						this.receiptData = dataReceipt.data.data.list
+					} else {
+						console.log('获取生产计划数据出错')
+					}
+					const dataBatch = await getBatchAll()
+					if(dataBatch.data.code === '1111'){
+						this.batchData = dataBatch.data.data
+					}else {
+						console.log('获取生产计划批次出错')
+					}
     			}catch(err){
     				console.log(err);
     			}
-    		},
+			},
+			async handleBatchSearch() {
+
+			},
 			handleEdit(index,row) {
 				console.log(index,row)
 				this.$destroy()
@@ -155,9 +194,12 @@
 				}else if(this.radio2 === 2) {
 					radioCon = '已完成'
 				}
-				const resData = await queryOrders(this.input,radioCon,sTime,eTime,1,10)
-				this.receiptData = resData.data.data.list
-				console.log(resData.data)
+				const resData = await queryPlan(this.input,radioCon,sTime,eTime,1,10)
+				if(resData.data.code && resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+				} else {
+					console.log(resData.data.message)
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())

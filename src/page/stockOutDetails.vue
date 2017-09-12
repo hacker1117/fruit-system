@@ -2,73 +2,86 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+        <el-row style="margin-top: 20px;">
+			<el-col :span="8">
+				出库单号：&nbsp;{{headData.outputrepositorycode}}
+			</el-col>
+            <el-col :span="8">
+				出库时间：&nbsp;{{headData.outdate}}
+			</el-col>
+            <el-col :span="8">
+				收货人名称：&nbsp;{{headData.consignee}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				订单编号：&nbsp;{{headData.ordersno}}
+			</el-col>
+            <el-col :span="8">
+				验收单号：&nbsp;{{headData.acceptanceformcode}}
+			</el-col>
+            <el-col :span="8">
+				客户ID：&nbsp;{{headData.customerid}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				当前库存编号：&nbsp;{{headData.repocode}}
+			</el-col>
+            <el-col :span="8">
+				详细地址：&nbsp;{{headData.address}}
+			</el-col>
+            <el-col :span="8">
+				所属区域：&nbsp;
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				出库合计商品数量：&nbsp;{{headData.totalproducts}}
+			</el-col>
+            <el-col :span="8">
+				订单生成时间：&nbsp;{{headData.createtime}}
+			</el-col>
+            <el-col :span="8">
+				批次：&nbsp;{{headData.batchcount}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				订单附言：&nbsp;{{headData.comments}}
+			</el-col>
+		</el-row>
 		<el-table 
 			:data="receiptData"
 			stripe
-			style="width: 100%;text-align:left; margin-top: 20px;">
+			style="width: 840px;text-align:left; margin-top: 20px;">
 			<el-table-column
-			prop="orderdetailid" width="120px"
-			label="订单明细ID">
-			</el-table-column>
-			<el-table-column
-			prop="productid" width="120px"
-			label="商品ID">
-			</el-table-column>
-			<el-table-column
-			prop="productfullname" width="120px"
-			label="商品名称">
-			</el-table-column>
-			<el-table-column
-			prop="ordersid" width="120px"
-			label="订单ID">
-			</el-table-column>
-			<el-table-column
-			prop="ordersno" width="120px"
-			label="订单号">
-			</el-table-column>
-			<el-table-column
-			prop="memberprice" width="120px"
-			label="成交价格">
-			</el-table-column>
-			<el-table-column
-			prop="count" width="120px"
-			label="数量">
-			</el-table-column>
-			<el-table-column
-			prop="buytype" width="120px"
-			label="购买类型">
+			prop="handlingordercode" width="120px"
+			label="加工单号">
 			</el-table-column>
 			<el-table-column
 			prop="productcode" width="120px"
 			label="商品编号">
 			</el-table-column>
 			<el-table-column
-			prop="brandid" width="120px"
-			label="商品品牌ID">
+			prop="proname" width="120px"
+			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="shopinfoid" width="120px"
-			label="店铺ID">
+			prop="prostandard" width="120px"
+			label="规格">
 			</el-table-column>
 			<el-table-column
-			prop="customerid" width="120px"
-			label="购买人ID">
+			prop="prounite" width="120px"
+			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="stockupdate" width="120px"
-			label="预计出货日">
+			prop="usecount" width="120px"
+			label="出库数量">
 			</el-table-column>
 			<el-table-column
-			prop="sku" width="120px"
-			label="SKU订货号">
-			</el-table-column>
-            <el-table-column
-			prop="discount" width="120px"
-			label="折扣比例">
-			</el-table-column>
-			<el-table-column
-			prop="createtime" width="120px"
-			label="订单生效时间">
+			prop="outdate" width="120px"
+			label="出库时间">
 			</el-table-column>
 		</el-table>
 		<el-row style="margin-top:20px;">
@@ -82,7 +95,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getOrderDetails} from '@/api/getData'
+    import {getStockOutDetailsHead, getStockOutDetailsDetail} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -93,7 +106,8 @@
 				input: '',
 				city: {},
                 receiptData: [],
-                id: this.$route.params.id
+                id: this.$route.params.id,
+                headData:{}
     		}
     	},
     	components: {
@@ -105,16 +119,19 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getOrderDetails(this.id)
-					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					const dataReceipt = await getStockOutDetailsHead(this.id)
+                    console.log('re: ',dataReceipt.data.data)
+                    this.headData = dataReceipt.data.data
+                    const dataReceiptDetails = await getStockOutDetailsDetail(this.id)
+                    console.log('re: ',dataReceiptDetails.data.data)
+                    this.receiptData = dataReceiptDetails.data.data
     			}catch(err){
     				console.log(err);
     			}
             },
             handleBack(){
                 this.$destroy()
-                this.$router.push('/receiptCount')
+                this.$router.push('/stockOut')
             }
 		}
     }

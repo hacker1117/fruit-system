@@ -4,21 +4,21 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 			<el-col :span="24">
-				<router-link to="/addBom"><el-button >增加</el-button></router-link>
+				<el-button @click="handleAdd" >增加</el-button>
 			</el-col>
 		</el-row>
 		<el-row>
-			<el-col :span="3" style="text-aligh:right;">商品编号：</el-col>
+			<el-col :span="3" style="text-aligh:right;">产品编号：</el-col>
 			<el-col :span="5"><el-input v-model="proid" placeholder="请输入内容"></el-input></el-col>
-			<el-col :span="3" style="text-aligh:right;">商品名称：</el-col>
+			<el-col :span="3" style="text-aligh:right;">产品名称：</el-col>
 			<el-col :span="5"><el-input v-model="procon" placeholder="请输入内容"></el-input></el-col>
 			<el-col :span="3" style="text-aligh:right;">计量单位：</el-col>
 			<el-col :span="5"><el-input v-model="prounit" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
-			<el-col :span="24" style="padding-left:87.5%; padding-right:0;">
-				<el-button type="primary">查询</el-button>
-				<el-button type="primary">清空</el-button>
+			<el-col :span="24">
+				<el-button style="float: right;" type="primary">清空</el-button>
+				<el-button style="float: right; margin-right:10px;" type="primary">查询</el-button>
 			</el-col>
 		</el-row>
 		<el-table
@@ -30,7 +30,7 @@
 			label="级别">
 			</el-table-column>
 			<el-table-column
-			prop="pid"
+			prop="procode"
 			label="产品编号">
 			</el-table-column>
 			<el-table-column
@@ -55,7 +55,7 @@
 			</el-table-column>
 			<el-table-column
 			prop="procedurecount"
-			label="工序号">
+			label="工序数">
 			</el-table-column>
 			<el-table-column
 			prop="procedurecontent"
@@ -69,7 +69,7 @@
 				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
 				<el-button
 				size="mini"
-				@click="handleDelete(scope.$index, scope.row)">删除</el-button>
+				@click="confirmDelete(scope.$index, scope.row)">删除</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
@@ -153,13 +153,39 @@
     				console.log(err)
     			}
 			},
+			handleAdd() {
+				this.$destroy()
+				this.$router.push('/addBom')
+			},
 			handleEdit(index,row) {
 				console.log(index, row)
 				this.$destroy()
 				this.$router.push('/addBom/'+ row.procode)
 			},
-			handleDelete(index,row) {
-				const isDeleted = deleteBom(row.procode)
+			confirmDelete(index,row) {
+				this.$confirm('此操作将删除该Bom, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.handleDelete(index,row)
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})       
+				})
+			},
+			async handleDelete(index,row) {
+				const isDeleted = await deleteBom(row.procode)
+				if(isDeleted.data.code === '1111') {
+					this.bomList.splice(index, 1)
+					this.total -= 1
+				}
 			}
 		    // addCategoryFun(){
 		    // 	this.showAddCategory = !this.showAddCategory;
