@@ -4,13 +4,13 @@
 		<div class="fruit-content">
         <el-row style="margin-top: 20px;">
 			<el-col :span="8">
-				单据编号：&nbsp;{{receiptData[0].orderid}}
+				单据编号：&nbsp;{{receiptData.ordercode}}
 			</el-col>
             <el-col :span="8">
-				单据日期：&nbsp;{{receiptData[0].ordertime}}
+				单据日期：&nbsp;{{receiptData.creattime}}
 			</el-col>
             <el-col :span="8">
-				默认仓库：&nbsp;{{receiptData[0].defaultrepository}}
+				供应商：&nbsp;{{receiptData[0].supplierid}}
 			</el-col>
 		</el-row>
         <el-row>
@@ -26,6 +26,9 @@
 		</el-row>
         <el-row>
 			<el-col :span="8">
+				默认仓库：&nbsp;{{receiptData[0].repositoryname}}
+			</el-col>
+			<el-col :span="8">
 				发运方式：&nbsp;{{receiptData[0].sendtype}}
 			</el-col>
 		</el-row>
@@ -34,7 +37,7 @@
 			stripe
 			style="width: 840px;text-align:left; margin-top: 20px;">
 			<el-table-column
-			prop="goodsname" width="120px"
+			prop="storagename" width="120px"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
@@ -46,20 +49,48 @@
 			label="商品分类">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
-			label="规格型号">
+			prop="sequencenumber" width="120px"
+			label="序列号">
+			</el-table-column>
+			<el-table-column
+			prop="prostandared" width="120px"
+			label="规格号码">
 			</el-table-column>
 			<el-table-column
 			prop="prounite" width="120px"
 			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="repositories" width="120px"
+			prop="repositoryname" width="120px"
 			label="仓库">
 			</el-table-column>
 			<el-table-column
-			prop="pronumber" width="120px"
-			label="数量">
+			prop="advisenumber" width="120px"
+			label="建议采购量">
+			</el-table-column>
+			<el-table-column
+			prop="infactbuy" width="120px"
+			label="实际采购量">
+			</el-table-column>
+			<el-table-column
+			prop="perprice" width="120px"
+			label="单价">
+			</el-table-column>
+			<el-table-column
+			prop="moneyamount" width="120px"
+			label="采购金额">
+			</el-table-column>
+			<el-table-column
+			prop="buyfare" width="120px"
+			label="采购费用">
+			</el-table-column>
+			<el-table-column
+			prop="estimatetime" width="120px"
+			label="预计到货日期">
+			</el-table-column>
+			<el-table-column
+			prop="remark" width="120px"
+			label="备注">
 			</el-table-column>
 		</el-table>
 		<el-row style="margin-top:20px;">
@@ -73,7 +104,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInListDetails} from '@/api/getData'
+    import {getPurchaseOrderDetails} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -97,7 +128,7 @@
     	methods: {
     		async initData(){
     			try{
-                    const dataReceiptDetails = await getStockInListDetails(this.id)
+                    const dataReceiptDetails = await getPurchaseOrderDetails(this.id)
                     console.log('re: ',dataReceiptDetails.data.data)
                     this.receiptData.push(dataReceiptDetails.data.data)
     			}catch(err){
@@ -106,7 +137,7 @@
             },
             handleBack(){
                 this.$destroy()
-                this.$router.push('/stockInList')
+                this.$router.push('/purchaseOrder')
             }
 		}
     }

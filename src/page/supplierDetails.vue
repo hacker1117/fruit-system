@@ -4,29 +4,122 @@
 		<div class="fruit-content">
         <el-row style="margin-top: 20px;">
 			<el-col :span="8">
-				单据编号：&nbsp;{{receiptData[0].orderid}}
+				单位编码：&nbsp;{{receiptData[0].orderid}}
 			</el-col>
             <el-col :span="8">
-				单据日期：&nbsp;{{receiptData[0].ordertime}}
+				单位名称：&nbsp;{{receiptData[0].ordertime}}
 			</el-col>
             <el-col :span="8">
-				默认仓库：&nbsp;{{receiptData[0].defaultrepository}}
+				单位分类：&nbsp;{{receiptData[0].defaultrepository}}
 			</el-col>
 		</el-row>
         <el-row>
 			<el-col :span="8">
-				采购员：&nbsp;{{receiptData[0].buyhuman}}
+				所属地区：&nbsp;{{receiptData[0].buyhuman}}
 			</el-col>
             <el-col :span="8">
-				采购类型：&nbsp;{{receiptData[0].buytype}}
+				单位电话：&nbsp;{{receiptData[0].buytype}}
 			</el-col>
             <el-col :span="8">
-				采购部门：&nbsp;{{receiptData[0].buydepartment}}
+				单位地址：&nbsp;{{receiptData[0].buydepartment}}
 			</el-col>
 		</el-row>
         <el-row>
 			<el-col :span="8">
-				发运方式：&nbsp;{{receiptData[0].sendtype}}
+				助记码：&nbsp;{{receiptData[0].buyhuman}}
+			</el-col>
+            <el-col :span="8">
+				级别：&nbsp;{{receiptData[0].buytype}}
+			</el-col>
+            <el-col :span="8">
+				登记日期：&nbsp;{{receiptData[0].buydepartment}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				备注：&nbsp;{{receiptData[0].sendtype}}
+			</el-col>
+		</el-row>
+        <el-row style="margin-top: 20px;">
+			<el-col :span="8">
+				联系人：&nbsp;{{receiptData[0].orderid}}
+			</el-col>
+            <el-col :span="8">
+				职务：&nbsp;{{receiptData[0].ordertime}}
+			</el-col>
+            <el-col :span="8">
+				电话：&nbsp;{{receiptData[0].defaultrepository}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				手机：&nbsp;{{receiptData[0].buyhuman}}
+			</el-col>
+            <el-col :span="8">
+				Email：&nbsp;{{receiptData[0].buytype}}
+			</el-col>
+            <el-col :span="8">
+				QQ：&nbsp;{{receiptData[0].buydepartment}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				地址：&nbsp;{{receiptData[0].buyhuman}}
+			</el-col>
+            <el-col :span="8">
+				传真：&nbsp;{{receiptData[0].buytype}}
+			</el-col>
+		</el-row>
+        <el-row style="margin-top: 20px;">
+			<el-col :span="8">
+				分管部门：&nbsp;{{receiptData[0].orderid}}
+			</el-col>
+            <el-col :span="8">
+				业务员：&nbsp;{{receiptData[0].ordertime}}
+			</el-col>
+            <el-col :span="8">
+				税率：&nbsp;{{receiptData[0].defaultrepository}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				税号：&nbsp;{{receiptData[0].buyhuman}}
+			</el-col>
+            <el-col :span="8">
+				开户行：&nbsp;{{receiptData[0].buytype}}
+			</el-col>
+            <el-col :span="8">
+				银行账号：&nbsp;{{receiptData[0].buydepartment}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				折扣率：&nbsp;{{receiptData[0].buyhuman}}
+			</el-col>
+            <el-col :span="8">
+				信用额度：&nbsp;{{receiptData[0].buytype}}
+			</el-col>
+            <el-col :span="8">
+				创建人：&nbsp;{{receiptData[0].buydepartment}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				创建时间：&nbsp;{{receiptData[0].buyhuman}}
+			</el-col>
+            <el-col :span="8">
+				修改人：&nbsp;{{receiptData[0].buytype}}
+			</el-col>
+            <el-col :span="8">
+				修改时间：&nbsp;{{receiptData[0].buydepartment}}
+			</el-col>
+		</el-row>
+        <el-row>
+			<el-col :span="8">
+				停用人：&nbsp;{{receiptData[0].buyhuman}}
+			</el-col>
+            <el-col :span="8">
+				停用时间：&nbsp;{{receiptData[0].buytype}}
 			</el-col>
 		</el-row>
 		<el-table 

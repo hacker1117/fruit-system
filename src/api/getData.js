@@ -444,3 +444,27 @@ export const getWasteAll = (pageNum = 1, pageSize = 10) => axio('/wastageordera/
  */
 
 export const getStockOutaAll = (pageNum = 1, pageSize = 10) => axio('/outputordera/ findTodayOutput',{pageNum, pageSize});
+
+/**
+ * 查询采购单列表
+ */
+
+export const queryPurchaseOrderList = (salesmanname, createtime, ordercode, supplierid, pageNum = 1, pageSize = 10) => axio('/purchaseordera/selectByPurchseordernumber',{salesmanname, createtime, ordercode, supplierid, salesmanname, createtime, ordercode, supplierid, pageNum, pageSize});
+
+/**
+ * 获取采购单（A库）详情
+ */
+
+export const getPurchaseOrderDetails = ordercode => axio('/purchaseordera/Deatil',{ordercode});
+
+/**
+ * 查询供应商列表
+ */
+
+export const querySupplierList = sname => axio('/supplierorder/selectByName',{sname});
+
+/**
+ * 查询列表
+ */
+
+export const queryGoodsList = (pname, prostandered, procode, helpcode, commodityattribute, factories, brand, barcode, placeoforigin, pageNum = '1', pageSize = '10') => axio('/productmanager/selectByExamples',{pname, prostandered, procode, helpcode, commodityattribute, factories, brand, barcode, placeoforigin, pageNum, pageSize});

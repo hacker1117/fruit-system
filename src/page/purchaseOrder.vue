@@ -3,16 +3,52 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">制单人：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">默认仓库：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="salesmanname" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">创建日期：</el-col>
+			<el-col :span="4">				
+				<el-date-picker
+				v-model="creattime"
+				type="date"
+				size="small"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+			</el-col>
+            <el-col :span="2" style="text-align:right;">单据号：</el-col>
+			<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">供应商：</el-col>
+			<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
-		<el-row>
+		<el-dialog title="新增采购单" v-model="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="料件名称" :label-width="formLabelWidth">
+				<el-autocomplete
+				v-model="form.proname"
+				:fetch-suggestions="querySearchAsync"
+				placeholder="请输入名称模糊搜索"
+				@select="handleAddChild"
+				></el-autocomplete>
+            </el-form-item>
+            <el-form-item label="规格" :label-width="formLabelWidth">
+            <el-input style="width: 195px" v-model="form.prostandard" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="单位" :label-width="formLabelWidth">
+            <el-select v-model="form.prounite" placeholder="请选择计量单位">
+                <el-option label="个" value="个"></el-option>
+                <el-option label="克" value="克"></el-option>
+            </el-select>
+            </el-form-item>
+            <el-form-item label="数量" :label-width="formLabelWidth">
+            <el-input style="width: 195px" v-model="form.count" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmBomChild">确 定</el-button>
+        </div>
+        </el-dialog>
+		<!-- <el-row>
             <el-col :span="2" style="text-align:right;">订单编号：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">供应商：</el-col>
@@ -29,7 +65,7 @@
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">序列号：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
+		</el-row> -->
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
@@ -67,11 +103,11 @@
 			label="采购部门">
 			</el-table-column>
 			<el-table-column
-			prop="abolishhuman" width="120px"
+			prop="salesmanname" width="120px"
 			label="采购员">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="moneyamount" width="120px"
 			label="采购金额">
 			</el-table-column>
 			<el-table-column
@@ -79,19 +115,19 @@
 			label="采购费用">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="allowance" width="120px"
 			label="折让金额">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="creatorderhuman" width="120px"
 			label="制单人">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="createtime" width="120px"
 			label="创建时间">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="abolishhuman" width="120px"
 			label="作废人">
 			</el-table-column>
 			<el-table-column
@@ -109,7 +145,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getPurchaseOrderAll, queryStockInList} from '@/api/getData'
+    import {getPurchaseOrderAll, queryPurchaseOrderList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -119,6 +155,10 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				salesmanname: '',
+				creattime: '',
+				ordercode: '',
+				supplierid: ''
     		}
     	},
     	components: {
@@ -140,17 +180,14 @@
 			handleEdit(index,row) {
 				console.log(index,row)
 				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
+				this.$router.push('/purchaseOrderDetails/'+ row.ordercode)
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				let cTime = this.creattime === '' ? '' : this.formatter(this.creattime)
+				console.log(cTime)
+				const resData = await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,1,1)
+				this.receiptData = resData.data.data.list
+				console.log(resData.data)
 			},
 			formatter(date){
 				console.log(date.getMonth())

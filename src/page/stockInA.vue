@@ -4,22 +4,20 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">单据编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="ordernumber" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">制单人：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">默认仓库：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="ordeertime" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">供应商：</el-col>
+			<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">入库类型：</el-col>
+			<el-col :span="4"><el-input v-model="storagetype" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
-            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
+            <el-col :span="2" style="text-align:right;">金额：</el-col>
+			<el-col :span="4"><el-input v-model="totalmoney" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">是否作废：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购员：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购类型：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
+            <el-col :span="2" style="text-align:right;">序列号：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
@@ -30,15 +28,15 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate" width="120px"
+			prop="state" width="120px"
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="marke" width="120px"
+			prop="markable" width="120px"
 			label="标记">
 			</el-table-column>
 			<el-table-column
-			prop="orderid" width="120px"
+			prop="ordernumber" width="120px"
 			label="单据编号">
 			</el-table-column>
 			<el-table-column
@@ -46,21 +44,41 @@
 			label="单据日期">
 			</el-table-column>
 			<el-table-column
-			prop="inrepotype" width="120px"
+			prop="storagetype" width="120px"
 			label="入库类别">
+			</el-table-column>
+			<el-table-column
+			prop="visualreposity" width="120px"
+			label="虚拟库">
+			</el-table-column>
+			</el-table-column>
+			<el-table-column
+			prop="supplierid" width="120px"
+			label="供应商">
 			</el-table-column>
 			<el-table-column
 			prop="netweight" width="120px"
 			label="净重量">
-			</el-table-column>
 			</el-table-column>
 			<el-table-column
 			prop="prounite" width="120px"
 			label="单位">
 			</el-table-column>
 			<el-table-column
+			prop="perprice" width="120px"
+			label="单价">
+			</el-table-column>
+			<el-table-column
+			prop="totalmoney" width="120px"
+			label="总价">
+			</el-table-column>
+			<el-table-column
 			prop="prostandered" width="120px"
 			label="规格">
+			</el-table-column>
+			<el-table-column
+			prop="remarkable" width="120px"
+			label="备注">
 			</el-table-column>
 			<el-table-column
 			label="操作" width="120px">

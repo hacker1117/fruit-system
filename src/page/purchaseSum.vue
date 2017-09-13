@@ -7,17 +7,17 @@
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">单据日期：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">制单人：</el-col>
+            <el-col :span="2" style="text-align:right;">商品分类：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">默认仓库：</el-col>
+            <el-col :span="2" style="text-align:right;">仓库：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
             <el-col :span="2" style="text-align:right;">订单编号：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购员：</el-col>
+            <el-col :span="2" style="text-align:right;">采购来源：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购类型：</el-col>
+            <el-col :span="2" style="text-align:right;">商品名称：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">采购部门：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
@@ -31,36 +31,60 @@
 			style="width: 100%;text-align:left;">
 			<el-table-column
 			prop="orderstate" width="120px"
-			label="单据状态">
+			label="商品名称">
 			</el-table-column>
 			<el-table-column
 			prop="marke" width="120px"
-			label="标记">
+			label="商品编码">
 			</el-table-column>
 			<el-table-column
 			prop="orderid" width="120px"
-			label="单据编号">
+			label="序列号">
 			</el-table-column>
 			<el-table-column
 			prop="ordertime" width="120px"
-			label="单据日期">
+			label="采购数量">
 			</el-table-column>
 			<el-table-column
 			prop="inrepotype" width="120px"
-			label="入库类别">
+			label="仓库来源">
 			</el-table-column>
 			<el-table-column
 			prop="netweight" width="120px"
-			label="净重量">
+			label="采购来源">
 			</el-table-column>
 			</el-table-column>
 			<el-table-column
 			prop="prounite" width="120px"
+			label="规格">
+			</el-table-column>
+			<el-table-column
+			prop="prostandered" width="120px"
+			label="商品分类">
+			</el-table-column>
+			<el-table-column
+			prop="prostandered" width="120px"
+			label="采购部门">
+			</el-table-column>
+			<el-table-column
+			prop="prostandered" width="120px"
 			label="单位">
 			</el-table-column>
 			<el-table-column
 			prop="prostandered" width="120px"
-			label="规格">
+			label="采购总需求">
+			</el-table-column>
+			<el-table-column
+			prop="prostandered" width="120px"
+			label="A库库存">
+			</el-table-column>
+			<el-table-column
+			prop="prostandered" width="120px"
+			label="建议采购量">
+			</el-table-column>
+			<el-table-column
+			prop="prostandered" width="120px"
+			label="实际采购量">
 			</el-table-column>
 			<el-table-column
 			label="操作" width="120px">

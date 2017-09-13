@@ -3,23 +3,11 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
+            <el-col :span="2" style="text-align:right;">供应商类别：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
+            <el-col :span="2" style="text-align:right;">供应商名称：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">制单人：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">默认仓库：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购员：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购类型：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
+            <el-col :span="2" style="text-align:right;">联系人电话：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
@@ -30,37 +18,37 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate" width="120px"
-			label="单据状态">
+			prop="companycode" width="120px"
+			label="单位编码">
 			</el-table-column>
 			<el-table-column
-			prop="marke" width="120px"
-			label="标记">
+			prop="sname" width="120px"
+			label="单位名称">
 			</el-table-column>
 			<el-table-column
-			prop="orderid" width="120px"
-			label="单据编号">
+			prop="regisdate" width="120px"
+			label="登记日期">
 			</el-table-column>
 			<el-table-column
-			prop="ordertime" width="120px"
-			label="单据日期">
+			prop="supplytype" width="120px"
+			label="单位分类">
 			</el-table-column>
 			<el-table-column
-			prop="inrepotype" width="120px"
-			label="入库类别">
+			prop="companytelephone" width="120px"
+			label="单位电话">
 			</el-table-column>
 			<el-table-column
-			prop="netweight" width="120px"
-			label="净重量">
+			prop="responsibilityhuman" width="120px"
+			label="首要联系人">
 			</el-table-column>
 			</el-table-column>
 			<el-table-column
-			prop="prounite" width="120px"
-			label="单位">
+			prop="cmpanyaddress" width="120px"
+			label="单位地址">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
-			label="规格">
+			prop="sstate" width="120px"
+			label="状态">
 			</el-table-column>
 			<el-table-column
 			label="操作" width="120px">
@@ -111,14 +99,14 @@
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				let sTime = this.formatter(this.value1)
+				let eTime = this.formatter(this.value2)
+				console.log(sTime)
+				console.log(eTime)
+				console.log(this.input)
+				const resData = await queryStockIn(this.input,sTime,eTime,1,10)
+				this.receiptData = resData.data.data.list
+				console.log(resData.data)
 			},
 			formatter(date){
 				console.log(date.getMonth())
