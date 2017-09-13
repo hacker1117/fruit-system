@@ -9,7 +9,7 @@
 let baseUrl = ''; 
 let routerMode = 'history';
 let baseImgPath = 'http://images.cangdu.org/';
-let basicUrl = 'http://47.94.134.88:8080/echuxianshengshop2'
+let basicUrl = 'http://47.95.12.49:8084/echuxianshengshop/'
 
 if (process.env.NODE_ENV == 'development') {
 	//baseUrl = 'http://cangdu.org:8001';
