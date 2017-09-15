@@ -12,9 +12,9 @@ let baseImgPath = 'http://images.cangdu.org/';
 let basicUrl = 'http://47.95.12.49:8084/echuxianshengshop'
 
 if (process.env.NODE_ENV == 'development') {
-	baseUrl = 'http://search.yichuxiansheng.com';
+	baseUrl = 'http://47.95.12.49:9001';
 }else{
-	baseUrl = 'http://search.yichuxiansheng.com';
+	baseUrl = 'http://47.95.12.49:9001';
 }
 
 export {
