@@ -408,7 +408,7 @@ export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/bTWas
  * 新增运输损耗
  */
 
-export const addTransportWasteAll = (ordercode, procode, pname, productcount, prostandered, unite) => axio('/bTWastageordera/insertBStageordera', {ordercode, procode, pname, productcount, prostandered, unite} );
+export const addTransportWasteAll = (orderid, procode, pname, productcount, prostandered, unite) => axio('/repositoryb/addTransWaste', {orderid, procode, pname, productcount, prostandered, unite} );
 
 /**
  * 查询运输损耗清单
@@ -474,7 +474,7 @@ export const getWasteAll = (pageNum = 1, pageSize = 10) => axio('/wastageordera/
  * 获取损耗列表
  */
 
-export const getStockOutaAll = (pageNum = 1, pageSize = 10) => axio('/outputordera/ findTodayOutput',{pageNum, pageSize});
+export const getStockOutaAll = (pageNum = 1, pageSize = 10) => axio('/outputordera/findTodayOutput',{pageNum, pageSize});
 
 /**
  * 查询采购单列表
@@ -592,6 +592,12 @@ export const getChildGroupAll = (saleid) => axio('/group/findChildrenGroupBysale
 export const getRepoAll = () => axio('/user/findrepositorymanagerb');
 
 /**
+ * 查询所有仓库
+ */
+
+export const getVirtualRepoAll = (pageNum = 1, pageSize = 10) => axio('/virtualrepomanager/selectAllRepositoryInUse');
+
+/**
  * 添加父类组
  */
 
@@ -625,7 +631,7 @@ export const getGroupUser = (saleid) => axio('/group/queryUserInGroup',{saleid})
  * 批量添加用户
  */
 
-export const bindUser = (saleid,uids) => axio('/group/bandSomeUserswithAGroup',{saleid,uids});
+export const bindUser = (saleid,uids) => axio('/mappingGroupUser/bandSomeUserswithAGroup',{saleid,uids});
 
 /**
  * B库-查询采购单列表
@@ -650,3 +656,21 @@ export const addFatherCate = categoryname => axio('/productCategory/creatParent'
  */
 
 export const addChildCate = (categoryname,parentcategoryname,pid) => axio('/productCategory/creatChild',{categoryname,parentcategoryname,pid}, 'POST');
+
+/**
+ * 按照仓库筛选未出库商品
+ */
+
+export const getAddPurchase = respositysource => axio('/outputordera/summary',{respositysource});
+
+/**
+ * 确认储库
+ */
+
+export const makeStockOut = (respositysource) => axio('/outputordera/insertOutput',{respositysource});
+
+/**
+ * 新增入库单
+ */
+
+export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, repositories, pronumber, perprice, totalmoney, netweight, supplierid, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, repositories, pronumber, perprice, totalmoney, netweight, supplierid, storagetype});

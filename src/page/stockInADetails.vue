@@ -9,31 +9,33 @@
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
-        <!-- <el-dialog title="完善入库信息" v-model="dialogFormVisible">
+        <el-dialog title="完善入库信息" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="仓库" :label-width="formLabelWidth">
                 <el-select v-model="form.repositoryname" placeholder="请选择仓库">
-                    <el-option label="A库" value="A库"></el-option>
+                    <el-option v-for="repo in repoList" :key="repo.id" :label="repo.reponame" :value="repo.reponame"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="实际入库数量" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.name" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.pronumber" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="净重量" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.name" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.netweight" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="单价" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.name" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.perprice" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="总价" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.name" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.totalmoney" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="供应商" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.name" auto-complete="off"></el-input>
+               <el-select v-model="form.supplierid" placeholder="请选择供应商">
+                    <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.sname" :value="supplier.supplierid"></el-option>
+                </el-select>
             </el-form-item>
 			<el-form-item label="虚拟库" :label-width="formLabelWidth">
-                <el-select v-model="form.repositoryname" placeholder="请选择虚拟库">
-                    <el-option label="A库" value="A库"></el-option>
+                <el-select v-model="form.visualreposity" placeholder="请选择虚拟库">
+                    <el-option v-for="repos in virtualRepoList" :key="repos.id" :label="repos.reponame" :value="repos.reponame"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -41,7 +43,7 @@
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="confirmAdd">确 定</el-button>
         </div>
-        </el-dialog> -->
+        </el-dialog>
 		<el-table
 			:data="receiptData"
 			stripe
@@ -118,7 +120,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getNotStockInA, queryStockInList} from '@/api/getData'
+    import {getNotStockInA, queryStockInList, getRepoAll, getVirtualRepoAll, makeStockIn, getSupplierAll} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -128,8 +130,23 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				repoList: [],
+				virtualRepoList: [],
+				supplierList: [],
 				ordernumber: '',
-				ordertime: ''
+				ordertime: '',
+				storagename: '',
+				goodscode: '',
+				storageproducttype: '',
+				prostandered: '',
+				prounite: '',
+				form:{
+					repositoryname: '',
+					visualreposity: '',
+					supplierid: ''
+				},
+				dialogFormVisible: false,
+				formLabelWidth: '120px'
     		}
     	},
     	components: {
@@ -144,15 +161,25 @@
 					const dataReceipt = await getNotStockInA()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data
+					const repos = await getRepoAll()
+					this.repoList = repos.data.data
+					const vRepos = await getVirtualRepoAll()
+					this.virtualRepoList = vRepos.data.data.list
+					const suppliers = await getSupplierAll()
+					this.supplierList = suppliers.data.data.list
     			}catch(err){
     				console.log(err);
     			}
     		},
-			// handleEdit(index,row) {
-			// 	console.log(index,row)
-			// 	this.$destroy()
-			// 	this.$router.push('/stockInListDetails/'+ row.orderid)
-			// },
+			handleEdit(index,row) {
+				this.dialogFormVisible = true
+				this.ordernumber = row.ordercode
+				this.storagename = row.storagename
+				this.goodscode = row.storagecode
+				this.storageproducttype = row.storageproducttype
+				this.prostandered = row.prostandered
+				this.prounite = row.prounite
+			},
 			async handleSearch(){
 				// let sTime = this.formatter(this.value1)
 				// let eTime = this.formatter(this.value2)
@@ -172,6 +199,16 @@
 			handleAdd() {
 				this.$destroy()
 				this.$router.push('/stockInADetails')
+			},
+			async confirmAdd() {
+				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.repositories, this.form.pronumber, this.form.perprice, this.form.totalmoney, this.form.netweight, this.form.supplierid)
+				if(addInfo.data.code === '1111'){
+					this.$message('完善入库单成功')
+					this.dialogFormVisible = false
+					this.initData()
+				}else {
+					this.$message(addInfo.data.message)
+				}
 			}
 		}
     }

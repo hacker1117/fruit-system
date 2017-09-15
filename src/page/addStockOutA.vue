@@ -4,47 +4,48 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 			<el-col :span="24">
-				<el-button @click="addStockOut" >新增出库单</el-button>
+				<el-button @click="addStockOut">确认出库</el-button>
 			</el-col>
 		</el-row>
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">去向：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+            <el-col :span="2" style="text-align:left;">去向：</el-col>
+			<el-col :span="4">
+                <el-select v-model="form.respositysource" @change="chooseRepo" placeholder="请选择仓库">
+                    <el-option v-for="repo in repoList" :key="repo.id" :label="repo.reponame" :value="repo.reponame"></el-option>
+                </el-select>
+            </el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
 			stripe
 			style="text-align:left;">
 			<el-table-column
-			prop="outputcode" 
-			label="出库单据编号">
+			prop="pname" 
+			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="ordertime" 
-			label="单据日期">
+			prop="productcode" 
+			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="ordercode" 
-			label="B库采购需求单号">
+			prop="producttype" 
+			label="商品类别">
 			</el-table-column>
 			<el-table-column
-			prop="customer" 
-			label="去向">
+			prop="productionstandard" 
+			label="规格型号">
 			</el-table-column>
 			<el-table-column
-			label="操作" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-			</template>
+			prop="buyunite" 
+			label="单位">
+			</el-table-column>
+			<el-table-column
+			prop="orderno" 
+			label="B库采购需求编号">
+			</el-table-column>
+            <el-table-column
+			prop="buynumber" 
+			label="数量">
 			</el-table-column>
 		</el-table>
 		</div>
@@ -53,7 +54,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockOutaAll, queryStockInList} from '@/api/getData'
+    import {getAddPurchase, queryStockInList, getRepoAll, makeStockOut} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -62,7 +63,11 @@
 				value2: '',
 				input: '',
 				city: {},
-				receiptData: [],
+                receiptData: [],
+                repoList: [],
+                form:{
+                    respositysource: ''
+                }
     		}
     	},
     	components: {
@@ -74,9 +79,8 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockOutaAll()
-					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					const repos = await getRepoAll()
+					this.repoList = repos.data.data
     			}catch(err){
     				console.log(err);
     			}
@@ -102,11 +106,25 @@
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
 			},
-			addStockOut() {
-				this.$destroy()
-				this.$router.push('/addStockOutA')
+			async chooseRepo() {
+				const dataReceipt = await getAddPurchase(this.form.respositysource)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data
+					this.$message('查询未生单信息成功')
+				}else {
+					this.$message(dataReceipt.data.message)
+					this.receiptData = []
+				}
+			},
+			async addStockOut(){
+				const addInfo = await makeStockOut(this.form.respositysource)
+				if(addInfo.data.code === '1111'){
+					this.$message('出库成功')
+				}else {
+					this.$message(addInfo.data.message)
+				}
 			}
-		}
+ 		}
     }
 </script>
 

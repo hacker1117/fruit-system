@@ -232,6 +232,7 @@
                 const dataReceipt = await queryUserList()
                 this.receiptData = dataReceipt.data.data.list
                 const userViews = await getGroupUser(row.saleid)
+                this.saleid = row.saleid
                 for(let i = 0;i < this.receiptData.length; i++){
                     for(let j = 0;j < userViews.data.data.length; j++){
                         if(this.receiptData[i].pagecode === userViews.data.data[j].pagecode){

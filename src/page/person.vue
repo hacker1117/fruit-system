@@ -1,6 +1,11 @@
 <template>
     <div class="fillcontain">
         <head-top></head-top>
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="dialogFormVisible = true" >新增用户</el-button>
+			</el-col>
+		</el-row>
         <el-dialog title="新增用户" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="角色" :label-width="formLabelWidth">

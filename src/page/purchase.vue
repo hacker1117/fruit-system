@@ -25,7 +25,7 @@
             </el-form-item>
 			<el-form-item label="仓库" :label-width="formLabelWidth">
                 <el-select v-model="form.defaultrepo" placeholder="请选择仓库">
-                    <el-option label="A库" value="A库"></el-option>
+                    <el-option v-for="repo in repoList" :key="repo.id" :label="repo.reponame" :value="repo.reponame"></el-option>
                 </el-select>
             </el-form-item>
 			<el-form-item label="规格" :label-width="formLabelWidth">
@@ -62,12 +62,20 @@
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="producttype" 
-			label="商品类别">
+			prop="ordercode" 
+			label="订单编号">
 			</el-table-column>
 			<el-table-column
-			prop="orderno" 
-			label="订单编号">
+			prop="proname" 
+			label="商品名称">
+			</el-table-column>
+			<el-table-column
+			prop="procodee" 
+			label="商品编码">
+			</el-table-column>
+			<el-table-column
+			prop="buynumber" 
+			label="采购量">
 			</el-table-column>
 			<el-table-column
 			prop="buydepartmentid" 
@@ -88,7 +96,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getPuschaseOrderB, queryStockInList, addPurchaseOrderB, getProList} from '@/api/getData'
+    import {getPuschaseOrderB, queryStockInList, addPurchaseOrderB, getProList, getRepoAll} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -104,7 +112,8 @@
 				},
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
-				goodsList:[]
+				goodsList:[],
+				repoList:[]
     		}
     	},
     	components: {
@@ -121,6 +130,8 @@
 					this.receiptData = dataReceipt.data.data.list
 					const result = await getProList('')
 					this.goodsList = result.data.data
+					const repos = await getRepoAll()
+					this.repoList = repos.data.data
     			}catch(err){
     				console.log(err);
     			}
@@ -150,6 +161,10 @@
 				const addInfo = await addPurchaseOrderB(this.goodsList[this.form.goodsIndex].pname, this.goodsList[this.form.goodsIndex].productcode, this.goodsList[this.form.goodsIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
+					this.dialogFormVisible = false
+					this.initData()
+				}else {
+					this.$message(addInfo.data.message)
 				}
 			}
 		}
