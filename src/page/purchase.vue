@@ -4,10 +4,10 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 			<el-col :span="24">
-				<el-button @click="dialogFormVisible = true" >新增运输损耗单</el-button>
+				<el-button @click="dialogFormVisible = true" >新增采购单</el-button>
 			</el-col>
 		</el-row>
-        <el-dialog title="新增运输损耗" v-model="dialogFormVisible">
+        <el-dialog title="新增采购单" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="商品名称" :label-width="formLabelWidth">
                 <el-select v-model="form.goodsIndex" placeholder="请选择商品名称">

@@ -2,10 +2,21 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+        <el-dialog title="报损" v-model="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="数量" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.productcount" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+		</el-dialog>
 		<el-table
 			:data="receiptData"
 			stripe
-			style="width: 840px;text-align:left; margin-top: 20px;">
+			style="width: 960px;text-align:left; margin-top: 20px;">
 			<el-table-column
 			prop="ordercode" width="120px"
 			label="B库采购需求单号">
@@ -54,7 +65,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInDetails, getStockOutDetailsDetail} from '@/api/getData'
+    import {getStockInDetails, getStockOutDetailsDetail, addTransportWasteAll} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -66,7 +77,14 @@
 				city: {},
                 receiptData: [],
                 id: this.$route.params.id,
-                headData:{}
+				headData:{},
+				procode: '',
+				pname: '',
+				prostandered: '',
+				prounite: '',
+				form: {},
+				dialogFormVisible:false,
+				formLabelWidth: '120px'
     		}
     	},
     	components: {
@@ -87,7 +105,25 @@
             handleBack(){
                 this.$destroy()
                 this.$router.push('/stockIn')
-            }
+			},
+			handleEdit(index,row) {
+				this.dialogFormVisible = true 
+				this.procode = row.procode
+				this.pname = row.proname
+				this.prostandered = row.prostandard
+				this.prounite = row.prounite
+				this.ordercode = row.ordercode
+			},
+			async confirmAdd(){
+				const addInfo = await addTransportWasteAll(this.ordercode, this.procode, this.pname, this.form.productcount, this.prostandered, this.prounite)
+				if(addInfo.data.code === '1111'){
+					this.$message('添加运输损耗成功')
+					this.dialogFormVisible = false
+					this.initData()
+				}else {
+					this.$message(addInfo.data.message)
+				}
+			}
 		}
     }
 </script>

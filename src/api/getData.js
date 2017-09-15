@@ -408,7 +408,7 @@ export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/bTWas
  * 新增运输损耗
  */
 
-export const addTransportWasteAll = (procode, pname, productcount, prostandered, unite, reporttime) => axio('/bTWastageordera/insertBStageordera', {procode, pname, productcount, prostandered, unite, reporttime} );
+export const addTransportWasteAll = (ordercode, procode, pname, productcount, prostandered, unite) => axio('/bTWastageordera/insertBStageordera', {ordercode, procode, pname, productcount, prostandered, unite} );
 
 /**
  * 查询运输损耗清单
@@ -638,3 +638,15 @@ export const getPuschaseOrderB = (pageNum = 1,pageSize = 10) => axio('/repositor
  */
 
 export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, defaultrepo, buynumber) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, defaultrepo, buynumber});
+
+/**
+ * 货品分类-添加父分类
+ */
+
+export const addFatherCate = categoryname => axio('/productCategory/creatParent',{categoryname}, 'POST');
+
+/**
+ * 货品分类-添加子分类
+ */
+
+export const addChildCate = (categoryname,parentcategoryname,pid) => axio('/productCategory/creatChild',{categoryname,parentcategoryname,pid}, 'POST');

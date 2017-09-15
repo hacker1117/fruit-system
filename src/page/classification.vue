@@ -1,6 +1,33 @@
 <template>
     <div class="fillcontain">
         <head-top></head-top>
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px; margin-left:2%">
+			<el-col :span="24">
+				<el-button @click="handleAdd" >新增父类</el-button>
+			</el-col>
+		</el-row>
+        <el-dialog title="新增父类" v-model="dialogFormVisible">
+        <el-form :model="form">
+			<el-form-item label="分类名称" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.categoryname" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+        </el-dialog>
+        <el-dialog title="新增子类" v-model="dialogFormVisibleChild">
+        <el-form :model="form">
+			<el-form-item label="分类名称" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.childcategoryname" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisibleChild = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAddChild">确 定</el-button>
+        </div>
+        </el-dialog>
         <div class="table_container">
             <el-table @row-click="handleChoose"
                 :data="tableData"
@@ -95,7 +122,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getCategoryAll, getCategoryChild, deleteCategory} from '@/api/getData'
+    import {getCategoryAll, getCategoryChild, deleteCategory, addFatherCate, addChildCate} from '@/api/getData'
     export default {
         data(){
             return {
@@ -106,7 +133,12 @@
                 count: 0,
                 currentPage: 1,
                 childData:[],
-                currentClass: ''
+                currentClass: '',
+                currentClassId: '',
+                form: {},
+                dialogFormVisible: false,
+                formLabelWidth: '120px',
+                dialogFormVisibleChild: false
             }
         },
     	components: {
@@ -134,9 +166,10 @@
                     this.childData = []
                 }
                 this.currentClass = row.categoryname
+                this.currentClassId = row.categorycode
             },
             handleAdd() {
-
+                this.dialogFormVisible = true
             },
             handleEdit() {
 
@@ -145,7 +178,7 @@
 
             },
             handleAddChild() {
-
+                this.dialogFormVisibleChild = true
             },
             handleEditChild() {
 
@@ -171,6 +204,26 @@
                     tableData.city = item.city;
                     this.tableData.push(tableData);
                 })
+            },
+            async confirmAdd(){
+                const addData = await addFatherCate(this.form.categoryname)
+                if(addData.data.code === '1111'){
+                    this.$message('添加父级组成功')
+                    this.initData()
+                }else {
+                    this.$message(addData.data.message)
+                    this.dialogFormVisible = true
+                }
+            },
+            async confirmAddChild(){
+                const addData = await addChildCate(this.form.childcategoryname,this.currentClass,this.currentClassId)
+                if(addData.data.code === '1111'){
+                    this.$message('添加子类组成功')
+                    this.initData()
+                }else {
+                    this.$message(addData.data.message)
+                    this.dialogFormVisibleChild = false
+                }
             }
         },
     }
