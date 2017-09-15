@@ -2,6 +2,11 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="dialogFormVisible = true" >新增运输损耗单</el-button>
+			</el-col>
+		</el-row>
         <el-dialog title="新增运输损耗" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="商品名称" :label-width="formLabelWidth">
@@ -19,7 +24,7 @@
                 <el-input style="width: 195px" v-model="form.buyunite" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="仓库" :label-width="formLabelWidth">
-                <el-select v-model="form.defaultrepo" placeholder="请选择商品名称">
+                <el-select v-model="form.defaultrepo" placeholder="请选择仓库">
                     <el-option label="A库" value="A库"></el-option>
                 </el-select>
             </el-form-item>
@@ -83,7 +88,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getPuschaseOrderB, queryStockInList, addPurchaseOrderB} from '@/api/getData'
+    import {getPuschaseOrderB, queryStockInList, addPurchaseOrderB, getProList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -96,7 +101,10 @@
 				form: {
 					defaultrepo: '',
 					goodsIndex: ''
-				}
+				},
+				dialogFormVisible: false,
+				formLabelWidth: '120px',
+				goodsList:[]
     		}
     	},
     	components: {
@@ -139,7 +147,7 @@
 				return res
 			},
 			async confirmAdd(){
-				const addInfo = await addPurchaseOrderB(pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, defaultrepo, buynumber)
+				const addInfo = await addPurchaseOrderB(this.goodsList[this.form.goodsIndex].pname, this.goodsList[this.form.goodsIndex].productcode, this.goodsList[this.form.goodsIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 				}

@@ -34,6 +34,14 @@
 			prop="procount" width="120px"
 			label="数量">
 			</el-table-column>
+			<el-table-column
+			label="操作" width="120px">
+			<template scope="scope">
+				<el-button
+				size="small"
+				@click="handleEdit(scope.$index, scope.row)">绑定商品</el-button>
+			</template>
+			</el-table-column>
 		</el-table>
 		<el-row style="margin-top:20px;">
 			<el-col :span="24">

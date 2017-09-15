@@ -5,9 +5,12 @@
         <el-dialog title="绑定APP后台商品" v-model="dialogFormVisibleGood">
         <el-form :model="form">
             <el-form-item label="APP后台商品" :label-width="formLabelWidth">
-                <el-select v-model="form.appGoodsIndex" placeholder="请选择商品">
-                    <el-option v-for="(appGoods,index) in appGoodsList" :key="appGoods.id" :label="appGoods.productFullName" :value="index"></el-option>
-                </el-select>
+				<el-autocomplete
+				v-model="form.appGoodsIndex"
+				:fetch-suggestions="querySearchAsync"
+				@select="confirmGood"
+				placeholder="请输入名称模糊搜索"
+				></el-autocomplete>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -79,6 +82,10 @@
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
+			prop="sku" width="120px"
+			label="SKU">
+			</el-table-column>
+			<el-table-column
 			prop="prostandered" width="120px"
 			label="规格">
 			</el-table-column>
@@ -107,15 +114,25 @@
 			prop="createman" width="120px"
 			label="创建人">
 			</el-table-column>
-			<el-table-column
+			<el-table-column fixed="right"
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
-				size="small"
+				size="small" 
 				@click="handleEdit(scope.$index, scope.row)">绑定商品</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -130,6 +147,7 @@
 				value1: '',
 				value2: '',
 				input: '',
+				count: 0,
 				city: {},
 				receiptData: [],
 				pname: '',
@@ -149,7 +167,9 @@
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
 				dialogFormVisibleGood: false,
-				appGoodsList:[]
+				appGoodsList:[],
+				confirmIndex: '',
+				currentPage: 1
     		}
     	},
     	components: {
@@ -161,11 +181,12 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getGoodsAll()
+					const dataReceipt = await getGoodsAll(this.currentPage)
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
 					const appGoodsInfo = await appGoodsList(1)
-					this.appGoodsList = appGoodsInfo.data.resultData
+					this.appGoodsList = appGoodsInfo.data.resultData.productList
 					console.log(this.appGoodsList)
     			}catch(err){
     				console.log(err)
@@ -198,13 +219,47 @@
                 }
 			},
 			async confirmBind(){
-				const bindInfo = await bindAppGoods(this.appGoodsList[this.form.appGoodsIndex].productId, this.appGoodsList[this.form.appGoodsIndex].sku, this.appBindId)
+				console.log(this.appGoodsList)
+				console.log(this.confirmIndex)
+				const bindInfo = await bindAppGoods(this.appGoodsList[this.confirmIndex].productId, this.appGoodsList[this.confirmIndex].sku, this.appBindId)
 				if(bindInfo.data.code === '1111'){
 					this.$message('绑定成功')
 					this.dialogFormVisibleGood =false
+					this.initData()
 				}else {
 					this.$message(bindInfo.data.message)
 				}
+			},
+			async querySearchAsync(queryString, cb) {
+				let results=[]
+				if(queryString !== '') {
+					const result = await appGoodsList(1,queryString)
+					results = result.data.resultData.productList
+					this.appGoodsList = result.data.resultData.productList
+					for(let i=0;i<results.length;i++){
+						results[i].value = results[i].productFullName
+					}
+				}
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					cb(results);
+				}, 3000 * Math.random());
+			},
+			confirmGood() {
+				for(let i = 0; i<this.appGoodsList.length; i++){
+					if(this.form.appGoodsIndex == this.appGoodsList[i].productFullName) {
+						this.confirmIndex = i
+					}
+				}
+			},
+			async handleCurrentChange() {
+				this.currentPage += 1
+				const dataReceipt = await getGoodsAll(this.currentPage)
+				console.log('re: ',dataReceipt.data.data)
+				this.receiptData = dataReceipt.data.data.list
+			},
+			handleSizeChange() {
+
 			}
 		}
     }

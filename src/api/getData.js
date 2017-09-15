@@ -12,7 +12,7 @@ export const login = data => axio('/user/login', data, 'POST');
  * 获取APP后台商品列表
  */
 
-export const appGoodsList = page => yichu('/openToErp/openToErpProductList', page, 'POST');
+export const appGoodsList = (page,productName) => yichu('/openToErp/openToErpProductList', {page, productName}, 'POST');
 
 /**
  * 获取APP后台商品列表
@@ -408,7 +408,7 @@ export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/bTWas
  * 新增运输损耗
  */
 
-export const addTransportWasteAll = (procode, pname, productcount, prostandered, originalprice, reporttime) => axio('/bTWastageordera/insertBStageordera', {procode, pname, productcount, prostandered, originalprice, reporttime} );
+export const addTransportWasteAll = (procode, pname, productcount, prostandered, unite, reporttime) => axio('/bTWastageordera/insertBStageordera', {procode, pname, productcount, prostandered, unite, reporttime} );
 
 /**
  * 查询运输损耗清单

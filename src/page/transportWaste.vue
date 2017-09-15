@@ -16,7 +16,7 @@
                 <el-input style="width: 195px" v-model="form.prostandered" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="单位" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.originalprice" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.unite" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="报损时间" :label-width="formLabelWidth">
                 <el-date-picker
@@ -153,7 +153,7 @@
 			},
 			async confirmAdd(){
 				let times = this.form.reporttime === '' ? '' : this.formatter(this.form.reporttime)
-				const addInfo = await addTransportWasteAll(this.goodsList[this.form.goodsIndex].procode, this.goodsList[this.form.goodsIndex].pname, this.form.productcount, this.form.prostandered, this.form.originalprice, times)
+				const addInfo = await addTransportWasteAll(this.goodsList[this.form.goodsIndex].procode, this.goodsList[this.form.goodsIndex].pname, this.form.productcount, this.form.prostandered, this.form.unite, times)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加运输损耗成功')
 					this.dialogFormVisible = false
