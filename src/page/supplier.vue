@@ -4,21 +4,71 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">供应商类别：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="supplytype" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">供应商名称：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="sname" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">联系人电话：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="mantelephone" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
+
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="dialogFormVisible = true" >新增供应商</el-button>
+			</el-col>
+		</el-row>
+        <el-dialog title="新增供应商" v-model="dialogFormVisible">
+        <el-form :model="form">
+			<el-form-item label="供应商编码" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.supplierid" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="供应商名称" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.sname" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="公司性质" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.supplytype" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="供应商地址" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.cmpanyaddress" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="供应商级别" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.ranks" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="联系人姓名" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.linkman" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="联系人电话" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.mantelephone" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="联系人手机号" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.mobiletelephone" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="税率" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.taxrate" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="创建人" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.createman" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="创建时间" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.createtime" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="备注" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+        </el-dialog>
 		<el-table
 			:data="receiptData"
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="companycode" width="120px"
+			prop="supplierid" width="120px"
 			label="单位编码">
 			</el-table-column>
 			<el-table-column
@@ -26,32 +76,36 @@
 			label="单位名称">
 			</el-table-column>
 			<el-table-column
-			prop="regisdate" width="120px"
-			label="登记日期">
-			</el-table-column>
-			<el-table-column
 			prop="supplytype" width="120px"
-			label="单位分类">
-			</el-table-column>
-			<el-table-column
-			prop="companytelephone" width="120px"
-			label="单位电话">
-			</el-table-column>
-			<el-table-column
-			prop="responsibilityhuman" width="120px"
-			label="首要联系人">
-			</el-table-column>
+			label="公司性质">
 			</el-table-column>
 			<el-table-column
 			prop="cmpanyaddress" width="120px"
-			label="单位地址">
+			label="供应商地址">
 			</el-table-column>
 			<el-table-column
-			prop="sstate" width="120px"
-			label="状态">
+			prop="ranks" width="120px"
+			label="供应商级别">
 			</el-table-column>
 			<el-table-column
-			label="操作" width="120px">
+			prop="linkman" width="120px"
+			label="联系人姓名">
+			</el-table-column>
+			</el-table-column>
+			<el-table-column
+			prop="mantelephone" width="120px"
+			label="联系人电话">
+			</el-table-column>
+			<el-table-column
+			prop="mobiletelephone" width="120px"
+			label="联系人手机号">
+			</el-table-column>
+			<el-table-column
+			prop="taxrate" width="120px"
+			label="税率">
+			</el-table-column>
+			<el-table-column
+			label="操作" fixed="right" width="120px">
 			<template scope="scope">
 				<el-button
 				size="small"
@@ -65,7 +119,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getSupplierAll, queryStockInList} from '@/api/getData'
+    import {getSupplierAll, querySupplierList, addSupplier} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -75,6 +129,12 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				form: {},
+				formLabelWidth: '120px',
+				dialogFormVisible: false,
+				supplytype: '',
+				sname: '',
+				mantelephone: ''
     		}
     	},
     	components: {
@@ -96,23 +156,32 @@
 			handleEdit(index,row) {
 				console.log(index,row)
 				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
+				this.$router.push('/supplierDetails/'+ row.supplierid)
 			},
 			async handleSearch(){
-				let sTime = this.formatter(this.value1)
-				let eTime = this.formatter(this.value2)
-				console.log(sTime)
-				console.log(eTime)
-				console.log(this.input)
-				const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				this.receiptData = resData.data.data.list
-				console.log(resData.data)
+				const resData = await querySupplierList(this.supplytype,this.sname,this.mantelephone)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async confirmAdd() {
+				console.log(this.form)
+                const supplierAdd = await addSupplier(this.form.supplierid,this.form.sname,this.form.supplytype,this.form.cmpanyaddress,this.form.ranks,this.form.linkman,this.form.mantelephone,this.form.mobiletelephone,this.form.taxrate,this.form.createman,this.form.createtime,this.form.remarkable)
+                if(supplierAdd.data.code === '1111') {
+                    this.$message('添加供应商成功!')
+                    this.dialogFormVisible = false
+                    this.initData()
+                } else {
+                    this.$message(supplierAdd.data.message)
+                }
 			}
 		}
     }

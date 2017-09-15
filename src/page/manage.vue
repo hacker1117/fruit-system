@@ -58,11 +58,11 @@
 					<el-submenu  style="background-color: #009a76;" index="5">
 						<template slot="title"><i class="el-icon-edit"></i>用户管理</template>
 						<!-- <el-menu-item index="uploadImg">上传图片</el-menu-item> -->
-						<el-menu-item style="background-color: #009a76;" index="/vueEdit">人员管理</el-menu-item>
-						<el-menu-item style="background-color: #009a76;" index="/vueEdit">权限管理</el-menu-item>
-						<el-menu-item style="background-color: #009a76;" index="/vueEdit">组管理</el-menu-item>
-						<el-menu-item style="background-color: #009a76;" index="/vueEdit">角色权限</el-menu-item>
-						<el-menu-item style="background-color: #009a76;" index="/vueEdit">页面权限</el-menu-item>
+						<el-menu-item style="background-color: #009a76;" index="/person">人员管理</el-menu-item>
+						<el-menu-item style="background-color: #009a76;" index="/permission">权限管理</el-menu-item>
+						<el-menu-item style="background-color: #009a76;" index="/group">组管理</el-menu-item>
+						<el-menu-item style="background-color: #009a76;" index="/role">角色权限</el-menu-item>
+						<el-menu-item style="background-color: #009a76;" index="/views">页面权限</el-menu-item>
 					</el-submenu>
 					<el-submenu style="background-color: #009a76;" index="6">
 						<template slot="title"><i class="el-icon-setting"></i>配置管理</template>

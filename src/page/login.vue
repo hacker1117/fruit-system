@@ -27,6 +27,7 @@
 <script>
 	import {login, getAdminInfo} from '@/api/getData'
 	import {mapActions, mapState} from 'vuex'
+	import local from '@/api/local'
 
 	export default {
 	    data(){
@@ -70,6 +71,7 @@
 								avatar: this.$store.state.adminInfo.avatar,
 								username: this.loginForm.username
 							})
+							local.set('userInfo', JSON.stringify(this.$store.state.adminInfo))
 							this.$router.push('/manage')
 						}else{
 							this.$message({
@@ -87,6 +89,16 @@
 					}
 				});
 			},
+			checkLogin() {
+				let isLogin = local.get('userInfo')
+				if(isLogin) {
+					this.$store.commit('saveAdminInfo', JSON.parse(isLogin))
+					this.$router.push('/manage')
+				}
+			}
+		},
+		created() {
+			this.checkLogin()
 		},
 		watch: {
 			adminInfo: function (newValue){

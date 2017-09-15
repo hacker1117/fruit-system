@@ -2,86 +2,37 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
-        <el-row style="margin-top: 20px;">
-			<el-col :span="8">
-				出库单号：&nbsp;{{headData.outputrepositorycode}}
-			</el-col>
-            <el-col :span="8">
-				出库时间：&nbsp;{{headData.outdate}}
-			</el-col>
-            <el-col :span="8">
-				收货人名称：&nbsp;{{headData.consignee}}
-			</el-col>
-		</el-row>
-        <el-row>
-			<el-col :span="8">
-				订单编号：&nbsp;{{headData.ordersno}}
-			</el-col>
-            <el-col :span="8">
-				验收单号：&nbsp;{{headData.acceptanceformcode}}
-			</el-col>
-            <el-col :span="8">
-				客户ID：&nbsp;{{headData.customerid}}
-			</el-col>
-		</el-row>
-        <el-row>
-			<el-col :span="8">
-				当前库存编号：&nbsp;{{headData.repocode}}
-			</el-col>
-            <el-col :span="8">
-				详细地址：&nbsp;{{headData.address}}
-			</el-col>
-            <el-col :span="8">
-				所属区域：&nbsp;
-			</el-col>
-		</el-row>
-        <el-row>
-			<el-col :span="8">
-				出库合计商品数量：&nbsp;{{headData.totalproducts}}
-			</el-col>
-            <el-col :span="8">
-				订单生成时间：&nbsp;{{headData.createtime}}
-			</el-col>
-            <el-col :span="8">
-				批次：&nbsp;{{headData.batchcount}}
-			</el-col>
-		</el-row>
-        <el-row>
-			<el-col :span="8">
-				订单附言：&nbsp;{{headData.comments}}
-			</el-col>
-		</el-row>
-		<el-table 
+		<el-table
 			:data="receiptData"
 			stripe
 			style="width: 840px;text-align:left; margin-top: 20px;">
 			<el-table-column
-			prop="handlingordercode" width="120px"
-			label="加工单号">
-			</el-table-column>
-			<el-table-column
-			prop="productcode" width="120px"
-			label="商品编号">
+			prop="ordercode" width="120px"
+			label="B库采购需求单号">
 			</el-table-column>
 			<el-table-column
 			prop="proname" width="120px"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
+			prop="procode" width="120px"
+			label="商品编码">
+			</el-table-column>
+			<el-table-column
+			prop="protype" width="120px"
+			label="商品分类">
+			</el-table-column>
+			<el-table-column
 			prop="prostandard" width="120px"
-			label="规格">
+			label="规格型号">
 			</el-table-column>
 			<el-table-column
 			prop="prounite" width="120px"
 			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="usecount" width="120px"
-			label="出库数量">
-			</el-table-column>
-			<el-table-column
-			prop="outdate" width="120px"
-			label="出库时间">
+			prop="procount" width="120px"
+			label="数量">
 			</el-table-column>
 		</el-table>
 		<el-row style="margin-top:20px;">
@@ -95,7 +46,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockOutDetailsHead, getStockOutDetailsDetail} from '@/api/getData'
+    import {getStockInDetails, getStockOutDetailsDetail} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -119,19 +70,15 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockOutDetailsHead(this.id)
-                    console.log('re: ',dataReceipt.data.data)
-                    this.headData = dataReceipt.data.data
-                    const dataReceiptDetails = await getStockOutDetailsDetail(this.id)
-                    console.log('re: ',dataReceiptDetails.data.data)
-                    this.receiptData = dataReceiptDetails.data.data
+					const dataReceipt = await getStockInDetails(this.id)
+                    this.receiptData = dataReceipt.data.data.list
     			}catch(err){
     				console.log(err);
     			}
             },
             handleBack(){
                 this.$destroy()
-                this.$router.push('/stockOut')
+                this.$router.push('/stockIn')
             }
 		}
     }

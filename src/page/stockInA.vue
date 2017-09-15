@@ -6,22 +6,15 @@
             <el-col :span="2" style="text-align:right;">单据编号：</el-col>
 			<el-col :span="4"><el-input v-model="ordernumber" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="ordeertime" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">供应商：</el-col>
-			<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">入库类型：</el-col>
-			<el-col :span="4"><el-input v-model="storagetype" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">金额：</el-col>
-			<el-col :span="4"><el-input v-model="totalmoney" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">是否作废：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">序列号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="ordertime" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+		</el-row>
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="handleAdd" >新增入库单</el-button>
+			</el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
@@ -80,14 +73,6 @@
 			prop="remarkable" width="120px"
 			label="备注">
 			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-			</template>
-			</el-table-column>
 		</el-table>
 		</div>
     </div>
@@ -105,6 +90,8 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				ordernumber: '',
+				ordertime: ''
     		}
     	},
     	components: {
@@ -123,11 +110,11 @@
     				console.log(err);
     			}
     		},
-			handleEdit(index,row) {
-				console.log(index,row)
-				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
-			},
+			// handleEdit(index,row) {
+			// 	console.log(index,row)
+			// 	this.$destroy()
+			// 	this.$router.push('/stockInListDetails/'+ row.orderid)
+			// },
 			async handleSearch(){
 				// let sTime = this.formatter(this.value1)
 				// let eTime = this.formatter(this.value2)
@@ -143,6 +130,10 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			handleAdd() {
+				this.$destroy()
+				this.$router.push('/stockInADetails')
 			}
 		}
     }

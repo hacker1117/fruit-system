@@ -24,7 +24,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json'
 			},
-			mode: "cors",
+			mode: "no-cors",
 			cache: "force-cache"
 		}
 
@@ -37,7 +37,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 		try {
 			const response = await fetch(url, requestConfig);
 			const responseJson = await response.json();
-			return responseJson
+			return response
 		} catch (error) {
 			throw new Error(error)
 		}

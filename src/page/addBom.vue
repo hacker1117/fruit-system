@@ -234,7 +234,7 @@
 			async querySearchAsync(queryString, cb) {
 				let results=[]
 				if(queryString !== '') {
-					const result = await getProList(queryString,1,10)
+					const result = await getProList(queryString)
 					results = result.data.data.list
 					for(let i=0;i<results.length;i++){
 						results[i].value=results[i].pname

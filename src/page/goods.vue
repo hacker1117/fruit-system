@@ -2,33 +2,70 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+        <el-dialog title="绑定APP后台商品" v-model="dialogFormVisibleGood">
+        <el-form :model="form">
+            <el-form-item label="APP后台商品" :label-width="formLabelWidth">
+                <el-select v-model="form.appGoodsIndex" placeholder="请选择商品">
+                    <el-option v-for="(appGoods,index) in appGoodsList" :key="appGoods.id" :label="appGoods.productFullName" :value="index"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisibleGood = false">取 消</el-button>
+            <el-button type="primary" @click="confirmBind">确 定</el-button>
+        </div>
+        </el-dialog>
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">商品编码：</el-col>
 			<el-col :span="4"><el-input v-model="proid" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">商品名称：</el-col>
 			<el-col :span="4"><el-input v-model="pname" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">规格型号：</el-col>
-			<el-col :span="4"><el-input v-model="prostandered" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">助记码：</el-col>
-			<el-col :span="4"><el-input v-model="helocode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">商品属性：</el-col>
-			<el-col :span="4"><el-input v-model="commodityattribute" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">厂家：</el-col>
-			<el-col :span="4"><el-input v-model="factories" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">品牌：</el-col>
-			<el-col :span="4"><el-input v-model="brand" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">条码：</el-col>
-			<el-col :span="4"><el-input v-model="barcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">产地：</el-col>
-			<el-col :span="4"><el-input v-model="placeoforigin" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="helpcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="dialogFormVisible = true" >新增货品</el-button>
+			</el-col>
+		</el-row>
+        <el-dialog title="新增供应商" v-model="dialogFormVisible">
+        <el-form :model="form">
+			<el-form-item label="商品编码" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.proid" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="商品名称" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.pname" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="规格" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.prostandered" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="商品属性" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.commodityattribute" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="厂家" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.factories" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="品牌" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.brand" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="供应商编码" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.supplierid" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="参考进价" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.referenceinprice" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="创建人" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.createman" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+        </el-dialog>
 		<el-table
 			:data="receiptData"
 			stripe
@@ -46,40 +83,36 @@
 			label="规格">
 			</el-table-column>
 			<el-table-column
-			prop="protype" width="120px"
-			label="商品分类">
+			prop="commodityattribute" width="120px"
+			label="商品属性">
 			</el-table-column>
 			<el-table-column
-			prop="pronuite" width="120px"
-			label="计量单位">
+			prop="factories" width="120px"
+			label="厂家">
 			</el-table-column>
 			<el-table-column
-			prop="referenceprice" width="120px"
-			label="参考售价">
+			prop="brand" width="120px"
+			label="品牌">
 			</el-table-column>
 			</el-table-column>
 			<el-table-column
-			prop="salesprice" width="120px"
-			label="零售价">
+			prop="supplierid" width="120px"
+			label="供应商编码">
 			</el-table-column>
 			<el-table-column
-			prop="imagepath" width="120px"
-			label="图片">
+			prop="referenceinprice" width="120px"
+			label="参考进价">
 			</el-table-column>
 			<el-table-column
-			prop="placeoforigin" width="120px"
-			label="来源">
-			</el-table-column>
-			<el-table-column
-			prop="goodsstate" width="120px"
-			label="状态">
+			prop="createman" width="120px"
+			label="创建人">
 			</el-table-column>
 			<el-table-column
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
 				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+				@click="handleEdit(scope.$index, scope.row)">绑定商品</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
@@ -89,7 +122,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getGoodsAll, queryGoodsList} from '@/api/getData'
+    import {getGoodsAll, queryGoodsList, addGoods, appGoodsList, bindAppGoods} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -100,6 +133,7 @@
 				city: {},
 				receiptData: [],
 				pname: '',
+				proid: '',
 				prostandered: '',
 				procode: '',
 				helpcode: '',
@@ -107,7 +141,15 @@
 				factories: '',
 				brand: '',
 				barcode: '',
-				placeoforigin: ''
+				placeoforigin: '',
+				form:{
+					appGoodsIndex:''
+				},
+				appBindId:'',
+				formLabelWidth: '120px',
+				dialogFormVisible: false,
+				dialogFormVisibleGood: false,
+				appGoodsList:[]
     		}
     	},
     	components: {
@@ -122,14 +164,16 @@
 					const dataReceipt = await getGoodsAll()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+					const appGoodsInfo = await appGoodsList(1)
+					this.appGoodsList = appGoodsInfo.data.resultData
+					console.log(this.appGoodsList)
     			}catch(err){
-    				console.log(err);
+    				console.log(err)
     			}
     		},
 			handleEdit(index,row) {
-				console.log(index,row)
-				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
+				this.dialogFormVisibleGood = true
+				this.appBindId = row.proid
 			},
 			async handleSearch(){
 				const resData = await queryGoodsList(this.pname, this.prostandered, this.procode, this.helpcode, this.commodityattribute, this.factories, this.brand, this.barcode, this.placeoforigin)
@@ -141,6 +185,26 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async confirmAdd(){
+				console.log(this.form)
+                const goodsAdd = await addGoods(this.form.proid,this.form.pname,this.form.prostandered,this.form.commodityattribute,this.form.factories,this.form.brand,this.form.supplierid,this.form.referenceinprice,this.form.createman)
+                if(goodsAdd.data.code === '1111') {
+                    this.$message('添加货品成功!')
+                    this.dialogFormVisible = false
+                    this.initData()
+                } else {
+                    this.$message(goodsAdd.data.message)
+                }
+			},
+			async confirmBind(){
+				const bindInfo = await bindAppGoods(this.appGoodsList[this.form.appGoodsIndex].productId, this.appGoodsList[this.form.appGoodsIndex].sku, this.appBindId)
+				if(bindInfo.data.code === '1111'){
+					this.$message('绑定成功')
+					this.dialogFormVisibleGood =false
+				}else {
+					this.$message(bindInfo.data.message)
+				}
 			}
 		}
     }

@@ -3,24 +3,12 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">商品分类：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">仓库：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购来源：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">商品名称：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4">
+				<el-select v-model="form.productindex" placeholder="请选择分类">
+                    <el-option v-for="(goods,index) in goodsList" :key="goods.id" :label="goods.pname" :value="index"></el-option>
+                </el-select>
+			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
@@ -30,69 +18,94 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate" width="120px"
+			prop="pname" width="120px"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="marke" width="120px"
+			prop="productcode" width="120px"
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="orderid" width="120px"
-			label="序列号">
-			</el-table-column>
-			<el-table-column
-			prop="ordertime" width="120px"
-			label="采购数量">
-			</el-table-column>
-			<el-table-column
-			prop="inrepotype" width="120px"
+			prop="respositysource" width="120px"
 			label="仓库来源">
 			</el-table-column>
 			<el-table-column
-			prop="netweight" width="120px"
-			label="采购来源">
-			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="prounite" width="120px"
+			prop="productionstandard" width="120px"
 			label="规格">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
-			label="商品分类">
-			</el-table-column>
-			<el-table-column
-			prop="prostandered" width="120px"
+			prop="buydepartmentid" width="120px"
 			label="采购部门">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="buyunite" width="120px"
 			label="单位">
 			</el-table-column>
-			<el-table-column
-			prop="prostandered" width="120px"
-			label="采购总需求">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="buynumber" width="120px"
+			label="采购数量">
+			</el-table-column>
+			<el-table-column
+			prop="aexistamount" width="120px"
 			label="A库库存">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="advisebuynumber" width="120px"
 			label="建议采购量">
-			</el-table-column>
-			<el-table-column
-			prop="prostandered" width="120px"
-			label="实际采购量">
 			</el-table-column>
 			<el-table-column
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
 				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+				@click="handleEdit(scope.$index, scope.row)">生成采购单</el-button>
 			</template>
+			</el-table-column>
+		</el-table>
+		<el-row style="margin-top:40px; ">
+		  <el-col :span="24"><h2>未生单商品列表</h2></el-col>
+		</el-row>
+		<el-table
+			:data="notCreatedData"
+			stripe
+			style="margin-top:20px; width: 100%;text-align:left;">
+			<el-table-column
+			prop="pname" width="120px"
+			label="商品名称">
+			</el-table-column>
+			<el-table-column
+			prop="productcode" width="120px"
+			label="商品编码">
+			</el-table-column>
+			<el-table-column
+			prop="respositysource" width="120px"
+			label="仓库来源">
+			</el-table-column>
+			<el-table-column
+			prop="productionstandard" width="120px"
+			label="规格">
+			</el-table-column>
+			<el-table-column
+			prop="buydepartmentid" width="120px"
+			label="采购部门">
+			</el-table-column>
+			<el-table-column
+			prop="buyunite" width="120px"
+			label="单位">
+			</el-table-column>
+			</el-table-column>
+			<el-table-column
+			prop="buynumber" width="120px"
+			label="采购数量">
+			</el-table-column>
+			<el-table-column
+			prop="aexistamount" width="120px"
+			label="A库库存">
+			</el-table-column>
+			<el-table-column
+			prop="advisebuynumber" width="120px"
+			label="建议采购量">
 			</el-table-column>
 		</el-table>
 		</div>
@@ -101,7 +114,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInListAll, queryStockInList} from '@/api/getData'
+    import {getPurchaseSumList, getPurchaseSumListByName, makePurchaseOrder, getPurchaseSumGoods} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -111,6 +124,12 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				notCreatedData:[],
+				pname: [],
+				goodsList: [],
+				form: {
+					productindex:''
+				}
     		}
     	},
     	components: {
@@ -122,27 +141,29 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockInListAll()
+					const dataReceipt = await getPurchaseSumList()
 					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					this.notCreatedData = dataReceipt.data.data.list
+					const goodsList = await getPurchaseSumGoods()
+					console.log('re: ',goodsList.data.data)
+					this.goodsList = goodsList.data.data
     			}catch(err){
     				console.log(err);
     			}
     		},
-			handleEdit(index,row) {
+			async handleEdit(index,row) {
 				console.log(index,row)
-				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
+				const makeInfo = await makePurchaseOrder(this.goodsList[this.form.productindex].pname, row.productcode, row.buynumber, row.aexistamount, row.advisebuynumber)
+				if(makeInfo.data.code === '1111'){
+					this.$message('生成采购单成功')
+				}else {
+					this.$message(makeInfo.data.message)
+				}
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				const purchaseReceipt = await getPurchaseSumListByName(this.goodsList[this.form.productindex].productcode)
+				console.log('re: ',purchaseReceipt.data.data)
+				this.receiptData = purchaseReceipt.data.data
 			},
 			formatter(date){
 				console.log(date.getMonth())

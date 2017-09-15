@@ -1,11 +1,24 @@
 import fetch from '@/config/fetch'
 import axio from '@/config/axio'
+import yichu from '@/config/yichu'
 
 /**
  * 登陆
  */
 
 export const login = data => axio('/user/login', data, 'POST');
+
+/**
+ * 获取APP后台商品列表
+ */
+
+export const appGoodsList = page => yichu('/openToErp/openToErpProductList', page, 'POST');
+
+/**
+ * 获取APP后台商品列表
+ */
+
+export const bindAppGoods = (procode, sku, proid) => axio('/productmanager/Bandwithfront', {procode, sku, proid});
 
 /**
  * 退出
@@ -245,7 +258,7 @@ export const getBomGroup = procode => axio('/Bom/queryOneGroup/' + procode);
  * 根据name模糊查询商品列表
  */
 
-export const getProList = (pName, pageNum = 1, pageSize = 10) => axio('/Bom/queryProductByName/' + pName ,{pageNum, pageSize})
+export const getProList = (pName) => axio('/Bom/queryProductByName',{pName})
 
 /**
  * 根据id获取BOM组
@@ -365,7 +378,7 @@ export const getStockInAll = (bpid = '',ordertime = '', inrepotype = '', handlep
  * 获取入库单详情
  */
 
-export const getStockInDetails = orderId => axio('/innetstorageb/get' , {orderId});
+export const getStockInDetails = bpid => axio('/repositoryb/selectTinstoragebByCondition' , {bpid});
 
 /**
  * 获取入库清单列表
@@ -392,10 +405,10 @@ export const queryStockInList = (orderid, ordertime, orderofcreatehuman, default
 export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getTotal',{pageNum, pageSize});
 
 /**
- * 获取运输损耗详情
+ * 新增运输损耗
  */
 
-export const getTransportWasteDetails = orderid => axio('/innetstorageb/get/'+ orderid );
+export const addTransportWasteAll = (procode, pname, productcount, prostandered, originalprice, reporttime) => axio('/bTWastageordera/insertBStageordera', {procode, pname, productcount, prostandered, originalprice, reporttime} );
 
 /**
  * 查询运输损耗清单
@@ -416,10 +429,28 @@ export const getPurchaseOrderAll = (pageNum = 1, pageSize = 10) => axio('/purcha
 export const getSupplierAll = (pageNum = 1, pageSize = 10) => axio('/supplierorder/findAllSupplierorder',{pageNum, pageSize});
 
 /**
+ * 获取供应商详情
+ */
+
+export const getSupplierDetails = (supplierid) => axio('/supplierorder/findDetalis',{supplierid});
+
+/**
+ * 添加供应商
+ */
+
+export const addSupplier = (supplierid,sname,supplytype,cmpanyaddress,ranks,linkman,mantelephone,mobiletelephone,taxrate,createman,createtime,remarkable) => axio('/supplierorder/InsertSupplierOrder',{supplierid,sname,supplytype,cmpanyaddress,ranks,linkman,mantelephone,mobiletelephone,taxrate,createman,createtime,remarkable},'POST');
+
+/**
  * 获取货品列表
  */
 
 export const getGoodsAll = (pageNum = 1, pageSize = 10) => axio('/productmanager/findAllProduct',{pageNum, pageSize});
+
+/**
+ * 获取货品列表
+ */
+
+export const addGoods = (proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice,createman) => axio('/productmanager/insertProduct',{proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice,createman});
 
 /**
  * 获取入库单列表
@@ -458,13 +489,152 @@ export const queryPurchaseOrderList = (salesmanname, createtime, ordercode, supp
 export const getPurchaseOrderDetails = ordercode => axio('/purchaseordera/Deatil',{ordercode});
 
 /**
+ * 获取未生单的采购单列表
+ */
+
+export const getPurchaseSumList = ordercode => axio('/purchasesummaryordera/selectAllNotCreate',{ordercode});
+
+/**
+ * 按照名称获取采购汇总单
+ */
+
+export const getPurchaseSumListByName = (productcode) => axio('/purchasesummaryordera/selectByProductcode',{productcode});
+
+/**
+ * 获取未生单的商品列表
+ */
+
+export const getPurchaseSumGoods = () => axio('/purchasesummaryordera/findAllProuctInPurchsummaryordera');
+
+/**
+ * 自动生成采购单
+ */
+
+export const makePurchaseOrder = (pname, productcode, buynumber, aexistamount, advisebuynumber) => axio('/purchasesummaryordera/updateIsCreatre',{pname, productcode, buynumber, aexistamount, advisebuynumber});
+
+/**
+ * 获取未生单的商品列表
+ */
+
+export const getNotStockInA = () => axio('/storageordera/queryTodayNotInStory');
+
+/**
  * 查询供应商列表
  */
 
-export const querySupplierList = sname => axio('/supplierorder/selectByName',{sname});
+export const querySupplierList = (supplytype,sname,mantelephone,pageNum = 1, pageSize = 10) => axio('/supplierorder/selectByExamples',{supplytype,sname,mantelephone,pageNum,pageSize});
 
 /**
  * 查询列表
  */
 
 export const queryGoodsList = (pname, prostandered, procode, helpcode, commodityattribute, factories, brand, barcode, placeoforigin, pageNum = '1', pageSize = '10') => axio('/productmanager/selectByExamples',{pname, prostandered, procode, helpcode, commodityattribute, factories, brand, barcode, placeoforigin, pageNum, pageSize});
+
+/**
+ * 查询用户列表
+ */
+
+export const queryUserList = () => axio('/user/findAllUser');
+
+/**
+ * 更新用户信息
+ */
+
+export const updateUser = (uid, upassword) => axio('/user/updateUser', {uid, upassword});
+
+/**
+ * 查询角色列表
+ */
+
+export const getRoleAll = () => axio('/user/addUserOnload');
+
+/**
+ * 添加用户
+ */
+
+export const addUserInfo = (roleid, urole, account, repositoryid, uname, upassword) => axio('/user/addUser', {roleid, urole, account, repositoryid, uname, upassword});
+
+/**
+ * 查询页面列表
+ */
+
+export const getViewsAll = () => axio('/maprolehtml/findAllHtml');
+
+/**
+ * 查询角色对应的页面列表
+ */
+
+export const getUserView = (roleid) => axio('/maprolehtml/findHtmlInRole/' + roleid);
+
+/**
+ * 查询角色对应的页面列表
+ */
+
+export const addRole = (rolename) => axio('/RoleManage/addRole', {rolename});
+
+
+/**
+ * 查询父类分组列表
+ */
+
+export const getGroupAll = () => axio('/group/findAllGroups');
+
+/**
+ * 查询子类分组列表
+ */
+
+export const getChildGroupAll = (saleid) => axio('/group/findChildrenGroupBysaleid' , {saleid});
+
+/**
+ * 查询所有仓库
+ */
+
+export const getRepoAll = () => axio('/user/findrepositorymanagerb');
+
+/**
+ * 添加父类组
+ */
+
+export const addGroup = (roleid,salegroupname) => axio('/group/insertGroup',{roleid,salegroupname});
+
+/**
+ * 添加子类组
+ */
+
+export const addChildGroup = (salegroupname,fid,roleid,categorycode) => axio('/group/insertChildrenGroup',{salegroupname, fid, roleid, categorycode});
+
+/**
+ * 查询所有商品分类
+ */
+
+export const getCateAll = () => axio('/group/selectCategroy');
+
+/**
+ * 批量添加页面绑定
+ */
+
+export const bindHtml = (roleID,hIDs) => axio('/maprolehtml/bandSomeHtml',{roleID,hIDs});
+
+/**
+ * 查询组内所有用户
+ */
+
+export const getGroupUser = (saleid) => axio('/group/queryUserInGroup',{saleid});
+
+/**
+ * 批量添加用户
+ */
+
+export const bindUser = (saleid,uids) => axio('/group/bandSomeUserswithAGroup',{saleid,uids});
+
+/**
+ * B库-查询采购单列表
+ */
+
+export const getPuschaseOrderB = (pageNum = 1,pageSize = 10) => axio('/repositoryb/queryNeedOfBuyb',{pageNum,pageSize});
+
+/**
+ * B库-添加采购单
+ */
+
+export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, defaultrepo, buynumber) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, defaultrepo, buynumber});

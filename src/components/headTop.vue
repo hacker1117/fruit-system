@@ -20,6 +20,7 @@
 	import {signout} from '@/api/getData'
 	import {baseImgPath} from '@/config/env'
 	import {mapActions, mapState} from 'vuex'
+	import local from '@/api/local'
 
     export default {
     	data(){
@@ -28,6 +29,10 @@
     		}
     	},
     	created(){
+			let isLogin = local.get('userInfo')
+			if(isLogin) {
+				this.$store.commit('saveAdminInfo', JSON.parse(isLogin))
+			}
     		if (!this.adminInfo.username) {
     			this.getAdminData()
     		}
@@ -46,7 +51,8 @@
 						this.$message({
 	                        type: 'success',
 	                        message: '退出成功'
-	                    });
+						});
+						local.clear()
 	                    this.$router.push('/');
 					}else{
 						this.$message({

@@ -20,7 +20,7 @@
             <el-col :span="2" style="text-align:right;">供应商：</el-col>
 			<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
-		<el-dialog title="新增采购单" v-model="dialogFormVisible">
+		<!-- <el-dialog title="新增采购单" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="料件名称" :label-width="formLabelWidth">
 				<el-autocomplete
@@ -47,7 +47,7 @@
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="confirmBomChild">确 定</el-button>
         </div>
-        </el-dialog>
+        </el-dialog> -->
 		<!-- <el-row>
             <el-col :span="2" style="text-align:right;">订单编号：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
@@ -74,25 +74,12 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate" width="120px"
-			label="单据状态">
-			</el-table-column>
-			<el-table-column
-			prop="markable" width="120px"
-			label="标记">
-			</el-table-column>
-			<el-table-column
-			prop="rejectedmarkable" width="120px"
-			label="进退货标志">
-			</el-table-column>
-			<el-table-column
-			prop="sequencenumber" width="120px"
-			label="序列号">
-			</el-table-column>
-			<el-table-column
 			prop="ordercode" width="120px"
 			label="单据号">
 			</el-table-column>
+			<el-table-column
+			prop="storagename" width="120px"
+			label="商品名称">
 			</el-table-column>
 			<el-table-column
 			prop="supplierid" width="120px"
@@ -107,6 +94,23 @@
 			label="采购员">
 			</el-table-column>
 			<el-table-column
+			prop="buyfare" width="120px"
+			label="采购费用">
+			</el-table-column>
+			</el-table-column>
+			<el-table-column
+			prop="moneyamount" width="120px"
+			label="采购金额">
+			</el-table-column>
+			<el-table-column
+			prop="allowance" width="120px"
+			label="折让金额">
+			</el-table-column>
+			<el-table-column
+			prop="salesmanname" width="120px"
+			label="创建时间">
+			</el-table-column>
+			<el-table-column
 			prop="moneyamount" width="120px"
 			label="采购金额">
 			</el-table-column>
@@ -119,23 +123,19 @@
 			label="折让金额">
 			</el-table-column>
 			<el-table-column
-			prop="creatorderhuman" width="120px"
-			label="制单人">
+			prop="advisenumber" width="120px"
+			label="建议采购量">
 			</el-table-column>
 			<el-table-column
 			prop="createtime" width="120px"
 			label="创建时间">
 			</el-table-column>
 			<el-table-column
-			prop="abolishhuman" width="120px"
-			label="作废人">
-			</el-table-column>
-			<el-table-column
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
 				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+				@click="handleEdit(scope.$index, scope.row)">修改</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
@@ -170,7 +170,7 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getPurchaseOrderAll(1, 1)
+					const dataReceipt = await getPurchaseOrderAll(1, 10)
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
     			}catch(err){

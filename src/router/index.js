@@ -49,7 +49,11 @@ const purchaseDetails = r => require.ensure([], () => r(require('@/page/purchase
 const dailyWaste = r => require.ensure([], () => r(require('@/page/dailyWaste')), 'dailyWaste');
 const branchHouse = r => require.ensure([], () => r(require('@/page/branchHouse')), 'branchHouse');
 const stockBalance = r => require.ensure([], () => r(require('@/page/stockBalance')), 'stockBalance');
-
+const person = r => require.ensure([], () => r(require('@/page/person')), 'person');
+const personDetails = r => require.ensure([], () => r(require('@/page/personDetails')), 'person');
+const role = r => require.ensure([], () => r(require('@/page/role')), 'role');
+const roleDetails = r => require.ensure([], () => r(require('@/page/roleDetails')), 'role');
+const group = r => require.ensure([], () => r(require('@/page/group')), 'group');
 
 const routes = [
 	{
@@ -64,6 +68,26 @@ const routes = [
 			path: '',
 			component: home,
 			meta: [],
+		},{
+			path: '/person',
+			component: person,
+			meta: ['用户管理', '人员管理'],
+		},{
+			path: '/personDetails/:id',
+			component: personDetails,
+			meta: ['用户管理', '人员管理'],
+		},{
+			path: '/role',
+			component: role,
+			meta: ['用户管理', '角色权限'],
+		},{
+			path: '/roleDetails/:id',
+			component: roleDetails,
+			meta: ['用户管理', '角色权限'],
+		},{
+			path: '/group',
+			component: group,
+			meta: ['用户管理', '组管理'],
 		},{
 			path: '/purchaseOrder',
 			component: purchaseOrder,
@@ -97,7 +121,7 @@ const routes = [
 			component: stockInA,
 			meta: ['A库进销存管理', '库存管理', '入库单'],
 		},{
-			path: '/stockInADetails/:id',
+			path: '/stockInADetails',
 			component: stockInADetails,
 			meta: ['A库进销存管理', '库存管理', '入库单'],
 		},{

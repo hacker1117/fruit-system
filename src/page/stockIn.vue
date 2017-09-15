@@ -7,10 +7,6 @@
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">单据日期：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">入库类型：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">经手人：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
@@ -18,54 +14,25 @@
 		<el-table
 			:data="receiptData"
 			stripe
-			style="width: 100%;text-align:left;">
+			style="text-align:left;">
 			<el-table-column
-			prop="ordercode" width="120px"
-			label="销售单号">
+			prop="orderstate" 
+			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="outputrepositorycode" width="120px"
-			label="出库编码">
+			prop="ordercode" 
+			label="入库单据号">
 			</el-table-column>
 			<el-table-column
-			prop="outdate" width="120px"
-			label="出库日期">
+			prop="ordertime" 
+			label="单据日期">
 			</el-table-column>
 			<el-table-column
-			prop="operatedate" width="120px"
-			label="订单生成日期">
+			prop="operatedate" 
+			label="B库采购需求单号">
 			</el-table-column>
 			<el-table-column
-			prop="repositorycode" width="120px"
-			label="仓库编码">
-			</el-table-column>
-			<el-table-column
-			prop="acceptanceFormID" width="120px"
-			label="验收单">
-			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="consigneeName" width="120px"
-			label="收货人名称">
-			</el-table-column>
-			<el-table-column
-			prop="customer" width="120px"
-			label="客户ID">
-			</el-table-column>
-			<el-table-column
-			prop="acceptanceHuman" width="120px"
-			label="验收员">
-			</el-table-column>
-			<el-table-column
-			prop="sendtype" width="120px"
-			label="所属区域">
-			</el-table-column>
-			<el-table-column
-			prop="addressDetail" width="120px"
-			label="详细地址">
-			</el-table-column>
-			<el-table-column
-			label="操作" fixed="right" width="120px">
+			label="操作" >
 			<template scope="scope">
 				<el-button
 				size="small"
@@ -110,7 +77,7 @@
 			handleEdit(index,row) {
 				console.log(index,row)
 				this.$destroy()
-				this.$router.push('/stockOutDetails/'+ row.outputrepositorycode)
+				this.$router.push('/stockInDetails/'+ row.bpid)
 			},
 			async handleSearch(){
 				// let sTime = this.formatter(this.value1)

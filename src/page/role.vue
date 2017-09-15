@@ -1,61 +1,44 @@
 <template>
     <div>
         <head-top></head-top>
+        <el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px; margin-left:2%;">
+			<el-col :span="24">
+				<el-button @click="dialogFormVisible = true" >新增角色</el-button>
+			</el-col>
+		</el-row>
+        <el-dialog title="新增用户" v-model="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="角色名称" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.rolename" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+        </el-dialog>
 		<div class="fruit-content">
-		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">入库清单编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购订单编号:</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
-		</el-row>
 		<el-table
 			:data="receiptData"
 			stripe
-			style="width: 100%;text-align:left;">
+			style="margin-top:20px;text-align:left;">
 			<el-table-column
-			prop="orderstate" width="120px"
-			label="单据状态">
+			prop="roleid" 
+			label="角色ID">
 			</el-table-column>
 			<el-table-column
-			prop="marke" width="120px"
-			label="标记">
+			prop="rolename" 
+			label="角色名称">
 			</el-table-column>
 			<el-table-column
-			prop="orderid" width="120px"
-			label="单据编号">
-			</el-table-column>
-			<el-table-column
-			prop="ordertime" width="120px"
-			label="单据日期">
-			</el-table-column>
-			<el-table-column
-			prop="inrepotype" width="120px"
-			label="入库类别">
-			</el-table-column>
-			<el-table-column
-			prop="netweight" width="120px"
-			label="净重量">
-			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="prounite" width="120px"
-			label="单位">
-			</el-table-column>
-			<el-table-column
-			prop="prostandered" width="120px"
-			label="规格">
-			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
+			label="操作" >
 			<template scope="scope">
 				<el-button
 				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+				@click="handleEdit(scope.$index, scope.row)">绑定页面</el-button>
+                <el-button
+				size="small"
+				@click="handleEdit(scope.$index, scope.row)">删除</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
@@ -65,7 +48,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInListAll, queryStockInList} from '@/api/getData'
+    import {getRoleAll, addRole} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -75,6 +58,20 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				pname: '',
+				prostandered: '',
+				procode: '',
+				helpcode: '',
+				commodityattribute: '',
+				factories: '',
+				brand: '',
+				barcode: '',
+                placeoforigin: '',
+                form: {
+                    rolename: ''
+                },
+                dialogFormVisible: false,
+                formLabelWidth: '120px'
     		}
     	},
     	components: {
@@ -86,9 +83,9 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockInListAll()
+					const dataReceipt = await getRoleAll()
 					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					this.receiptData = dataReceipt.data.data
     			}catch(err){
     				console.log(err);
     			}
@@ -96,24 +93,25 @@
 			handleEdit(index,row) {
 				console.log(index,row)
 				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
-			},
-			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				this.$router.push('/roleDetails/'+ row.roleid)
 			},
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
-			}
+            },
+            async confirmAdd() {
+                console.log(this.form.rolename)
+                const roleInfo = await addRole(this.form.rolename)
+                if (roleInfo.data.code === '1111'){
+                    this.$message('添加角色成功')
+                    this.initData()
+                    this.dialogFormVisible = false
+                } else {
+                    this.$message(roleInfo.data.message)
+                }
+            }
 		}
     }
 </script>

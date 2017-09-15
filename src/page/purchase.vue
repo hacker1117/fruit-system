@@ -2,24 +2,47 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+        <el-dialog title="新增运输损耗" v-model="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="商品名称" :label-width="formLabelWidth">
+                <el-select v-model="form.goodsIndex" placeholder="请选择商品名称">
+                    <el-option v-for="(goods,index) in goodsList" :key="goods.id" :label="goods.pname" :value="index"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="采购部门" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.buydepartmentid" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="采购员" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.buyer" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="单位" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.buyunite" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="仓库" :label-width="formLabelWidth">
+                <el-select v-model="form.defaultrepo" placeholder="请选择商品名称">
+                    <el-option label="A库" value="A库"></el-option>
+                </el-select>
+            </el-form-item>
+			<el-form-item label="规格" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.productionstandard" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="采购量" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.buynumber" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+        </el-dialog>
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
+            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">单据日期：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">制单人：</el-col>
+            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">默认仓库：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购员：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购类型：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
@@ -30,45 +53,28 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate" width="120px"
+			prop="orderstate" 
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="marke" width="120px"
-			label="标记">
+			prop="producttype" 
+			label="商品类别">
 			</el-table-column>
 			<el-table-column
-			prop="orderid" width="120px"
-			label="单据编号">
+			prop="orderno" 
+			label="订单编号">
 			</el-table-column>
 			<el-table-column
-			prop="ordertime" width="120px"
-			label="单据日期">
+			prop="buydepartmentid" 
+			label="采购部门">
 			</el-table-column>
 			<el-table-column
-			prop="inrepotype" width="120px"
-			label="入库类别">
+			prop="buyer" 
+			label="采购员">
 			</el-table-column>
 			<el-table-column
-			prop="netweight" width="120px"
-			label="净重量">
-			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="prounite" width="120px"
-			label="单位">
-			</el-table-column>
-			<el-table-column
-			prop="prostandered" width="120px"
-			label="规格">
-			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-			</template>
+			prop="createtime" 
+			label="创建时间">
 			</el-table-column>
 		</el-table>
 		</div>
@@ -77,7 +83,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInListAll, queryStockInList} from '@/api/getData'
+    import {getPuschaseOrderB, queryStockInList, addPurchaseOrderB} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -87,6 +93,10 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				form: {
+					defaultrepo: '',
+					goodsIndex: ''
+				}
     		}
     	},
     	components: {
@@ -98,9 +108,11 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockInListAll()
+					const dataReceipt = await getPuschaseOrderB()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+					const result = await getProList('')
+					this.goodsList = result.data.data
     			}catch(err){
     				console.log(err);
     			}
@@ -125,6 +137,12 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async confirmAdd(){
+				const addInfo = await addPurchaseOrderB(pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, defaultrepo, buynumber)
+				if(addInfo.data.code === '1111'){
+					this.$message('添加采购单成功')
+				}
 			}
 		}
     }
