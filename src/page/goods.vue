@@ -252,10 +252,9 @@
 					}
 				}
 			},
-			async handleCurrentChange() {
-				this.currentPage += 1
+			async handleCurrentChange(event) {
+				this.currentPage = event
 				const dataReceipt = await getGoodsAll(this.currentPage)
-				console.log('re: ',dataReceipt.data.data)
 				this.receiptData = dataReceipt.data.data.list
 			},
 			handleSizeChange() {
