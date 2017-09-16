@@ -258,7 +258,7 @@ export const getBomGroup = procode => axio('/Bom/queryOneGroup/' + procode);
  * 根据name模糊查询商品列表
  */
 
-export const getProList = (pName) => axio('/Bom/queryProductByName',{pName})
+export const getProList = (proName) => axio('/Bom/queryProductByName',{proName})
 
 /**
  * 根据id获取BOM组
@@ -270,13 +270,13 @@ export const getBomDetail = procode => axio('/Bom/findSingleBom/' + procode);
  * 插入Bom父节点
  */
 
-export const insertParentBom = data => axio('/Bom/createParentBom', data, 'POST');
+export const insertParentBom = (proname, prostandard, prounite) => axio('/Bom/createParentBom', {proname, prostandard, prounite}, 'POST');
 
 /**
  * 插入Bom父节点
  */
 
-export const insertChildBom = data => axio('/Bom/createChildBom', data, 'POST');
+export const insertChildBom = (proname, prostandard, prounite, proid, pid, count) => axio('/Bom/createChildBom', {proname, prostandard, prounite, proid, pid, count}, 'POST');
 
 /**
  * 删除Bom节点（父子均可）

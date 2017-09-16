@@ -104,15 +104,16 @@
 			prop="taxrate" width="120px"
 			label="税率">
 			</el-table-column>
-			<el-table-column
-			label="操作" fixed="right" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-			</template>
-			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -134,7 +135,9 @@
 				dialogFormVisible: false,
 				supplytype: '',
 				sname: '',
-				mantelephone: ''
+				mantelephone: '',
+				currentPage: 1,
+				count: 0
     		}
     	},
     	components: {
@@ -146,9 +149,10 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getSupplierAll()
+					const dataReceipt = await getSupplierAll(this.currentPage)
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -182,6 +186,11 @@
                 } else {
                     this.$message(supplierAdd.data.message)
                 }
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = await getSupplierAll(this.currentPage)
+				this.receiptData = dataReceipt.data.data.list
 			}
 		}
     }

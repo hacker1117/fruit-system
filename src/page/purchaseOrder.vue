@@ -90,12 +90,12 @@
 			prop="moneyamount" width="120px"
 			label="采购金额">
 			</el-table-column>
-			<el-table-column
+			<el-table-column fixed="right"
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
 				size="small"
-				@click="handleEdit(scope.$index, scope.row)">修改</el-button>
+				@click="handleEdit(scope.$index, scope.row)">完善采购单信息</el-button>
 			</template>
 			</el-table-column>
 		</el-table>

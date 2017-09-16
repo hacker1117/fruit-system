@@ -11,7 +11,7 @@
         <el-form :model="form">
             <el-form-item label="料件名称" :label-width="formLabelWidth">
 				<el-autocomplete
-				v-model="form.proname"
+				v-model="form.goodsName"
 				:fetch-suggestions="querySearchAsync"
 				placeholder="请输入名称模糊搜索"
 				@select="handleAddChild"
@@ -93,9 +93,8 @@
 			label="数量">
 			</el-table-column>
 		</el-table>
-		<el-row style="margin-top:20px;">
-			<el-col :span="24" style="padding-left:87.5%; padding-right:0;">
-				<el-button type="primary">保存</el-button>
+		<el-row style="margin-top:20px; float:right">
+			<el-col :span="24" >
 				<el-button @click="handleBack" type="primary">返回</el-button>
 			</el-col>
 		</el-row>
@@ -130,7 +129,9 @@
 				formLabelWidth: '120px',
 				pid: '',
 				childList:[],
-				isDisabled: false
+				isDisabled: false,
+				goodsList:[],
+				confirmIndex: 0
     		}
     	},
     	components: {
@@ -201,11 +202,7 @@
 				}
 			},
 			async insertBom() {
-				const insertStatus = await insertParentBom({
-					proname: this.form.proname,
-					prostandard: this.form.prostandard,
-					prounite: this.form.prounite,
-				})
+				const insertStatus = await insertParentBom(this.proname, this.prostandard, this.prounite)
 				console.log(insertStatus)
 				if(insertStatus.data.code === '1111'){
 					this.$message({
@@ -235,9 +232,10 @@
 				let results=[]
 				if(queryString !== '') {
 					const result = await getProList(queryString)
-					results = result.data.data.list
+					results = result.data.data
+					this.goodsList = result.data.data
 					for(let i=0;i<results.length;i++){
-						results[i].value=results[i].pname
+						results[i].value=results[i].proname
 					}
 				}
 				clearTimeout(this.timeout)
@@ -250,36 +248,20 @@
 				this.form.proid = item.proid
 			},
 			handleAddChild(){
-				this.$confirm('确认新增该料件吗?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.confirmBomChild()
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					}) 
-					return false         
-				})
+				for(let i = 0; i<this.goodsList.length; i++){
+					if(this.form.goodsName == this.goodsList[i].proname) {
+						this.confirmIndex = i
+					}
+				}
 			},
 			async confirmBomChild() {
-				const insertStatus = await insertChildBom({
-					proname: this.proname,
-					prostandard: this.prostandard,
-					prounite: this.prounite,
-					proid: this.form.proid,
-					pid: this.pid,
-					count: this.form.count
-				})
+				const insertStatus = await insertChildBom(this.proname, this.prostandard, this.prounite, this.goodsList[this.confirmIndex].proid, this.pid, this.form.count)
 				let childData = insertStatus.data.data
 				childData.level = 2
 				console.log('child:',childData)
 				this.bomChildList.push(childData)
 				this.dialogFormVisible = false
 				this.initForm()
-				console.log(this.pid)
 			}
 		}
     }
