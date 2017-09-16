@@ -2,9 +2,35 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+        <el-dialog title="完善采购信息" v-model="dialogFormVisible">
+        <el-form :model="form">
+			<el-form-item label="供应商" :label-width="formLabelWidth">
+               <el-select v-model="form.supplierid" placeholder="请选择供应商">
+                    <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.sname" :value="supplier.supplierid"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="采购部门" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.buydepartment" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="采购员" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.salesmanname" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="采购费用" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.buyfare" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="采购金额" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.moneyamount" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="折让金额" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.allowance" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+        </el-dialog>
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">制单人：</el-col>
-			<el-col :span="4"><el-input v-model="salesmanname" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">创建日期：</el-col>
 			<el-col :span="4">				
 				<el-date-picker
@@ -20,52 +46,6 @@
             <el-col :span="2" style="text-align:right;">供应商：</el-col>
 			<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
-		<!-- <el-dialog title="新增采购单" v-model="dialogFormVisible">
-        <el-form :model="form">
-            <el-form-item label="料件名称" :label-width="formLabelWidth">
-				<el-autocomplete
-				v-model="form.proname"
-				:fetch-suggestions="querySearchAsync"
-				placeholder="请输入名称模糊搜索"
-				@select="handleAddChild"
-				></el-autocomplete>
-            </el-form-item>
-            <el-form-item label="规格" :label-width="formLabelWidth">
-            <el-input style="width: 195px" v-model="form.prostandard" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="单位" :label-width="formLabelWidth">
-            <el-select v-model="form.prounite" placeholder="请选择计量单位">
-                <el-option label="个" value="个"></el-option>
-                <el-option label="克" value="克"></el-option>
-            </el-select>
-            </el-form-item>
-            <el-form-item label="数量" :label-width="formLabelWidth">
-            <el-input style="width: 195px" v-model="form.count" auto-complete="off"></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="confirmBomChild">确 定</el-button>
-        </div>
-        </el-dialog> -->
-		<!-- <el-row>
-            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">供应商：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购类型：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">采购员：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购金额：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">序列号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row> -->
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
@@ -111,26 +91,6 @@
 			label="采购金额">
 			</el-table-column>
 			<el-table-column
-			prop="allowance" width="120px"
-			label="折让金额">
-			</el-table-column>
-			<el-table-column
-			prop="salesmanname" width="120px"
-			label="创建时间">
-			</el-table-column>
-			<el-table-column
-			prop="moneyamount" width="120px"
-			label="采购金额">
-			</el-table-column>
-			<el-table-column
-			prop="buyfare" width="120px"
-			label="采购费用">
-			</el-table-column>
-			<el-table-column
-			prop="allowance" width="120px"
-			label="折让金额">
-			</el-table-column>
-			<el-table-column
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
@@ -139,6 +99,15 @@
 			</template>
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -158,7 +127,19 @@
 				salesmanname: '',
 				creattime: '',
 				ordercode: '',
-				supplierid: ''
+				form:{
+					supplierid: '',
+					buydepartment: '',
+					salesmanname: '',
+					buyfare: '',
+					moneyamount: '',
+					allowance: ''
+				},
+				dialogFormVisible: false,
+				formLabelWidth: '120px',
+				supplierList:[],
+				currentPage: 1,
+				count: 0
     		}
     	},
     	components: {
@@ -170,17 +151,21 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getPurchaseOrderAll(1, 10)
+					const dataReceipt = await getPurchaseOrderAll(this.currentPage, 10)
 					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					if(dataReceipt.data.code === '1111'){
+						this.receiptData = dataReceipt.data.data.list
+						this.count = dataReceipt.data.data.total
+					}
+					const suppliers = await getSupplierAll()
+					this.supplierList = suppliers.data.data.list
     			}catch(err){
     				console.log(err);
     			}
     		},
 			handleEdit(index,row) {
-				console.log(index,row)
-				this.$destroy()
-				this.$router.push('/purchaseOrderDetails/'+ row.ordercode)
+				this.dialogFormVisible = true
+				this.ordercode = row.ordercode
 			},
 			async handleSearch(){
 				let cTime = this.creattime === '' ? '' : this.formatter(this.creattime)
@@ -194,6 +179,23 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async confirmAdd(){
+				const addInfo = await makePurchase(this.ordercode, this.form.supplierid, this.form.salesmanname, this.form.buydepartment, this.form.buyfare, this.form.moneyamount, this.form.allowance)
+				if(addInfo.data.code === '1111'){
+					this.$message('完善采购单信息成功')
+					this.dialogFormVisible = false
+					this.initData()
+				}else {
+					this.$message(addInfo.data.message)
+				}
+			},
+			async handleCurrentChange(num) {
+				this.currentPage = num
+				const dataReceipt = await getPurchaseOrderAll(this.currentPage, 10)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+				}
 			}
 		}
     }

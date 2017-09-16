@@ -664,7 +664,7 @@ export const addChildCate = (categoryname,parentcategoryname,pid) => axio('/prod
 export const getAddPurchase = respositysource => axio('/outputordera/summary',{respositysource});
 
 /**
- * 确认储库
+ * 确认出库
  */
 
 export const makeStockOut = (respositysource) => axio('/outputordera/insertOutput',{respositysource});
@@ -673,4 +673,10 @@ export const makeStockOut = (respositysource) => axio('/outputordera/insertOutpu
  * 新增入库单
  */
 
-export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, repositories, pronumber, perprice, totalmoney, netweight, supplierid, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, repositories, pronumber, perprice, totalmoney, netweight, supplierid, storagetype});
+export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, storagetype});
+
+/**
+ * 完善入库单信息
+ */
+
+export const makePurchase = (ordercode, supplierid, salesmanname, buydepartment, buyfare, moneyamount, allowance) => axio('/purchaseordera/updateByOrderCode',{ordercode, supplierid, salesmanname, buydepartment, buyfare, moneyamount, allowance});

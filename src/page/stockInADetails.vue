@@ -11,11 +11,6 @@
 		</el-row>
         <el-dialog title="完善入库信息" v-model="dialogFormVisible">
         <el-form :model="form">
-            <el-form-item label="仓库" :label-width="formLabelWidth">
-                <el-select v-model="form.repositoryname" placeholder="请选择仓库">
-                    <el-option v-for="repo in repoList" :key="repo.id" :label="repo.reponame" :value="repo.reponame"></el-option>
-                </el-select>
-            </el-form-item>
             <el-form-item label="实际入库数量" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.pronumber" auto-complete="off"></el-input>
             </el-form-item>
@@ -27,11 +22,6 @@
             </el-form-item>
 			<el-form-item label="总价" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.totalmoney" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="供应商" :label-width="formLabelWidth">
-               <el-select v-model="form.supplierid" placeholder="请选择供应商">
-                    <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.sname" :value="supplier.supplierid"></el-option>
-                </el-select>
             </el-form-item>
 			<el-form-item label="虚拟库" :label-width="formLabelWidth">
                 <el-select v-model="form.visualreposity" placeholder="请选择虚拟库">
@@ -141,7 +131,6 @@
 				prostandered: '',
 				prounite: '',
 				form:{
-					repositoryname: '',
 					visualreposity: '',
 					supplierid: ''
 				},
@@ -201,7 +190,7 @@
 				this.$router.push('/stockInADetails')
 			},
 			async confirmAdd() {
-				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.repositories, this.form.pronumber, this.form.perprice, this.form.totalmoney, this.form.netweight, this.form.supplierid)
+				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.pronumber, this.form.perprice, this.form.totalmoney, this.form.netweight)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善入库单成功')
 					this.dialogFormVisible = false
