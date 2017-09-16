@@ -82,6 +82,14 @@
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
+			prop="advisenumber" width="120px"
+			label="建议采购量">
+			</el-table-column>
+			<el-table-column
+			prop="createtime" width="120px"
+			label="创建时间">
+			</el-table-column>
+			<el-table-column
 			prop="supplierid" width="120px"
 			label="供应商">
 			</el-table-column>
@@ -121,14 +129,6 @@
 			<el-table-column
 			prop="allowance" width="120px"
 			label="折让金额">
-			</el-table-column>
-			<el-table-column
-			prop="advisenumber" width="120px"
-			label="建议采购量">
-			</el-table-column>
-			<el-table-column
-			prop="createtime" width="120px"
-			label="创建时间">
 			</el-table-column>
 			<el-table-column
 			label="操作" width="120px">

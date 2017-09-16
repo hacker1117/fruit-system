@@ -28,37 +28,42 @@
 		<el-table
 			:data="receiptData"
 			stripe
-			style="width: 100%;text-align:left;">
+			style="text-align:left;">
 			<el-table-column
-			prop="repocode" width="120px"
+			prop="repocode"
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="proname" width="120px"
+			prop="proname" 
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="goodstype" width="120px"
+			prop="goodstype" 
 			label="商品分类">
 			</el-table-column>
 			<el-table-column
-			prop="prostandard" width="120px"
+			prop="prostandard" 
 			label="规格型号">
 			</el-table-column>
 			<el-table-column
-			prop="inrepotype" width="120px"
+			prop="inrepotype" 
 			label="库存单位">
 			</el-table-column>
 			<el-table-column
-			prop="currentexist" width="120px"
+			prop="currentexist" 
 			label="库存单位现存量">
 			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="prounite" width="120px"
-			label="序列号">
-			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -75,6 +80,8 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				currentPage: 1,
+				count: ''
     		}
     	},
     	components: {
@@ -86,9 +93,12 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockBalanceaAll(1, 1)
+					const dataReceipt = await getStockBalanceaAll()
 					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					if(dataReceipt.data.code === '1111'){
+						this.receiptData = dataReceipt.data.data.list
+						this.count = dataReceipt.data.data.total
+					}
     			}catch(err){
     				console.log(err);
     			}
@@ -113,6 +123,18 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = await getStockBalanceaAll(num)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+				}else {
+					this.receiptData = []
+				}
+			},
+			handleSizeChange(){
+
 			}
 		}
     }

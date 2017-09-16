@@ -643,7 +643,7 @@ export const getPuschaseOrderB = (pageNum = 1,pageSize = 10) => axio('/repositor
  * B库-添加采购单
  */
 
-export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, defaultrepo, buynumber) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, defaultrepo, buynumber});
+export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber});
 
 /**
  * 货品分类-添加父分类

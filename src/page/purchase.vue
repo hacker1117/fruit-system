@@ -62,15 +62,15 @@
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="ordercode" 
+			prop="orderno" 
 			label="订单编号">
 			</el-table-column>
 			<el-table-column
-			prop="proname" 
+			prop="pname" 
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="procodee" 
+			prop="productcode" 
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
@@ -126,12 +126,17 @@
     		async initData(){
     			try{
 					const dataReceipt = await getPuschaseOrderB()
-					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					if(dataReceipt.data.code === '1111'){
+						this.receiptData = dataReceipt.data.data.list
+					}
 					const result = await getProList('')
-					this.goodsList = result.data.data
+					if(result.data.code === '1111'){
+						this.goodsList = result.data.data	
+					}
 					const repos = await getRepoAll()
-					this.repoList = repos.data.data
+					if(repos.data.code === '1111'){
+						this.repoList = repos.data.data
+					}	
     			}catch(err){
     				console.log(err);
     			}
@@ -158,7 +163,7 @@
 				return res
 			},
 			async confirmAdd(){
-				const addInfo = await addPurchaseOrderB(this.goodsList[this.form.goodsIndex].pname, this.goodsList[this.form.goodsIndex].productcode, this.goodsList[this.form.goodsIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
+				const addInfo = await addPurchaseOrderB(this.goodsList[this.form.goodsIndex].pname, this.goodsList[this.form.goodsIndex].procode, this.goodsList[this.form.goodsIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 					this.dialogFormVisible = false

@@ -20,7 +20,7 @@
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="ordercode" 
+			prop="outputcode" 
 			label="入库单据号">
 			</el-table-column>
 			<el-table-column
@@ -28,7 +28,7 @@
 			label="单据日期">
 			</el-table-column>
 			<el-table-column
-			prop="operatedate" 
+			prop="ordercode" 
 			label="B库采购需求单号">
 			</el-table-column>
 			<el-table-column
