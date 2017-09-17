@@ -180,6 +180,7 @@
 				return res
 			},
 			async confirmAdd(){
+				//procode -> proid
 				const addInfo = await addPurchaseOrderB(this.goodsList[this.confirmIndex].pname, this.goodsList[this.confirmIndex].proid, this.goodsList[this.confirmIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
@@ -213,11 +214,11 @@
 				}
 			},
 			async handleCurrentChange(num){
-				this.currentPage = num
+				this.currentPage = num 
 				const dataReceipt = await getPuschaseOrderB(this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
-				}
+				}				
 			}
 		}
     }
