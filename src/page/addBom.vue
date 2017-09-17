@@ -230,12 +230,13 @@
 			},
 			async querySearchAsync(queryString, cb) {
 				let results=[]
-				if(queryString !== '') {
-					const result = await getProList(queryString)
-					results = result.data.data
-					this.goodsList = result.data.data
+				console.log(queryString)
+				const result = await getProList(queryString)
+				results = result.data.data
+				this.goodsList = result.data.data
+				if(result.data.code === '1111'){
 					for(let i=0;i<results.length;i++){
-						results[i].value=results[i].proname
+						results[i].value=results[i].pname
 					}
 				}
 				clearTimeout(this.timeout)
@@ -249,7 +250,7 @@
 			},
 			handleAddChild(){
 				for(let i = 0; i<this.goodsList.length; i++){
-					if(this.form.goodsName == this.goodsList[i].proname) {
+					if(this.form.goodsName == this.goodsList[i].pname) {
 						this.confirmIndex = i
 					}
 				}

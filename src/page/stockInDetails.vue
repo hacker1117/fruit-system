@@ -5,7 +5,7 @@
         <el-dialog title="报损" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="数量" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.productcount" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.procount" auto-complete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -50,7 +50,7 @@
 			<template scope="scope">
 				<el-button
 				size="small"
-				@click="handleEdit(scope.$index, scope.row)">绑定商品</el-button>
+				@click="handleEdit(scope.$index, scope.row)">报损</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
@@ -84,7 +84,9 @@
 				prounite: '',
 				form: {},
 				dialogFormVisible:false,
-				formLabelWidth: '120px'
+				formLabelWidth: '120px',
+				repository: '',
+				productcount: ''
     		}
     	},
     	components: {
@@ -113,9 +115,11 @@
 				this.prostandered = row.prostandard
 				this.prounite = row.prounite
 				this.ordercode = row.ordercode
+				this.repository = row.customer
+				this.productcount = row.procount
 			},
 			async confirmAdd(){
-				const addInfo = await addTransportWasteAll(this.ordercode, this.procode, this.pname, this.form.productcount, this.prostandered, this.prounite)
+				const addInfo = await addTransportWasteAll(this.form.procount, this.productcount, this.procode, this.ordercode, this.repository, this.proname, this.prostandard, this.prounite)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加运输损耗成功')
 					this.dialogFormVisible = false

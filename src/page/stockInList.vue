@@ -3,12 +3,20 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">入库清单编号：</el-col>
+            <el-col :span="3" style="text-align:center;">入库清单编号：</el-col>
 			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购订单编号:</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="3" style="text-align:center;">单据日期：</el-col>
+            <el-col :span="4">
+				<el-date-picker
+				v-model="createtime"
+				type="date"
+				size="small"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+			</el-col>
+            <el-col :span="3" style="text-align:center;">采购订单编号:</el-col>
+			<el-col :span="4"><el-input v-model="orderNumber" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
@@ -73,7 +81,9 @@
 				value1: '',
 				value2: '',
 				input: '',
+                createtime: '',
 				city: {},
+                orderNumber: '',
 				receiptData: [],
     		}
     	},

@@ -47,7 +47,6 @@
 			<el-col :span="24">
                 <el-button style="float: right;" @click="handleSearch" type="primary">清空</el-button>
                 <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-                <el-button style="float: right;" @click="handleInsert" type="primary">新增</el-button>
             </el-col>
 		</el-row>
 		<el-table

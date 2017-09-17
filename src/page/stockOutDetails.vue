@@ -86,6 +86,7 @@
 		</el-table>
 		<el-row style="margin-top:20px;">
 			<el-col :span="24">
+				<a :href="toPrint"><el-button style="float:right; margin-left:20px;" type="primary">预览打印</el-button></a>
 				<el-button style="float:right;" @click="handleBack" type="primary">返回</el-button>
 			</el-col>
 		</el-row>
@@ -107,7 +108,8 @@
 				city: {},
                 receiptData: [],
                 id: this.$route.params.id,
-                headData:{}
+				headData:{},
+				toPrint:'http://47.95.12.49:9001/print/z_print.html?' + this.$route.params.id
     		}
     	},
     	components: {
@@ -132,7 +134,10 @@
             handleBack(){
                 this.$destroy()
                 this.$router.push('/stockOut')
-            }
+			},
+			handlePrint(){
+				this.$router.go('https://www.baidu.com')
+			}
 		}
     }
 </script>

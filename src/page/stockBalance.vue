@@ -3,81 +3,66 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">制单人：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">默认仓库：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购员：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购类型：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">商品编码：</el-col>
+			<el-col :span="4"><el-input v-model="repocode" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">商品名称：</el-col>
+			<el-col :span="4"><el-input v-model="proname" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">仓库名称：</el-col>
+			<el-col :span="4"><el-input v-model="repositorystate" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
-		<el-table
-			:data="receiptData"
-			stripe
-			style="width: 100%;text-align:left;">
-			<el-table-column
-			prop="orderstate" width="120px"
-			label="单据状态">
-			</el-table-column>
-			<el-table-column
-			prop="marke" width="120px"
-			label="标记">
-			</el-table-column>
-			<el-table-column
-			prop="orderid" width="120px"
-			label="单据编号">
-			</el-table-column>
-			<el-table-column
-			prop="ordertime" width="120px"
-			label="单据日期">
-			</el-table-column>
-			<el-table-column
-			prop="inrepotype" width="120px"
-			label="入库类别">
-			</el-table-column>
-			<el-table-column
-			prop="netweight" width="120px"
-			label="净重量">
-			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="prounite" width="120px"
-			label="单位">
-			</el-table-column>
-			<el-table-column
-			prop="prostandered" width="120px"
-			label="规格">
-			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-			</template>
-			</el-table-column>
-		</el-table>
+        <el-table
+            :data="receiptData"
+            stripe
+            style="text-align:left;">
+            <el-table-column
+            prop="repocode"
+            label="商品编码">
+            </el-table-column>
+            <el-table-column
+            prop="proname"
+            label="商品名称">
+            </el-table-column>
+            <el-table-column
+            prop="goodstype"
+            label="商品分类">
+            </el-table-column>
+            <el-table-column
+            prop="prostandard"
+            label="规格型号">
+            </el-table-column>
+            <el-table-column
+            prop="prounite"
+            label="库存单位">
+            </el-table-column>
+            <el-table-column
+            prop="repositorystate"
+            label="仓库名称">
+            </el-table-column>
+            <el-table-column
+            prop="currentexist"
+            label="库存单位现存量">
+            </el-table-column>
+        </el-table>
+        <div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="20"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInListAll, queryStockInList} from '@/api/getData'
+    import {getStockInListAll, queryStockInList, getBalanceTableB} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -87,6 +72,11 @@
 				input: '',
 				city: {},
 				receiptData: [],
+                currentPage: 1,
+                count: 0,
+                proname: '',
+                repocode: '',
+                repositorystate: ''
     		}
     	},
     	components: {
@@ -98,9 +88,9 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockInListAll()
-					console.log('re: ',dataReceipt.data.data)
+					const dataReceipt = await getBalanceTableB()
 					this.receiptData = dataReceipt.data.data.list
+                    this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -111,21 +101,24 @@
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+                let {repocode, proname, repositorystate} = this
+				const dataReceipt = await getBalanceTableB(null, null, repocode, proname, repositorystate)
+                this.receiptData = dataReceipt.data.data.list
+                this.count = dataReceipt.data.data.total
 			},
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
-			}
+			},
+            async handleCurrentChange(num){
+                const dataReceipt = await getBalanceTableB(num)
+                this.receiptData = dataReceipt.data.data.list
+            },
+            handleSizeChange(...rest) {
+                console.log('rest', rest)
+            }
 		}
     }
 </script>
