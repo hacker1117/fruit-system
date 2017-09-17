@@ -3,24 +3,14 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">制单人：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">默认仓库：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购员：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购类型：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">仓库：</el-col>
+			<el-col :span="4"><el-input v-model="repository" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">商品编码：</el-col>
+			<el-col :span="4"><el-input v-model="repocode" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">助记码：</el-col>
+			<el-col :span="4"><el-input v-model="mnemoniccode" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">商品名称：</el-col>
+			<el-col :span="4"><el-input v-model="proname" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
@@ -81,6 +71,10 @@
 				receiptData: [],
 				currentPage: 1,
 				count: 0,
+				repository: '',
+				repocode: '',
+				mnemoniccode: '',
+				proname: ''
     		}
     	},
     	components: {
@@ -92,7 +86,7 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockBalancebAll()
+					const dataReceipt = await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname)
 					console.log('re: ',dataReceipt.data.data)
 					if(dataReceipt.data.code === '1111'){
 						this.receiptData = dataReceipt.data.data.list
@@ -108,14 +102,10 @@
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				const resData = await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname)
+				this.receiptData = resData.data.data.list
+				this.count = resData.data.data.total
+				console.log(resData.data)
 			},
 			formatter(date){
 				console.log(date.getMonth())
@@ -125,7 +115,7 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getStockBalancebAll(num)
+				const dataReceipt = await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,num)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 				}else {

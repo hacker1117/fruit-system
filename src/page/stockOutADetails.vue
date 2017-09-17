@@ -2,63 +2,36 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
-        <el-row style="margin-top: 20px;">
-			<el-col :span="8">
-				单据编号：&nbsp;{{receiptData[0].orderid}}
-			</el-col>
-            <el-col :span="8">
-				单据日期：&nbsp;{{receiptData[0].ordertime}}
-			</el-col>
-            <el-col :span="8">
-				默认仓库：&nbsp;{{receiptData[0].defaultrepository}}
-			</el-col>
-		</el-row>
-        <el-row>
-			<el-col :span="8">
-				采购员：&nbsp;{{receiptData[0].buyhuman}}
-			</el-col>
-            <el-col :span="8">
-				采购类型：&nbsp;{{receiptData[0].buytype}}
-			</el-col>
-            <el-col :span="8">
-				采购部门：&nbsp;{{receiptData[0].buydepartment}}
-			</el-col>
-		</el-row>
-        <el-row>
-			<el-col :span="8">
-				发运方式：&nbsp;{{receiptData[0].sendtype}}
-			</el-col>
-		</el-row>
-		<el-table 
+		<el-table
 			:data="receiptData"
 			stripe
-			style="width: 840px;text-align:left; margin-top: 20px;">
+			style="text-align:left;margin-top:20px;">
 			<el-table-column
-			prop="goodsname" width="120px"
+			prop="proname" 
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="storagecode" width="120px"
+			prop="procode" 
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="storagetype" width="120px"
-			label="商品分类">
+			prop="protype" 
+			label="商品类别">
 			</el-table-column>
 			<el-table-column
-			prop="prostandered" width="120px"
+			prop="prostandard" 
 			label="规格型号">
 			</el-table-column>
 			<el-table-column
-			prop="prounite" width="120px"
+			prop="prounite" 
 			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="repositories" width="120px"
-			label="仓库">
+			prop="ordercode" 
+			label="B库采购需求编号">
 			</el-table-column>
-			<el-table-column
-			prop="pronumber" width="120px"
+            <el-table-column
+			prop="procount" 
 			label="数量">
 			</el-table-column>
 		</el-table>
@@ -73,19 +46,21 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInListDetails} from '@/api/getData'
+    import {getAddPurchase, queryStockInList, getStockOutaDetails, makeStockOut} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
     		return {
-				radio2: 3,
 				value1: '',
 				value2: '',
 				input: '',
 				city: {},
                 receiptData: [],
-                id: this.$route.params.id,
-                headData:{}
+                repoList: [],
+                form:{
+                    respositysource: ''
+				},
+				id: this.$route.params.id
     		}
     	},
     	components: {
@@ -97,18 +72,56 @@
     	methods: {
     		async initData(){
     			try{
-                    const dataReceiptDetails = await getStockInListDetails(this.id)
-                    console.log('re: ',dataReceiptDetails.data.data)
-                    this.receiptData.push(dataReceiptDetails.data.data)
+					const repos = await getStockOutaDetails(this.id)
+					this.receiptData = repos.data.data
     			}catch(err){
     				console.log(err);
     			}
-            },
-            handleBack(){
+    		},
+			handleEdit(index,row) {
+				console.log(index,row)
+				this.$destroy()
+				this.$router.push('/stockInListDetails/'+ row.orderid)
+			},
+			async handleSearch(){
+				// let sTime = this.formatter(this.value1)
+				// let eTime = this.formatter(this.value2)
+				// console.log(sTime)
+				// console.log(eTime)
+				// console.log(this.input)
+				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
+				// this.receiptData = resData.data.data.list
+				// console.log(resData.data)
+			},
+			formatter(date){
+				console.log(date.getMonth())
+				let res = ''
+				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
+				return res
+			},
+			async chooseRepo() {
+				const dataReceipt = await getAddPurchase(this.form.respositysource)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data
+					this.$message('查询未生单信息成功')
+				}else {
+					this.$message(dataReceipt.data.message)
+					this.receiptData = []
+				}
+			},
+			async addStockOut(){
+				const addInfo = await makeStockOut(this.form.respositysource)
+				if(addInfo.data.code === '1111'){
+					this.$message('出库成功')
+				}else {
+					this.$message(addInfo.data.message)
+				}
+			},
+			handleBack(){
                 this.$destroy()
-                this.$router.push('/stockInList')
-            }
-		}
+                this.$router.push('/stockOutA')
+			}
+ 		}
     }
 </script>
 

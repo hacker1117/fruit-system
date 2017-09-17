@@ -468,7 +468,7 @@ export const getStockBalanceaAll = (pageNum = 1, pageSize = 10) => axio('/abalan
  * 获取库存余额列表 -B库
  */
 
-export const getStockBalancebAll = (pageNum = 1, pageSize = 10) => axio('/repositoryb/getStoragebAblance',{pageNum, pageSize});
+export const getStockBalancebAll = (repository,repocode,mnemoniccode,proname,pageNum = 1, pageSize = 10) => axio('/repositoryb/getStoragebAblance',{repository,repocode,mnemoniccode,proname,pageNum, pageSize});
 
 /**
  * 获取损耗列表
@@ -487,6 +487,12 @@ export const getStockOutaAll = (pageNum = 1, pageSize = 10) => axio('/outputorde
  */
 
 export const queryStockOutA= (ordercode, ordertime, customer, pageNum = 1, pageSize = 10) => axio('/outputordera/findByExamples',{ordercode, ordertime, customer, pageNum, pageSize});
+
+/**
+ * 查询A库出库单
+ */
+
+export const getStockOutaDetails= outputCode => axio('/outputordera/findDetails',{outputCode});
 
 /**
  * 查询B库入库单
@@ -657,6 +663,12 @@ export const bindUser = (saleid,uids) => axio('/mappingGroupUser/bandSomeUserswi
  */
 
 export const getPuschaseOrderB = (pageNum = 1,pageSize = 10) => axio('/repositoryb/queryNeedOfBuyb',{pageNum,pageSize});
+
+/**
+ * B库-查询分库列表
+ */
+
+export const getRepoBranch = (pageNum = 1,pageSize = 10) => axio('/repositoryb/getBranREpob',{pageNum,pageSize});
 
 /**
  * B库-添加采购单

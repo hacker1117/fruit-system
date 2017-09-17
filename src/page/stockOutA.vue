@@ -95,7 +95,7 @@
 			handleEdit(index,row) {
 				console.log(index,row)
 				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
+				this.$router.push('/stockOutADetails/'+ row.outputcode)
 			},
 			async handleSearch(){
 				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)

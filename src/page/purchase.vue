@@ -180,7 +180,7 @@
 				return res
 			},
 			async confirmAdd(){
-				const addInfo = await addPurchaseOrderB(this.goodsList[this.confirmIndex].pname, this.goodsList[this.confirmIndex].procode, this.goodsList[this.confirmIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
+				const addInfo = await addPurchaseOrderB(this.goodsList[this.confirmIndex].pname, this.goodsList[this.confirmIndex].proid, this.goodsList[this.confirmIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 					this.dialogFormVisible = false
