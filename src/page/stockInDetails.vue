@@ -5,7 +5,7 @@
         <el-dialog title="报损" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="数量" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.procount" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.productcount" auto-complete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -86,7 +86,7 @@
 				dialogFormVisible:false,
 				formLabelWidth: '120px',
 				repository: '',
-				productcount: ''
+				procount: ''
     		}
     	},
     	components: {
@@ -116,10 +116,10 @@
 				this.prounite = row.prounite
 				this.ordercode = row.ordercode
 				this.repository = row.customer
-				this.productcount = row.procount
+				this.procount = row.procount
 			},
 			async confirmAdd(){
-				const addInfo = await addTransportWasteAll(this.form.procount, this.productcount, this.procode, this.ordercode, this.repository, this.proname, this.prostandard, this.prounite)
+				const addInfo = await addTransportWasteAll(this.form.productcount, this.procount, this.procode, this.ordercode, this.repository, this.proname, this.prostandard, this.prounite)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加运输损耗成功')
 					this.dialogFormVisible = false

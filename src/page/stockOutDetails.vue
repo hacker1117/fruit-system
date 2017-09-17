@@ -50,7 +50,7 @@
 			<el-col :span="8">
 				订单附言：&nbsp;{{headData.comments}}
 			</el-col>
-			<a :href="toPrint"><el-button style="float:right; margin-left:20px;" type="primary">预览打印</el-button></a>
+			<a target="blank" :href="toPrint"><el-button style="float:right; margin-left:20px;" type="primary">预览打印</el-button></a>
 		</el-row>
 		<el-table 
 			:data="receiptData"

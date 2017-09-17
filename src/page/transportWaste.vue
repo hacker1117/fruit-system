@@ -75,7 +75,7 @@
 			</el-table-column>
 			<el-table-column
 			prop="productcount" 
-			label="数量">
+			label="损耗数量">
 			</el-table-column>
 			</el-table-column>
 			<el-table-column

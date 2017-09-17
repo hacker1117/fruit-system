@@ -402,13 +402,13 @@ export const queryStockInList = (orderid, ordertime, orderofcreatehuman, default
  * 获取运输损耗列表
  */
 
-export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getTotal',{pageNum, pageSize});
+export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/repositoryb/getTransferWasteb',{pageNum, pageSize});
 
 /**
  * 新增运输损耗
  */
 
-export const addTransportWasteAll = (procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, pageNum = '1', pageSize = '10') => axio('/bTWastageordera/addWeastorder', {procount, productcount, procode, ordercode, customer, proname, prostandard, prounite} );
+export const addTransportWasteAll = (procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, pageNum = '1', pageSize = '1000') => axio('/bTWastageordera/addWeastorder', {procount, productcount, procode, ordercode, customer, proname, prostandard, prounite} );
 
 /**
  * 查询运输损耗清单

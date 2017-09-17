@@ -7,41 +7,20 @@
                 highlight-current-row
                 style="width: 100%">
                 <el-table-column @click="handleChoose"
-                  property="categorycode"
-                  label="分类ID">
+                  property="reponame"
+                  label="仓库名称">
                 </el-table-column>
                <el-table-column @click="handleChoose"
-                  property="categorycode"
-                  label="分类ID">
+                  property="repocode"
+                  label="仓库编码">
                 </el-table-column>
                <el-table-column @click="handleChoose"
-                  property="categorycode"
-                  label="分类ID">
-                </el-table-column>
-               <el-table-column @click="handleChoose"
-                  property="categorycode"
-                  label="分类ID">
+                  property="isDefault"
+                  label="是否默认仓库">
                 </el-table-column>
                 <el-table-column @click="handleChoose"
-                  property="categoryname"
-                  label="分类名称">
-                </el-table-column>
-                <el-table-column
-                label="操作">
-                <template scope="scope">
-                    <el-button
-                    size="mini"
-                    @click="handleAdd(scope.$index, scope.row)">增加</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleDelete(scope.$index, scope.row)">修改</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleAddChild(scope.$index, scope.row)">添加二级分类</el-button>
-                </template>
+                  property="repostate"
+                  label="状态">
                 </el-table-column>
             </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
@@ -71,7 +50,9 @@
                 count: 0,
                 currentPage: 1,
                 childData:[],
-                currentClass: ''
+                currentClass: '',
+                count: 0,
+                currentPage: 1
             }
         },
     	components: {
@@ -86,6 +67,10 @@
                     const countData = await getRepoBranch(1,10);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
+                    this.count = countData.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                        this.tableData[i].isDefault = this.tableData[i].isDefault == 0 ? '否' : '是'
+                    }
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
