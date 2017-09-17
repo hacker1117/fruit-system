@@ -711,3 +711,9 @@ export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, s
  */
 
 export const makePurchase = (ordercode, supplierid, salesmanname, buydepartment, buyfare, moneyamount, allowance) => axio('/purchaseordera/updateByOrderCode',{ordercode, supplierid, salesmanname, buydepartment, buyfare, moneyamount, allowance});
+
+/**
+ * 完善入库单信息
+ */
+
+export const insertVirtualRepo = (reponame, protype) => axio('/insertvirtualrepo', {reponame, protype});

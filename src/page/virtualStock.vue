@@ -7,12 +7,16 @@
                 highlight-current-row
                 style="width: 100%">
                 <el-table-column @click="handleChoose"
-                  property="categorycode"
-                  label="分类ID">
+                  property="repocode"
+                  label="仓库编码">
                 </el-table-column>
                 <el-table-column @click="handleChoose"
-                  property="categoryname"
-                  label="分类名称">
+                  property="protype"
+                  label="货品类别">
+                </el-table-column>
+                <el-table-column @click="handleChoose"
+                  property="reponame"
+                  label="仓库名称">
                 </el-table-column>
                 <el-table-column
                 label="操作">
@@ -20,82 +24,31 @@
                     <el-button
                     size="mini"
                     @click="handleAdd(scope.$index, scope.row)">增加</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleDelete(scope.$index, scope.row)">修改</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleAddChild(scope.$index, scope.row)">添加二级分类</el-button>
                 </template>
                 </el-table-column>
             </el-table>
-            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="5"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
+            <el-dialog title="新增采购单" v-model="dialogFormVisible">
+            <el-form :model="form">
+                <el-form-item label="仓库名称" :label-width="formLabelWidth">
+                    <el-input style="width: 195px" v-model="form.reponame" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="货品类别" :label-width="formLabelWidth">
+                    <el-input style="width: 195px" v-model="form.protype" auto-complete="off"></el-input>
+                </el-form-item>
+                <span v-show='form.error'>{{form.error}}</span>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="confirmAdd(form.reponame, form.protype)">确 定</el-button>
             </div>
-            <el-row style="margin-top: 20px;margin-bottom: 20px;">
-                <el-col :span="24">
-                    <h1>当前分类:{{currentClass}}</h1>
-                </el-col>
-            </el-row>
-            <el-table
-                :data="childData"
-                highlight-current-row
-                style="width: 100%;margin-top:20px;">
-                <el-table-column
-                  type="index"
-                  label="序号">
-                </el-table-column>
-                <el-table-column
-                  property="categorycode"
-                  label="分类ID">
-                </el-table-column>
-                <el-table-column
-                  property="categoryname"
-                  label="分类名称">
-                </el-table-column>
-                <el-table-column
-                  property="parentcategoryname"
-                  label="归属分类">
-                </el-table-column>
-                <el-table-column
-                label="操作">
-                <template scope="scope">
-                    <el-button
-                    size="mini"
-                    @click="handleEditChild(scope.$index, scope.row)">修改</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleDeleteChild(scope.$index, scope.row)">删除</el-button>
-                </template>
-                </el-table-column>
-            </el-table>
-            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="5"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
-            </div>
+            </el-dialog>
         </div>
     </div>
 </template>
 
 <script>
     import headTop from '../components/headTop'
-    import {getCategoryAll, getCategoryChild, deleteCategory} from '@/api/getData'
+    import {getCategoryAll, getCategoryChild, deleteCategory, getVirtualRepoAll, insertVirtualRepo} from '@/api/getData'
     export default {
         data(){
             return {
@@ -106,7 +59,15 @@
                 count: 0,
                 currentPage: 1,
                 childData:[],
-                currentClass: ''
+                currentClass: '',
+                formLabelWidth: '120px',
+                form: {
+                    reponame: '',
+                    protype: '',
+                    isDefault: false,
+                    error: ''
+                },
+                dialogFormVisible: false
             }
         },
     	components: {
@@ -118,15 +79,17 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getCategoryAll(1,10);
-                    console.log(countData.data)
+                    const countData = await getVirtualRepoAll(1,10);
+                    countData.data.data.list.forEach(list => {
+                        list.is_default = list.isDefault ? '是' : '不是'
+                    })
                     this.tableData = countData.data.data.list
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
             },
             async handleChoose(row) {
-                console.log(row)
+                console.log('row------', row)
                 const classData = await getCategoryChild(row.categorycode)
                 if(classData.data.code === '1111'){
                     this.childData = classData.data.data.list
@@ -135,11 +98,28 @@
                 }
                 this.currentClass = row.categoryname
             },
-            handleAdd() {
-
+            handleAdd(index, row) {
+                let {reponame, protype, is_default} = row
+                this.form = {reponame, protype, is_default, error: ''}
+                this.dialogFormVisible = true
             },
             handleEdit() {
 
+            },
+            async confirmAdd(reponame, protype) {
+                var _this = this
+                const res = insertVirtualRepo(reponame, protype)
+                if(res.data.code === '0000'){
+                    this.form.error = '添加订单失败，请重试'
+                }
+                else if(res.data.code === '1111') {
+                    this.form.error = '添加订单成功'
+                }else {
+                    this.form.error = '添加订单失败，请重试'
+                }
+                setTimeout(() => {
+                    _this.dialogFormVisible = false
+                }, 1000)
             },
             handleDelete() {
 
