@@ -10,3 +10,4 @@ selenium-debug.log
 logs/
 manage/
 manage.*
+package-lock.json

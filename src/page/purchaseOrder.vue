@@ -32,7 +32,7 @@
         </el-dialog>
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">创建日期：</el-col>
-			<el-col :span="4">				
+			<el-col :span="4">
 				<el-date-picker
 				v-model="creattime"
 				type="date"
@@ -114,7 +114,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getPurchaseOrderAll, queryPurchaseOrderList} from '@/api/getData'
+    import {getSupplierAll, getPurchaseOrderAll, queryPurchaseOrderList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
