@@ -7,12 +7,16 @@
                 highlight-current-row
                 style="width: 100%">
                 <el-table-column @click="handleChoose"
-                  property="categorycode"
-                  label="分类ID">
+                  property="repocode"
+                  label="仓库编码">
                 </el-table-column>
                 <el-table-column @click="handleChoose"
-                  property="categoryname"
-                  label="分类名称">
+                  property="protype"
+                  label="货品类别">
+                </el-table-column>
+                <el-table-column @click="handleChoose"
+                  property="reponame"
+                  label="仓库名称">
                 </el-table-column>
                 <el-table-column
                 label="操作">
@@ -20,82 +24,16 @@
                     <el-button
                     size="mini"
                     @click="handleAdd(scope.$index, scope.row)">增加</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleDelete(scope.$index, scope.row)">修改</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">删除</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleAddChild(scope.$index, scope.row)">添加二级分类</el-button>
                 </template>
                 </el-table-column>
             </el-table>
-            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="5"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
-            </div>
-            <el-row style="margin-top: 20px;margin-bottom: 20px;">
-                <el-col :span="24">
-                    <h1>当前分类:{{currentClass}}</h1>
-                </el-col>
-            </el-row>
-            <el-table
-                :data="childData"
-                highlight-current-row
-                style="width: 100%;margin-top:20px;">
-                <el-table-column
-                  type="index"
-                  label="序号">
-                </el-table-column>
-                <el-table-column
-                  property="categorycode"
-                  label="分类ID">
-                </el-table-column>
-                <el-table-column
-                  property="categoryname"
-                  label="分类名称">
-                </el-table-column>
-                <el-table-column
-                  property="parentcategoryname"
-                  label="归属分类">
-                </el-table-column>
-                <el-table-column
-                label="操作">
-                <template scope="scope">
-                    <el-button
-                    size="mini"
-                    @click="handleEditChild(scope.$index, scope.row)">修改</el-button>
-                    <el-button
-                    size="mini"
-                    @click="handleDeleteChild(scope.$index, scope.row)">删除</el-button>
-                </template>
-                </el-table-column>
-            </el-table>
-            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="5"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
     import headTop from '../components/headTop'
-    import {getCategoryAll, getCategoryChild, deleteCategory} from '@/api/getData'
+    import {getCategoryAll, getCategoryChild, deleteCategory, getVirtualRepoAll} from '@/api/getData'
     export default {
         data(){
             return {
@@ -118,8 +56,7 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getCategoryAll(1,10);
-                    console.log(countData.data)
+                    const countData = await getVirtualRepoAll(1,10);
                     this.tableData = countData.data.data.list
                 }catch(err){
                     console.log('获取数据失败', err);

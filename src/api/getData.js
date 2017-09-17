@@ -387,6 +387,12 @@ export const getStockInDetails = bpid => axio('/repositoryb/selectTinstoragebByC
 export const getStockInListAll = (pageNum = 1, pageSize = 10) => axio('/innetstorageb/getTotal',{pageNum, pageSize});
 
 /**
+ * B库查询库存余额表
+ */
+
+export const getBalanceTableB = (pageNum = 1, pageSize = 20, repocode, proname, repositorystate) => axio('/repositoryb/getStoragebAblance', {pageNum, pageSize, repocode, proname, repositorystate});
+
+/**
  * 获取入库清淡详情
  */
 

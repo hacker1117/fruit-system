@@ -61,35 +61,35 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate" 
+			prop="orderstate"
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="orderno" 
+			prop="orderno"
 			label="订单编号">
 			</el-table-column>
 			<el-table-column
-			prop="pname" 
+			prop="pname"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="productcode" 
+			prop="productcode"
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="buynumber" 
+			prop="buynumber"
 			label="采购量">
 			</el-table-column>
 			<el-table-column
-			prop="buydepartmentid" 
+			prop="buydepartmentid"
 			label="采购部门">
 			</el-table-column>
 			<el-table-column
-			prop="buyer" 
+			prop="buyer"
 			label="采购员">
 			</el-table-column>
 			<el-table-column
-			prop="createtime" 
+			prop="createtime"
 			label="创建时间">
 			</el-table-column>
 		</el-table>
@@ -148,12 +148,12 @@
 					}
 					const result = await getProList('')
 					if(result.data.code === '1111'){
-						this.goodsList = result.data.data	
+						this.goodsList = result.data.data
 					}
 					const repos = await getRepoAll()
 					if(repos.data.code === '1111'){
 						this.repoList = repos.data.data
-					}	
+					}
     			}catch(err){
     				console.log(err);
     			}
@@ -180,7 +180,8 @@
 				return res
 			},
 			async confirmAdd(){
-				const addInfo = await addPurchaseOrderB(this.goodsList[this.confirmIndex].pname, this.goodsList[this.confirmIndex].procode, this.goodsList[this.confirmIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
+				//procode -> proid
+				const addInfo = await addPurchaseOrderB(this.goodsList[this.confirmIndex].pname, this.goodsList[this.confirmIndex].proid, this.goodsList[this.confirmIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 					this.dialogFormVisible = false
