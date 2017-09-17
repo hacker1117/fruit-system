@@ -28,56 +28,48 @@
 		<el-table
 			:data="receiptData"
 			stripe
-			style="width: 100%;text-align:left;">
+			style="text-align:left;">
 			<el-table-column
-			prop="orderstate" width="120px"
-			label="单据状态">
+			prop="repocode"
+			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="marke" width="120px"
-			label="标记">
+			prop="proname" 
+			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="orderid" width="120px"
-			label="单据编号">
+			prop="goodstype" 
+			label="商品分类">
 			</el-table-column>
 			<el-table-column
-			prop="ordertime" width="120px"
-			label="单据日期">
+			prop="prostandard" 
+			label="规格型号">
 			</el-table-column>
 			<el-table-column
-			prop="inrepotype" width="120px"
-			label="入库类别">
+			prop="prounite" 
+			label="库存单位">
 			</el-table-column>
 			<el-table-column
-			prop="netweight" width="120px"
-			label="净重量">
-			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="prounite" width="120px"
-			label="单位">
-			</el-table-column>
-			<el-table-column
-			prop="prostandered" width="120px"
-			label="规格">
-			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-			</template>
+			prop="existamount" 
+			label="库存单位现存量">
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInListAll, queryStockInList} from '@/api/getData'
+    import {getStockBalancebAll, queryStockInList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -87,6 +79,8 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				currentPage: 1,
+				count: 0,
     		}
     	},
     	components: {
@@ -98,9 +92,12 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockInListAll()
+					const dataReceipt = await getStockBalancebAll()
 					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					if(dataReceipt.data.code === '1111'){
+						this.receiptData = dataReceipt.data.data.list
+						this.count = dataReceipt.data.data.total
+					}
     			}catch(err){
     				console.log(err);
     			}
@@ -125,6 +122,15 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = await getStockBalancebAll(num)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+				}else {
+					this.receiptData = []
+				}
 			}
 		}
     }
