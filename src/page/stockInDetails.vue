@@ -79,7 +79,7 @@
                 id: this.$route.params.id,
 				headData:{},
 				procode: '',
-				pname: '',
+				proname: '',
 				prostandered: '',
 				prounite: '',
 				form: {},
@@ -111,7 +111,7 @@
 			handleEdit(index,row) {
 				this.dialogFormVisible = true 
 				this.procode = row.procode
-				this.pname = row.proname
+				this.proname = row.proname
 				this.prostandered = row.prostandard
 				this.prounite = row.prounite
 				this.ordercode = row.ordercode

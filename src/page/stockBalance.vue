@@ -88,9 +88,12 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getBalanceTableB()
-					this.receiptData = dataReceipt.data.data.list
-                    this.count = dataReceipt.data.data.total
+					const dataReceipt = await getStockBalancebAll()
+					console.log('re: ',dataReceipt.data.data)
+					if(dataReceipt.data.code === '1111'){
+						this.receiptData = dataReceipt.data.data.list
+						this.count = dataReceipt.data.data.total
+					}
     			}catch(err){
     				console.log(err);
     			}

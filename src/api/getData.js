@@ -465,10 +465,16 @@ export const addGoods = (proid,pname,prostandered,commodityattribute,factories,b
 export const getStockInaAll = (pageNum = 1, pageSize = 10) => axio('/storageordera/findAllData',{pageNum, pageSize});
 
 /**
- * 获取库存余额列表
+ * 获取库存余额列表 -A库
  */
 
 export const getStockBalanceaAll = (pageNum = 1, pageSize = 10) => axio('/abalancerepository/selectAllDatas',{pageNum, pageSize});
+
+/**
+ * 获取库存余额列表 -B库
+ */
+
+export const getStockBalancebAll = (pageNum = 1, pageSize = 10) => axio('/repositoryb/getStoragebAblance',{pageNum, pageSize});
 
 /**
  * 获取损耗列表
