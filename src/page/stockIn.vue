@@ -4,9 +4,15 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">单据编码：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="6" style="text-align:right;">单据日期：
+				<el-date-picker
+				v-model="ordertime"
+				type="date"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
@@ -56,6 +62,8 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				ordercode: '',
+				ordertime: ''
     		}
     	},
     	components: {
@@ -80,14 +88,10 @@
 				this.$router.push('/stockInDetails/'+ row.bpid)
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
+				const resData = await queryStockIn(this.ordercode,sTime)
+				this.receiptData = resData.data.data.list
+				console.log(resData.data)
 			},
 			formatter(date){
 				console.log(date.getMonth())

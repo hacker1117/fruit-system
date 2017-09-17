@@ -408,7 +408,7 @@ export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/bTWas
  * 新增运输损耗
  */
 
-export const addTransportWasteAll = (orderid, procode, pname, productcount, prostandered, unite) => axio('/repositoryb/addTransWaste', {orderid, procode, pname, productcount, prostandered, unite} );
+export const addTransportWasteAll = (procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, pageNum = '1', pageSize = '10') => axio('/bTWastageordera/addWeastorder', {procount, productcount, procode, ordercode, customer, proname, prostandard, prounite} );
 
 /**
  * 查询运输损耗清单
@@ -475,6 +475,19 @@ export const getWasteAll = (pageNum = 1, pageSize = 10) => axio('/wastageordera/
  */
 
 export const getStockOutaAll = (pageNum = 1, pageSize = 10) => axio('/outputordera/findTodayOutput',{pageNum, pageSize});
+
+/**
+ * 查询A库出库单
+ */
+
+export const queryStockOutA= (ordercode, ordertime, customer, pageNum = 1, pageSize = 10) => axio('/outputordera/findByExamples',{ordercode, ordertime, customer, pageNum, pageSize});
+
+/**
+ * 查询B库入库单
+ */
+
+export const queryStockIn= (ordercode, ordertime, pageNum = 1, pageSize = 10) => axio('/repositoryb/selectTinstoragebByCondition',{ordercode, ordertime, pageNum, pageSize});
+
 
 /**
  * 查询采购单列表

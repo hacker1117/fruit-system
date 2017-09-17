@@ -10,9 +10,12 @@
         <el-dialog title="新增采购单" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="商品名称" :label-width="formLabelWidth">
-                <el-select v-model="form.goodsIndex" placeholder="请选择商品名称">
-                    <el-option v-for="(goods,index) in goodsList" :key="goods.id" :label="goods.pname" :value="index"></el-option>
-                </el-select>
+				<el-autocomplete
+				v-model="form.goodsName"
+				:fetch-suggestions="querySearchAsync"
+				placeholder="请输入名称模糊搜索"
+				@select="handleAddChild"
+				></el-autocomplete>
             </el-form-item>
             <el-form-item label="采购部门" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buydepartmentid" auto-complete="off"></el-input>
@@ -90,6 +93,15 @@
 			label="创建时间">
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -108,12 +120,16 @@
 				receiptData: [],
 				form: {
 					defaultrepo: '',
-					goodsIndex: ''
+					goodsIndex: '',
+					goodsName: ''
 				},
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
 				goodsList:[],
-				repoList:[]
+				repoList:[],
+				confirmIndex: '',
+				currentPage: 1,
+				count: 0
     		}
     	},
     	components: {
@@ -128,6 +144,7 @@
 					const dataReceipt = await getPuschaseOrderB()
 					if(dataReceipt.data.code === '1111'){
 						this.receiptData = dataReceipt.data.data.list
+						this.count = dataReceipt.data.data.total
 					}
 					const result = await getProList('')
 					if(result.data.code === '1111'){
@@ -163,7 +180,7 @@
 				return res
 			},
 			async confirmAdd(){
-				const addInfo = await addPurchaseOrderB(this.goodsList[this.form.goodsIndex].pname, this.goodsList[this.form.goodsIndex].procode, this.goodsList[this.form.goodsIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
+				const addInfo = await addPurchaseOrderB(this.goodsList[this.confirmIndex].pname, this.goodsList[this.confirmIndex].procode, this.goodsList[this.confirmIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 					this.dialogFormVisible = false
@@ -171,6 +188,36 @@
 				}else {
 					this.$message(addInfo.data.message)
 				}
+			},
+			async querySearchAsync(queryString, cb) {
+				let results=[]
+				console.log(this.goodsList)
+				const result = await getProList(queryString)
+				if(result.data.code === '1111'){
+					results = result.data.data
+					this.goodsList = result.data.data
+					for(let i=0;i<results.length;i++){
+						results[i].value=results[i].pname
+					}
+				}
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					cb(results);
+				}, 3000 * Math.random());
+			},
+			handleAddChild(){
+				for(let i = 0; i<this.goodsList.length; i++){
+					if(this.form.goodsName == this.goodsList[i].pname) {
+						this.confirmIndex = i
+					}
+				}
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num 
+				const dataReceipt = await getPuschaseOrderB(this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+				}				
 			}
 		}
     }

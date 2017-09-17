@@ -114,7 +114,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getPurchaseOrderAll, queryPurchaseOrderList} from '@/api/getData'
+    import {getPurchaseOrderAll, queryPurchaseOrderList, getSupplierAll, makePurchase} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -135,6 +135,7 @@
 					moneyamount: '',
 					allowance: ''
 				},
+				supplierid: '',
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
 				supplierList:[],
