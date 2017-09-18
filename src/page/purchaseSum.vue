@@ -54,15 +54,15 @@
 			prop="advisebuynumber" width="120px"
 			label="建议采购量">
 			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
-			<template scope="scope">
+		</el-table>
+		<el-row style="margin-top:20px;">
+			<el-col :span="24" >
 				<el-button
 				size="small"
-				@click="handleEdit(scope.$index, scope.row)">生成采购单</el-button>
-			</template>
-			</el-table-column>
-		</el-table>
+				:disabled="isDisabled"
+				@click="handleEdit()">生成采购单</el-button>
+			</el-col>
+		</el-row>
 		<el-row style="margin-top:40px; ">
 		  <el-col :span="24"><h2>未生单商品列表</h2></el-col>
 		</el-row>
@@ -129,7 +129,8 @@
 				goodsList: [],
 				form: {
 					productindex:''
-				}
+				},
+				isDisabled:true
     		}
     	},
     	components: {
@@ -143,19 +144,29 @@
     			try{
 					const dataReceipt = await getPurchaseSumList()
 					console.log('re: ',dataReceipt.data.data)
-					this.notCreatedData = dataReceipt.data.data.list
+					if(dataReceipt.data.code === '1111'){
+						this.notCreatedData = dataReceipt.data.data.list
+					} else {
+						this.notCreatedData = []
+					}
 					const goodsList = await getPurchaseSumGoods()
-					console.log('re: ',goodsList.data.data)
-					this.goodsList = goodsList.data.data
+					if(goodsList.data.code === '1111'){
+						this.goodsList = goodsList.data.data						
+					}else {
+						this.goodsList = []
+					}
     			}catch(err){
     				console.log(err);
     			}
     		},
-			async handleEdit(index,row) {
-				console.log(index,row)
+			async handleEdit() {
+				let row = this.receiptData[this.receiptData.length-1]
 				const makeInfo = await makePurchaseOrder(this.goodsList[this.form.productindex].pname, row.productcode, row.buynumber, row.aexistamount, row.advisebuynumber)
 				if(makeInfo.data.code === '1111'){
 					this.$message('生成采购单成功')
+					this.isDisabled = true
+					this.receiptData = []
+					this.initData()
 				}else {
 					this.$message(makeInfo.data.message)
 				}
@@ -163,7 +174,13 @@
 			async handleSearch(){
 				const purchaseReceipt = await getPurchaseSumListByName(this.goodsList[this.form.productindex].productcode)
 				console.log('re: ',purchaseReceipt.data.data)
-				this.receiptData = purchaseReceipt.data.data
+				if(this.purchaseReceipt.data.code === '1111'){
+					this.receiptData = purchaseReceipt.data.data
+					this.isDisabled = false
+				}else {
+					this.$message(purchaseReceipt.data.message)
+					this.receiptData = []
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())

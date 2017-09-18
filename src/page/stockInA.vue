@@ -3,9 +3,9 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
+            <el-col :span="3" style="text-align:right;">单据编号：</el-col>
 			<el-col :span="4"><el-input v-model="ordernumber" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
+            <el-col :span="3" style="text-align:right;">单据日期：</el-col>
 			<el-col :span="4"><el-input v-model="ordertime" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
@@ -25,29 +25,16 @@
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="markable" width="120px"
-			label="标记">
-			</el-table-column>
-			<el-table-column
 			prop="ordernumber" width="120px"
 			label="单据编号">
 			</el-table-column>
 			<el-table-column
-			prop="ordertime" width="120px"
-			label="单据日期">
-			</el-table-column>
-			<el-table-column
-			prop="storagetype" width="120px"
-			label="入库类别">
+			prop="storagename" width="120px"
+			label="入库商品">
 			</el-table-column>
 			<el-table-column
 			prop="visualreposity" width="120px"
 			label="虚拟库">
-			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="supplierid" width="120px"
-			label="供应商">
 			</el-table-column>
 			<el-table-column
 			prop="netweight" width="120px"
@@ -70,10 +57,32 @@
 			label="规格">
 			</el-table-column>
 			<el-table-column
+			prop="ordertime" width="120px"
+			label="单据日期">
+			</el-table-column>
+			<el-table-column
+			prop="storagetype" width="120px"
+			label="入库类别">
+			</el-table-column>
+			</el-table-column>
+			<el-table-column
+			prop="supplierid" width="120px"
+			label="供应商">
+			</el-table-column>
+			<el-table-column
 			prop="remarkable" width="120px"
 			label="备注">
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -91,7 +100,9 @@
 				city: {},
 				receiptData: [],
 				ordernumber: '',
-				ordertime: ''
+				ordertime: '',
+				currentPage: 1,
+				count: 0
     		}
     	},
     	components: {
@@ -103,9 +114,9 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockInaAll(1, 1)
-					console.log('re: ',dataReceipt.data.data)
+					const dataReceipt = await getStockInaAll()
 					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -134,6 +145,11 @@
 			handleAdd() {
 				this.$destroy()
 				this.$router.push('/stockInADetails')
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = await getStockInaAll(this.currentPage)
+				this.receiptData = dataReceipt.data.data.list
 			}
 		}
     }

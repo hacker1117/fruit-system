@@ -34,6 +34,10 @@
 			label="单据日期">
 			</el-table-column>
 			<el-table-column
+			prop="customer" 
+			label="商品位置">
+			</el-table-column>
+			<el-table-column
 			prop="ordercode" 
 			label="B库采购需求单号">
 			</el-table-column>

@@ -553,7 +553,7 @@ export const querySupplierList = (supplytype,sname,mantelephone,pageNum = 1, pag
  * 查询列表
  */
 
-export const queryGoodsList = (pname, prostandered, procode, helpcode, commodityattribute, factories, brand, barcode, placeoforigin, pageNum = '1', pageSize = '10') => axio('/productmanager/selectByExamples',{pname, prostandered, procode, helpcode, commodityattribute, factories, brand, barcode, placeoforigin, pageNum, pageSize});
+export const queryGoodsList = (pname, proid, pageNum = '1', pageSize = '10') => axio('/productmanager/selectByExamples',{pname, proid, pageNum, pageSize});
 
 /**
  * 查询用户列表
@@ -662,7 +662,7 @@ export const bindUser = (saleid,uids) => axio('/mappingGroupUser/bandSomeUserswi
  * B库-查询采购单列表
  */
 
-export const getPuschaseOrderB = (pageNum = 1,pageSize = 10) => axio('/repositoryb/queryNeedOfBuyb',{pageNum,pageSize});
+export const getPuschaseOrderB = (orderno,createtime,buydepartmentid,repositorysource,pageNum = 1,pageSize = 10) => axio('/repositoryb/queryNeedOfBuyb',{orderno,createtime,buydepartmentid,repositorysource,pageNum,pageSize});
 
 /**
  * B库-查询分库列表
@@ -716,4 +716,10 @@ export const makePurchase = (ordercode, supplierid, salesmanname, buydepartment,
  * 完善入库单信息
  */
 
-export const insertVirtualRepo = (reponame, protype) => axio('/insertvirtualrepo', {reponame, protype});
+export const insertVirtualRepo = (reponame, protype) => axio('/virtualrepomanager/insertvirtualrepo', {reponame, protype});
+
+/**
+ * A库-查询库存余额
+ */
+
+export const queryBalanceB = (repocode,proname) => axio('/abalancerepository/selectAbalanceByExamples',{repocode,proname});

@@ -17,10 +17,10 @@
 				@select="handleAddChild"
 				></el-autocomplete>
             </el-form-item>
-            <el-form-item label="采购部门" :label-width="formLabelWidth">
+            <el-form-item label="申请部门" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buydepartmentid" auto-complete="off"></el-input>
             </el-form-item>
-			<el-form-item label="采购员" :label-width="formLabelWidth">
+			<el-form-item label="申请人" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buyer" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="单位" :label-width="formLabelWidth">
@@ -44,14 +44,16 @@
         </div>
         </el-dialog>
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">订单编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">采购部门：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">默认仓库：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="3" style="text-align:right;">订单编号：</el-col>
+			<el-col :span="4"><el-input v-model="orderno" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="3" style="text-align:right;">单据日期：</el-col>
+			<el-col :span="4"><el-input v-model="createtime" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="3" style="text-align:right;">采购部门：</el-col>
+			<el-col :span="4"><el-input v-model="buydepartmentid" siez="mini" placeholder="请输入内容"></el-input></el-col>
+		</el-row>
+		<el-row style="margin-top: 20px;">
+            <el-col :span="3" style="text-align:right;">仓库来源：</el-col>
+			<el-col :span="4"><el-input v-model="respositysource" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
@@ -69,6 +71,10 @@
 			label="订单编号">
 			</el-table-column>
 			<el-table-column
+			prop="respositysource" 
+			label="仓库来源">
+			</el-table-column>
+			<el-table-column
 			prop="pname" 
 			label="商品名称">
 			</el-table-column>
@@ -82,11 +88,11 @@
 			</el-table-column>
 			<el-table-column
 			prop="buydepartmentid" 
-			label="采购部门">
+			label="申请部门">
 			</el-table-column>
 			<el-table-column
 			prop="buyer" 
-			label="采购员">
+			label="申请人">
 			</el-table-column>
 			<el-table-column
 			prop="createtime" 
@@ -129,7 +135,11 @@
 				repoList:[],
 				confirmIndex: '',
 				currentPage: 1,
-				count: 0
+				count: 0,
+				createtime: '',
+				orderno: '',
+				respositysource: '',
+				buydepartmentid: ''
     		}
     	},
     	components: {
@@ -141,7 +151,8 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getPuschaseOrderB()
+					let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
+					const dataReceipt = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource)
 					if(dataReceipt.data.code === '1111'){
 						this.receiptData = dataReceipt.data.data.list
 						this.count = dataReceipt.data.data.total
@@ -164,14 +175,11 @@
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
+				const resData = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource)
+				this.receiptData = resData.data.data.list
+				this.total = resData.data.data.total
+				console.log(resData.data)
 			},
 			formatter(date){
 				console.log(date.getMonth())
@@ -214,7 +222,8 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num 
-				const dataReceipt = await getPuschaseOrderB(this.currentPage)
+				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
+				const dataReceipt = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 				}				

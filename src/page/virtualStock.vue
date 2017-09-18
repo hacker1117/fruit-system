@@ -2,6 +2,11 @@
     <div class="fillcontain">
         <head-top></head-top>
         <div class="table_container">
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="handleAdd" >新增虚拟库</el-button>
+			</el-col>
+		</el-row>
             <el-table @row-click="handleChoose"
                 :data="tableData"
                 highlight-current-row
@@ -17,14 +22,6 @@
                 <el-table-column @click="handleChoose"
                   property="reponame"
                   label="仓库名称">
-                </el-table-column>
-                <el-table-column
-                label="操作">
-                <template scope="scope">
-                    <el-button
-                    size="mini"
-                    @click="handleAdd(scope.$index, scope.row)">增加</el-button>
-                </template>
                 </el-table-column>
             </el-table>
             <el-dialog title="新增采购单" v-model="dialogFormVisible">
@@ -98,9 +95,7 @@
                 }
                 this.currentClass = row.categoryname
             },
-            handleAdd(index, row) {
-                let {reponame, protype, is_default} = row
-                this.form = {reponame, protype, is_default, error: ''}
+            handleAdd() {
                 this.dialogFormVisible = true
             },
             handleEdit() {

@@ -1,6 +1,11 @@
 <template>
     <div class="fillcontain">
         <head-top></head-top>
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="handleAdd" >新增分库</el-button>
+			</el-col>
+		</el-row>
         <div class="table_container">
             <el-table @row-click="handleChoose"
                 :data="tableData"

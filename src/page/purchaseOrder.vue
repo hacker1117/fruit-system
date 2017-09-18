@@ -31,7 +31,7 @@
         </div>
         </el-dialog>
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">创建日期：</el-col>
+            <el-col :span="3" style="text-align:right;">创建日期：</el-col>
 			<el-col :span="4">				
 				<el-date-picker
 				v-model="creattime"
@@ -41,9 +41,9 @@
 				placeholder="选择日期">
 				</el-date-picker>
 			</el-col>
-            <el-col :span="2" style="text-align:right;">单据号：</el-col>
+            <el-col :span="3" style="text-align:right;">单据号：</el-col>
 			<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">供应商：</el-col>
+            <el-col :span="3" style="text-align:right;">供应商：</el-col>
 			<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
