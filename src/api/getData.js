@@ -273,7 +273,7 @@ export const getBomDetail = procode => axio('/Bom/findSingleBom/' + procode);
 export const insertParentBom = (proname, prostandard, prounite) => axio('/Bom/createParentBom', {proname, prostandard, prounite}, 'POST');
 
 /**
- * 插入Bom父节点
+ * 插入Bom子节点
  */
 
 export const insertChildBom = (proname, prostandard, prounite, proid, pid, count) => axio('/Bom/createChildBom', {proname, prostandard, prounite, proid, pid, count}, 'POST');

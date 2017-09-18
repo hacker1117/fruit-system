@@ -256,7 +256,8 @@
 				}
 			},
 			async confirmBomChild() {
-				const insertStatus = await insertChildBom(this.proname, this.prostandard, this.prounite, this.goodsList[this.confirmIndex].proid, this.pid, this.form.count)
+				console.log(this.confirmIndex,this.goodsList[this.confirmIndex])
+				const insertStatus = await insertChildBom(this.goodsList[this.confirmIndex].pname, this.form.prostandard, this.form.prounite, this.goodsList[this.confirmIndex].proid, this.pid, this.form.count)
 				let childData = insertStatus.data.data
 				childData.level = 2
 				console.log('child:',childData)
