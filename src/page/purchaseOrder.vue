@@ -32,7 +32,7 @@
         </el-dialog>
 		<el-row style="margin-top: 20px;">
             <el-col :span="3" style="text-align:right;">创建日期：</el-col>
-			<el-col :span="4">				
+			<el-col :span="4">
 				<el-date-picker
 				v-model="creattime"
 				type="date"
@@ -70,7 +70,7 @@
 			label="创建时间">
 			</el-table-column>
 			<el-table-column
-			prop="supplierid" width="120px"
+			prop="sname" width="120px"
 			label="供应商">
 			</el-table-column>
 			<el-table-column

@@ -22,23 +22,23 @@
 			stripe
 			style="text-align:left;">
 			<el-table-column
-			prop="orderstate" 
+			prop="orderstate"
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="outputcode" 
+			prop="outputcode"
 			label="入库单据号">
 			</el-table-column>
 			<el-table-column
-			prop="ordertime" 
+			prop="ordertime"
 			label="单据日期">
 			</el-table-column>
 			<el-table-column
-			prop="customer" 
+			prop="customer"
 			label="商品位置">
 			</el-table-column>
 			<el-table-column
-			prop="ordercode" 
+			prop="ordercode"
 			label="B库采购需求单号">
 			</el-table-column>
 			<el-table-column
@@ -56,7 +56,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInAll, queryStockIn} from '@/api/getData'
+    import {getStockInAllB, queryStockIn} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -79,9 +79,9 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockInAll()
+					const dataReceipt = await getStockInAllB()
 					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data.list
+					this.receiptData = dataReceipt.data.data
     			}catch(err){
     				console.log(err);
     			}
@@ -89,7 +89,7 @@
 			handleEdit(index,row) {
 				console.log(index,row)
 				this.$destroy()
-				this.$router.push('/stockInDetails/'+ row.bpid)
+				this.$router.push('/stockInDetails/'+ row.outputcode)
 			},
 			async handleSearch(){
 				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)

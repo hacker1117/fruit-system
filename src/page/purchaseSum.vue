@@ -151,7 +151,7 @@
 					}
 					const goodsList = await getPurchaseSumGoods()
 					if(goodsList.data.code === '1111'){
-						this.goodsList = goodsList.data.data						
+						this.goodsList = goodsList.data.data
 					}else {
 						this.goodsList = []
 					}
@@ -174,7 +174,7 @@
 			async handleSearch(){
 				const purchaseReceipt = await getPurchaseSumListByName(this.goodsList[this.form.productindex].productcode)
 				console.log('re: ',purchaseReceipt.data.data)
-				if(this.purchaseReceipt.data.code === '1111'){
+				if(purchaseReceipt.data.code === '1111'){
 					this.receiptData = purchaseReceipt.data.data
 					this.isDisabled = false
 				}else {

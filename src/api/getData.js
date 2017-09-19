@@ -376,10 +376,16 @@ export const getBatchAll = () => axio('/handlingorder/findAllBatches');
 export const getStockInAll = (bpid = '',ordertime = '', inrepotype = '', handleperson = '', pageNum = 1, pageSize = 10) => axio('/repositoryb/selectTinstoragebByCondition',{bpid, ordertime, inrepotype, handleperson, pageNum, pageSize});
 
 /**
+ * 获取入库单列表
+ */
+
+export const getStockInAllB = (bpid = '',ordertime = '', inrepotype = '', handleperson = '', pageNum = 1, pageSize = 10) => axio('/repositoryb/queryInstorageOrder',{bpid, ordertime, inrepotype, handleperson, pageNum, pageSize});
+
+/**
  * 获取入库单详情
  */
 
-export const getStockInDetails = bpid => axio('/repositoryb/selectTinstoragebByCondition' , {bpid});
+export const getStockInDetails = outputcode => axio('/repositoryb/selectTinstoragebByCondition' , {outputcode});
 
 /**
  * 获取入库清单列表

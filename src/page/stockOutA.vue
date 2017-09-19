@@ -8,9 +8,9 @@
 			</el-col>
 		</el-row>
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
+            <el-col :span="3" style="text-align:right;">单据编号：</el-col>
 			<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="6" style="text-align:right;">单据日期：
+            <el-col :span="7" style="text-align:right;">单据日期：
 				<el-date-picker
 				v-model="ordertime"
 				type="date"
@@ -20,7 +20,7 @@
 				</el-date-picker>
 			</el-col>
 
-            <el-col :span="2" style="text-align:right;">去向：</el-col>
+            <el-col :span="3" style="text-align:right;">去向：</el-col>
 			<el-col :span="4"><el-input v-model="customer" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
@@ -31,19 +31,19 @@
 			stripe
 			style="text-align:left;">
 			<el-table-column
-			prop="outputcode" 
+			prop="outputcode"
 			label="出库单据编号">
 			</el-table-column>
 			<el-table-column
-			prop="ordertime" 
+			prop="ordertime"
 			label="单据日期">
 			</el-table-column>
 			<el-table-column
-			prop="ordercode" 
+			prop="ordercode"
 			label="B库采购需求单号">
 			</el-table-column>
 			<el-table-column
-			prop="customer" 
+			prop="customer"
 			label="去向">
 			</el-table-column>
 			<el-table-column

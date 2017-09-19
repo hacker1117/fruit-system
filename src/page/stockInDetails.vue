@@ -109,7 +109,7 @@
                 this.$router.push('/stockIn')
 			},
 			handleEdit(index,row) {
-				this.dialogFormVisible = true 
+				this.dialogFormVisible = true
 				this.procode = row.procode
 				this.proname = row.proname
 				this.prostandered = row.prostandard
@@ -119,7 +119,7 @@
 				this.procount = row.procount
 			},
 			async confirmAdd(){
-				const addInfo = await addTransportWasteAll(this.form.productcount, this.procount, this.procode, this.ordercode, this.repository, this.proname, this.prostandard, this.prounite)
+				const addInfo = await addTransportWasteAll(this.procount, this.form.productcount, this.procode, this.ordercode, this.repository, this.proname, this.prostandard, this.prounite)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加运输损耗成功')
 					this.dialogFormVisible = false

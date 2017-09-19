@@ -41,7 +41,6 @@
 			prop="netweight" width="120px"
 			label="净重量">
 			</el-table-column>
-			</el-table-column>
 			<el-table-column
 			prop="prounite" width="120px"
 			label="单位">
