@@ -194,8 +194,8 @@
 						this.$message({
 							type: 'info',
 							message: '已取消删除'
-						}) 
-						return false         
+						})
+						return false
 					})
 				} else {
 					this.dialogFormVisible = true
@@ -325,7 +325,7 @@
 		}
 		span{
 			.sc(14px, #999);
-			transition: all 400ms;	
+			transition: all 400ms;
 		}
 		.edit_icon{
 			color: #ccc;

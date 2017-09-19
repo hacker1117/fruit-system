@@ -6,7 +6,7 @@ import yichu from '@/config/yichu'
  * 登陆
  */
 
-export const login = data => axio('/user/login', data, 'POST');
+export const login = data => axio('/user/login', data);
 
 /**
  * 获取APP后台商品列表
