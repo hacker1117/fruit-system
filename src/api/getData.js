@@ -1,3 +1,4 @@
+import "babel-polyfill"
 import fetch from '@/config/fetch'
 import axio from '@/config/axio'
 import yichu from '@/config/yichu'
