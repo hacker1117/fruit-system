@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "echarts": "^3.5.4",
-    "element-ui": "^1.2.9",
+    "element-ui": "^1.4.4",
     "time-formater": "^1.0.1",
-    "vue": "^2.2.6",
+    "vue": "^2.4.4",
     "vue-quill-editor": "^2.2.1",
     "vue-router": "^2.3.1",
     "vue-simplemde": "^0.3.8",
