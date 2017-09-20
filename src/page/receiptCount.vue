@@ -169,6 +169,8 @@
 				}
 				const resData = await queryOrders(this.input,radioCon,sTime,eTime,1,10)
 				this.receiptData = resData.data.data.list
+                this.count = resData.data.data.count
+                this.currentPage = 1
 				console.log(resData.data)
 			},
 			formatter(date){
@@ -179,9 +181,21 @@
 			},
             async handleCurrentChange(num){
 			    this.currentPage = num
-                const dataReceipt = await getOrderAll(this.currentPage)
-                console.log('re: ',dataReceipt.data.data)
-                this.receiptData = dataReceipt.data.data.list
+                let radioCon =''
+                let sTime = this.value1 === '' ? '' : this.formatter(this.value1)
+                let eTime = this.value2 === '' ? '' : this.formatter(this.value2)
+                console.log(sTime)
+                console.log(eTime)
+                console.log(this.input)
+                console.log(this.radio2)
+                if(this.radio2 === 1) {
+                    radioCon = '未完成'
+                }else if(this.radio2 === 2) {
+                    radioCon = '已完成'
+                }
+                const resData = await queryOrders(this.input,radioCon,sTime,eTime,this.currentPage,10)
+                this.receiptData = resData.data.data.list
+                this.count = resData.data.data.total
             }
 		}
     }
