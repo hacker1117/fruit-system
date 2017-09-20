@@ -104,7 +104,8 @@
                     roleindex:'',
                     account: '',
                     uname: '',
-                    upassword: '',   
+                    upassword: '',
+                    repocode: ''
                 },
                 roleList: [],
                 repoList: []

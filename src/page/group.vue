@@ -55,7 +55,7 @@
             width="55">
             </el-table-column>
 			<el-table-column
-			prop="uname" 
+			prop="uname"
 			label="人员名称">
 			</el-table-column>
 		</el-table>
@@ -193,7 +193,7 @@
                 }
                 const cateData = await getCateAll();
                 console.log(cateData.data)
-                this.cateList = cateData.data.data.list
+                this.cateList = cateData.data.data
             },
             async handleChoose(row) {
                 console.log(row)

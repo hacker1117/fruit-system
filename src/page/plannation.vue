@@ -127,6 +127,15 @@
 			label="备注">
 			</el-table-column>
 		</el-table>
+            <div class="Pagination" style="text-align: left;margin-top: 10px;">
+                <el-pagination
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-size="10"
+                    layout="total, prev, pager, next"
+                    :total="count">
+                </el-pagination>
+            </div>
 		</div>
     </div>
 </template>
@@ -145,7 +154,9 @@
 				city: {},
 				receiptData: [],
 				batchData:[],
-				batchID:''
+				batchID:'',
+                count: 0,
+                currentPage: 1
     		}
     	},
     	components: {
@@ -157,9 +168,10 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getPlanAll(1,10)
+					const dataReceipt = await getPlanAll(this.currentPage)
 					if(dataReceipt.data.code === '1111'){
 						this.receiptData = dataReceipt.data.data.list
+                        this.count = dataReceipt.data.data.total
 					} else {
 						console.log('获取生产计划数据出错')
 					}
@@ -206,7 +218,16 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
-			}
+			},
+            async handleCurrentChange(num) {
+			    this.currentPage = num
+                const dataReceipt = await getPlanAll(this.currentPage)
+                if(dataReceipt.data.code === '1111'){
+                    this.receiptData = dataReceipt.data.data.list
+                } else {
+                    console.log('获取生产计划数据出错')
+                }
+            }
 		}
     }
 </script>
