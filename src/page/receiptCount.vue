@@ -102,6 +102,15 @@
 			</template>
 			</el-table-column>
 		</el-table>
+            <div class="Pagination" style="text-align: left;margin-top: 10px;">
+                <el-pagination
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-size="10"
+                    layout="total, prev, pager, next"
+                    :total="count">
+                </el-pagination>
+            </div>
 		</div>
     </div>
 </template>
@@ -118,7 +127,9 @@
 				value2: '',
 				input: '',
 				city: {},
-				receiptData: []
+				receiptData: [],
+                count: 0,
+                currentPage: 1
     		}
     	},
     	components: {
@@ -130,9 +141,10 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getOrderAll()
+					const dataReceipt = await getOrderAll(this.currentPage)
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+                    this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -164,7 +176,13 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
-			}
+			},
+            async handleCurrentChange(num){
+			    this.currentPage = num
+                const dataReceipt = await getOrderAll(this.currentPage)
+                console.log('re: ',dataReceipt.data.data)
+                this.receiptData = dataReceipt.data.data.list
+            }
 		}
     }
 </script>
