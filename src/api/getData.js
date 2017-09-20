@@ -566,7 +566,7 @@ export const queryGoodsList = (pname, proid, pageNum = '1', pageSize = '10') => 
  * 查询用户列表
  */
 
-export const queryUserList = () => axio('/user/findAllUser');
+export const queryUserList = (pageNum = 1,pageSize = 10) => axio('/user/findAllUser',{pageNum,pageSize});
 
 /**
  * 更新用户信息

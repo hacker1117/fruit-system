@@ -3,10 +3,10 @@
         <head-top></head-top>
 		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 			<el-col :span="24">
-				<el-button @click="dialogFormVisible = true" >新增用户</el-button>
+				<el-button @click="dialogFormVisible = true" style="margin-left: 2%;" >新增用户</el-button>
 			</el-col>
 		</el-row>
-        <el-dialog title="新增用户" v-model="dialogFormVisible">
+        <el-dialog title="新增用户" v-model="dialogFormVisible" >
         <el-form :model="form">
             <el-form-item label="角色" :label-width="formLabelWidth">
                 <el-select v-model="form.roleindex" placeholder="请选择角色">
@@ -71,10 +71,9 @@
             </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
                 <el-pagination
-                  @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
-                  :page-size="5"
+                  :page-size="10"
                   layout="total, prev, pager, next"
                   :total="count">
                 </el-pagination>
@@ -108,7 +107,8 @@
                     repocode: ''
                 },
                 roleList: [],
-                repoList: []
+                repoList: [],
+                currentPage: 1
             }
         },
     	components: {
@@ -120,10 +120,10 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await queryUserList();
+                    const countData = await queryUserList(this.currentPage);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
-                    this.count = countData.data.data.list.length
+                    this.count = countData.data.data.total
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -163,10 +163,11 @@
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
             },
-            handleCurrentChange(val) {
+            async handleCurrentChange(val) {
                 this.currentPage = val;
-                this.offset = (val - 1)*this.limit;
-                this.getUsers()
+                const countData = await queryUserList(this.currentPage);
+                console.log(countData.data)
+                this.tableData = countData.data.data.list
             },
             async getUsers(){
                 const Users = await getUserList({offset: this.offset, limit: this.limit});

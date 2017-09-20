@@ -28,6 +28,7 @@
 	import {login, getAdminInfo} from '@/api/getData'
 	import {mapActions, mapState} from 'vuex'
 	import local from '@/api/local'
+    import md5 from 'md5'
 
 	export default {
 	    data(){
@@ -61,8 +62,8 @@
 			async submitForm(formName) {
 				this.$refs[formName].validate(async (valid) => {
 					if (valid) {
-						const res = await login({account: this.loginForm.username, password: this.loginForm.password})
-						if (res.data) {
+						const res = await login({account: this.loginForm.username, password: md5(this.loginForm.password)})
+						if (res.data.code === '1111') {
 							this.$message({
 		                        type: 'success',
 		                        message: '登录成功'
