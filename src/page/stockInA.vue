@@ -6,7 +6,14 @@
             <el-col :span="3" style="text-align:right;">单据编号：</el-col>
 			<el-col :span="4"><el-input v-model="ordernumber" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="3" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="ordertime" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4">
+				<el-date-picker
+				v-model="ordertime"
+				type="date"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
@@ -127,14 +134,13 @@
 			// 	this.$router.push('/stockInListDetails/'+ row.orderid)
 			// },
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				const resData = await queryStockInList(this.ordernumber,this.ordertime)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					console.log(this.receiptData)
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())

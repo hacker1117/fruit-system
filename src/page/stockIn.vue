@@ -5,7 +5,8 @@
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">单据编码：</el-col>
 			<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="6" style="text-align:right;">单据日期：
+            <el-col :span="2" style="text-align:right;">单据日期：</el-col>
+            <el-col :span="4">
 				<el-date-picker
 				v-model="ordertime"
 				type="date"

@@ -32,7 +32,7 @@
 				<el-button @click="dialogFormVisible = true" >新增货品</el-button>
 			</el-col>
 		</el-row>
-        <el-dialog title="新增供应商" v-model="dialogFormVisible">
+        <el-dialog title="新增货品" v-model="dialogFormVisible">
         <el-form :model="form">
 			<el-form-item label="商品编码" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.proid" auto-complete="off"></el-input>

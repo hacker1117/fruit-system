@@ -4,23 +4,29 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">商品编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="procode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">商品名称：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="pname" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">损耗商品码：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="wasteproductcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">制单员：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="createhuman" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
             <el-col :span="2" style="text-align:right;">报损时间：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4">
+				<el-date-picker
+				v-model="reporttime"
+				type="date"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+			</el-col>			
 		</el-row>
 		<el-row>
 			<el-col :span="24">
-                <el-button style="float: right;" @click="handleSearch" type="primary">清空</el-button>
                 <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-                <el-button style="float: right;" @click="handleInsert" type="primary">新增</el-button>
+                <el-button style="float: right;" @click="" type="primary">新增</el-button>
             </el-col>
 		</el-row>
 		<el-table
@@ -85,7 +91,11 @@
     		return {
 				value1: '',
 				value2: '',
-				input: '',
+				procode: '',
+				pname: '',
+				wasteproductcode: '',
+				createhuman: '',
+				reporttime: '',
 				city: {},
 				receiptData: [],
     		}
@@ -112,14 +122,12 @@
 				this.$router.push('/transportWasteDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				const resData = await queryTransportWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,this.reporttime)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())

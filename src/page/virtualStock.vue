@@ -24,7 +24,7 @@
                   label="仓库名称">
                 </el-table-column>
             </el-table>
-            <el-dialog title="新增采购单" v-model="dialogFormVisible">
+            <el-dialog title="新增虚拟库" v-model="dialogFormVisible">
             <el-form :model="form">
                 <el-form-item label="仓库名称" :label-width="formLabelWidth">
                     <el-input style="width: 195px" v-model="form.reponame" auto-complete="off"></el-input>

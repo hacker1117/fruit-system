@@ -403,7 +403,7 @@ export const getStockInListDetails = orderid => axio('/innetstorageb/get/'+ orde
  * 查询入库清单
  */
 
-export const queryStockInList = (orderid, ordertime, orderofcreatehuman, defaultrepository, marklogo, buyhuman, buytype, buydepartment, pageNum = 1, pageSize = 10) => axio('/innetstorageb/get/',{orderid, ordertime, orderofcreatehuman, defaultrepository, marklogo, buyhuman, buytype, buydepartment, pageNum, pageSize});
+export const queryStockInList = (ordernumber, ordertime, pageNum = 1, pageSize = 10) => axio('/storageordera/selectByExamples',{ordernumber, ordertime, pageNum, pageSize});
 
 /**
  * 获取运输损耗列表
