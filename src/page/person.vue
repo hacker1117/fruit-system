@@ -21,7 +21,7 @@
             </el-form-item>
             <el-form-item label="所属仓库" :label-width="formLabelWidth">
                 <el-select v-model="form.repocode" placeholder="请选择区域">
-                    <el-option v-for="(repo,index) in repoList" :key="repo.id" :label="repo.reponame" :value="repo.rolename"></el-option>
+                    <el-option v-for="(repo,index) in repoList" :key="repo.id" :label="repo.reponame" :value="repo.repocode"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="密码" :label-width="formLabelWidth">
