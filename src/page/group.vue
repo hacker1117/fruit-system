@@ -43,7 +43,7 @@
             <el-button type="primary" @click="confirmChildAdd">确 定</el-button>
         </div>
         </el-dialog>
-        <el-dialog title="选择人员" v-model="dialogFormVisibleGroup">
+        <el-dialog title="选择人员" ref="dialog" v-model="dialogFormVisibleGroup">
 		<el-table
             ref="multipleTable"
 			:data="receiptData"
@@ -229,6 +229,7 @@
 
             },
             async handleEditChild(index,row) {
+                this.dialogFormVisibleGroup = true
                 const dataReceipt = await queryUserList()
                 this.receiptData = dataReceipt.data.data.list
                 const userViews = await getGroupUser(row.saleid)
@@ -236,12 +237,12 @@
                 for(let i = 0;i < this.receiptData.length; i++){
                     for(let j = 0;j < userViews.data.data.length; j++){
                         if(this.receiptData[i].pagecode === userViews.data.data[j].pagecode){
+                            console.log('table', this.$refs)
                             this.$refs.multipleTable.toggleRowSelection(this.receiptData[i])
                             console.log(i,j)
                         }
                     }
                 }
-                this.dialogFormVisibleGroup = true
                 this.salegroupname = row.saleid
             },
             handleSelectionChange(val) {

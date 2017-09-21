@@ -25,7 +25,7 @@
 </template>
 
 <script>
-	import {login, getAdminInfo} from '@/api/getData'
+	import {login, getAdminInfo, getViewsAll, loginRole} from '@/api/getData'
 	import {mapActions, mapState} from 'vuex'
 	import local from '@/api/local'
     import md5 from 'md5'
@@ -50,9 +50,6 @@
 		},
 		mounted(){
 			this.showLogin = true;
-			if (!this.adminInfo.username) {
-    			this.getAdminData()
-    		}
 		},
 		computed: {
 			...mapState(['adminInfo']),
@@ -68,11 +65,18 @@
 		                        type: 'success',
 		                        message: '登录成功'
 							});
-							this.$store.commit('saveAdminInfo',{
-								avatar: this.$store.state.adminInfo.avatar,
-								username: this.loginForm.username
-							})
+							this.$store.commit('saveAdminInfo',res.data.data[0])
 							local.set('userInfo', JSON.stringify(this.$store.state.adminInfo))
+                            console.log(this.$store.state.adminInfo)
+                            const results = await getViewsAll()
+                            let page = results.data.data
+                            let views = new Map()
+                            for (let i of page) {
+                                views.set(i.pagecode, false)
+                            }
+                            const rolePage = await loginRole(this.$store.state.adminInfo.uid)
+//                            let pages = rolePage.data.
+                            this.$store.commit('setPageList', views)
 							this.$router.push('/manage')
 						}else{
 							this.$message({
@@ -93,6 +97,7 @@
 			checkLogin() {
 				let isLogin = local.get('userInfo')
 				if(isLogin) {
+				    console.log('login!')
 					this.$store.commit('saveAdminInfo', JSON.parse(isLogin))
 					this.$router.push('/manage')
 				}

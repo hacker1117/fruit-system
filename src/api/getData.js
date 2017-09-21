@@ -10,6 +10,12 @@ import yichu from '@/config/yichu'
 export const login = data => axio('/user/login', data);
 
 /**
+ * 登陆后获取页面权限
+ */
+
+export const loginRole = (uID = '111') => axio('/user/queryPageRole', {uID});
+
+/**
  * 获取APP后台商品列表
  */
 

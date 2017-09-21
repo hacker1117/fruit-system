@@ -13,7 +13,7 @@
             width="55">
             </el-table-column>
 			<el-table-column
-			prop="pagename" 
+			prop="pagename"
 			label="页面名称">
 			</el-table-column>
 		</el-table>
@@ -66,6 +66,7 @@
                     for(let i = 0;i < this.receiptData.length; i++){
                         for(let j = 0;j < userViews.data.data.length; j++){
                             if(this.receiptData[i].pagecode === userViews.data.data[j].pagecode){
+                                console.log('table', this.$refs)
                                 this.$refs.multipleTable.toggleRowSelection(this.receiptData[i])
                                 console.log(i,j)
                             }
