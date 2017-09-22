@@ -166,8 +166,11 @@
 				const resData = await querySupplierList(this.supplytype,this.sname,this.mantelephone)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
 				}
 			},
 			formatter(date){

@@ -78,13 +78,22 @@
 			</template>
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
 
 <script>
     import headTop from '@/components/headTop'
-    import {getWasteAll, queryTransportWasteList} from '@/api/getData'
+    import {getWasteAll, queryWasteList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -98,6 +107,8 @@
 				reporttime: '',
 				city: {},
 				receiptData: [],
+				currentPage: '',
+				count: ''
     		}
     	},
     	components: {
@@ -109,9 +120,10 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getWasteAll(1, 1)
+					const dataReceipt = await getWasteAll(1, 10)
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -122,11 +134,15 @@
 				this.$router.push('/transportWasteDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				const resData = await queryTransportWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,this.reporttime)
+				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
+				const resData = await queryWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,times)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
 				}
 			},
 			formatter(date){
@@ -134,6 +150,11 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = await getWasteAll(this.currentPage)
+				this.receiptData = dataReceipt.data.data.list
 			}
 		}
     }

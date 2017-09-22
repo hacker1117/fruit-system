@@ -36,7 +36,6 @@
 				<el-date-picker
 				v-model="creattime"
 				type="date"
-				size="small"
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
@@ -171,9 +170,16 @@
 			async handleSearch(){
 				let cTime = this.creattime === '' ? '' : this.formatter(this.creattime)
 				console.log(cTime)
-				const resData = await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,1,1)
-				this.receiptData = resData.data.data.list
+				const resData = await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,1,10)
 				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())

@@ -424,6 +424,12 @@ export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/repos
 export const addTransportWasteAll = (procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, pageNum = '1', pageSize = '1000') => axio('/bTWastageordera/addWeastorder', {procount, productcount, procode, ordercode, customer, proname, prostandard, prounite} );
 
 /**
+ * 查询A库损耗管理
+ */
+
+export const queryWasteList = (procode, pname, wasteproductcode, createhuman, reporttime, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, createhuman, reporttime, pageNum , pageSize});
+
+/**
  * 查询运输损耗清单
  */
 
@@ -735,4 +741,4 @@ export const insertVirtualRepo = (reponame, protype) => axio('/virtualrepomanage
  * A库-查询库存余额
  */
 
-export const queryBalanceB = (repocode,proname) => axio('/abalancerepository/selectAbalanceByExamples',{repocode,proname});
+export const queryBalanceB = (repocode,proname,pageNum = 1,pageSize = 10) => axio('/abalancerepository/selectAbalanceByExamples',{repocode,proname,pageNum,pageSize});

@@ -196,8 +196,14 @@
 			},
 			async handleSearch(){
 				const resData = await queryGoodsList(this.pname, this.procode)
-				this.receiptData = resData.data.data.list
-				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())

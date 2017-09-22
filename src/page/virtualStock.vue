@@ -24,6 +24,15 @@
                   label="仓库名称">
                 </el-table-column>
             </el-table>
+			<div class="Pagination" style="text-align: left;margin-top: 10px;">
+				<el-pagination
+					@current-change="handleCurrentChange"
+					:current-page="currentPage"
+					:page-size="10"
+					layout="total, prev, pager, next"
+					:total="count">
+				</el-pagination>
+			</div>
             <el-dialog title="新增虚拟库" v-model="dialogFormVisible">
             <el-form :model="form">
                 <el-form-item label="仓库名称" :label-width="formLabelWidth">
@@ -81,6 +90,7 @@
                         list.is_default = list.isDefault ? '是' : '不是'
                     })
                     this.tableData = countData.data.data.list
+					this.count = countData.data.data.total
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -146,7 +156,12 @@
                     tableData.city = item.city;
                     this.tableData.push(tableData);
                 })
-            }
+            },
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const countData = await getVirtualRepoAll(this.currentPage)
+				this.countData = countData.data.data.list
+			}
         },
     }
 </script>
