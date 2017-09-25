@@ -33,20 +33,16 @@
 			label="标记">
 			</el-table-column>
 			<el-table-column
-			prop="orderid" width="120px"
+			prop="orderid" width="180px"
 			label="单据编号">
 			</el-table-column>
 			<el-table-column
-			prop="ordertime" width="120px"
+			prop="ordertime" width="180px"
 			label="单据日期">
 			</el-table-column>
 			<el-table-column
 			prop="inrepotype" width="120px"
 			label="入库类别">
-			</el-table-column>
-			<el-table-column
-			prop="netweight" width="120px"
-			label="净重量">
 			</el-table-column>
 			<el-table-column
 			prop="prounite" width="120px"

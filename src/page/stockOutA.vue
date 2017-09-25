@@ -8,18 +8,20 @@
 			</el-col>
 		</el-row>
 		<el-row style="margin-top: 20px;">
-            <el-col :span="3" style="text-align:right;">单据编号：</el-col>
+            <el-col :span="3" style="text-align:right;">B库采购需求单号：</el-col>
 			<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="3" style="text-align:right;">出库单号：</el-col>
+			<el-col :span="4"><el-input v-model="outputcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="7" style="text-align:right;">单据日期：
 				<el-date-picker
 				v-model="ordertime"
 				type="date"
-				size="small"
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
 			</el-col>
-
+		</el-row>
+		<el-row style="margin-top: 20px;">
             <el-col :span="3" style="text-align:right;">去向：</el-col>
 			<el-col :span="4"><el-input v-model="customer" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
@@ -55,6 +57,15 @@
 			</template>
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -72,8 +83,11 @@
 				city: {},
 				receiptData: [],
 				ordercode: '',
+				outputcode: '',
 				ordertime: '',
-				customer: ''
+				customer: '',
+				currentPage: 1,
+				count: 0
     		}
     	},
     	components: {
@@ -88,6 +102,7 @@
 					const dataReceipt = await getStockOutaAll()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -99,9 +114,15 @@
 			},
 			async handleSearch(){
 				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
-				const resData = await queryStockOutA(this.ordercode,sTime,this.customer)
-				this.receiptData = resData.data.data.list
-				console.log(resData.data)
+				const resData = await queryStockOutA(this.ordercode,this.outputcode,sTime,this.customer)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())
@@ -112,6 +133,11 @@
 			addStockOut() {
 				this.$destroy()
 				this.$router.push('/addStockOutA')
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = await getStockOutaAll(this.currentPage)
+				this.receiptData = dataReceipt.data.data.list
 			}
 		}
     }

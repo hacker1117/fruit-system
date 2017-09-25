@@ -93,6 +93,7 @@
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
+				v-if="toggle"
 				size="small"
 				@click="handleEdit(scope.$index, scope.row)">完善采购单信息</el-button>
 			</template>
@@ -121,6 +122,7 @@
 				value1: '',
 				value2: '',
 				input: '',
+				toggle: true,
 				city: {},
 				receiptData: [],
 				salesmanname: '',
@@ -175,6 +177,7 @@
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
+					this.toggle= false
 				} else {
 					this.$message(resData.data.message)
 					this.receiptData =""

@@ -505,7 +505,7 @@ export const getStockOutaAll = (pageNum = 1, pageSize = 10) => axio('/outputorde
  * 查询A库出库单
  */
 
-export const queryStockOutA= (ordercode, ordertime, customer, pageNum = 1, pageSize = 10) => axio('/outputordera/findByExamples',{ordercode, ordertime, customer, pageNum, pageSize});
+export const queryStockOutA= (ordercode,outputcode , ordertime, customer, pageNum = 1, pageSize = 10) => axio('/outputordera/findByExamples',{ordercode, ordertime, customer, pageNum, pageSize});
 
 /**
  * 查询A库出库单
