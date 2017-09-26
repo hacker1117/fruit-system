@@ -107,8 +107,8 @@
 				reporttime: '',
 				city: {},
 				receiptData: [],
-				currentPage: '',
-				count: ''
+				currentPage: 1,
+				count: 0
     		}
     	},
     	components: {

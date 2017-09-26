@@ -4,17 +4,24 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">商品编号：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="productcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">商品名称：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">损耗商品码：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="pname" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="2" style="text-align:right;">损耗商品编码：</el-col>
+			<el-col :span="4"><el-input v-model="wasteproductcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">制单员：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="createhuman" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
             <el-col :span="2" style="text-align:right;">报损时间：</el-col>
-			<el-col :span="4"><el-input v-model="input" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4">
+				<el-date-picker
+				v-model="timeofreport"
+				type="date"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24">
@@ -28,11 +35,11 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderid" width="120px"
+			prop="ordernumber" width="120px"
 			label="订单号">
 			</el-table-column>
 			<el-table-column
-			prop="procode" width="120px"
+			prop="productcode" width="120px"
 			label="商品编号">
 			</el-table-column>
 			<el-table-column
@@ -40,7 +47,7 @@
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="unite" width="120px"
+			prop="productunite" width="120px"
 			label="单位">
 			</el-table-column>
 			<el-table-column
@@ -48,7 +55,7 @@
 			label="损耗商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="productcount" width="120px"
+			prop="productnumber" width="120px"
 			label="数量">
 			</el-table-column>
 			</el-table-column>
@@ -57,7 +64,7 @@
 			label="损耗类别">
 			</el-table-column>
 			<el-table-column
-			prop="unincludeelse" width="120px"
+			prop="remarkable" width="120px"
 			label="其他">
 			</el-table-column>
 			<el-table-column
@@ -72,13 +79,22 @@
 			</template>
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
 
 <script>
     import headTop from '@/components/headTop'
-    import {getTransportWasteAll, queryTransportWasteList} from '@/api/getData'
+    import {getTransportWasteAll, queryDailyLossList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -86,8 +102,15 @@
 				value1: '',
 				value2: '',
 				input: '',
+				productcode: '',
+				pname: '',
+				wasteproductcode: '',
+				createhuman: '',
+				timeofreport: '',
 				city: {},
 				receiptData: [],
+				currentPage: 1,
+				count: 0,
     		}
     	},
     	components: {
@@ -102,6 +125,7 @@
 					const dataReceipt = await getTransportWasteAll()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+						this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -112,20 +136,33 @@
 				this.$router.push('/transportWasteDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				let sTime = this.timeofreport === '' ? '' : this.formatter(this.timeofreport)
+				const resData = await queryDailyLossList(this.productcode,this.pname,this.wasteproductcode,this.createhuman,sTime)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num 
+				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
+				const dataReceipt = await getTransportWasteAll(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}				
 			}
 		}
     }

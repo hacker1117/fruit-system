@@ -433,7 +433,13 @@ export const queryWasteList = (procode, pname, wasteproductcode, createhuman, re
  * 查询运输损耗清单
  */
 
-export const queryTransportWasteList = (procode, pname, wasteproductcode, createhuman, reporttime, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, createhuman, reporttime, pageNum , pageSize});
+export const queryTransportWasteList = (procode, pname, wasteproductcode, reporttime, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, reporttime, pageNum , pageSize});
+
+/**
+ * 查询B库日常损耗管理
+ */
+
+export const queryDailyLossList = (productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum , pageSize});
 
 /**
  * 获取采购单（A库）列表

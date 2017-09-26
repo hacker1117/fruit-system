@@ -67,7 +67,7 @@
 				city: {},
 				receiptData: [],
 				currentPage: 1,
-				count: '',
+				count: 0,
 				repocode: '',
 				proname: ''
     		}

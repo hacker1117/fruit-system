@@ -41,7 +41,15 @@
             <el-col :span="2" style="text-align:right;">损耗商品码：</el-col>
 			<el-col :span="4"><el-input v-model="wasteproductcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">报损时间</el-col>
-			<el-col :span="4"><el-input v-model="reporttime" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<!--<el-col :span="4"><el-input v-model="reporttime" siez="mini" placeholder="请输入内容"></el-input></el-col>-->
+			<el-col :span="4">
+                <el-date-picker
+				v-model="reporttime"
+				type="date"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24">
@@ -83,6 +91,15 @@
 			label="损耗类别">
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -97,8 +114,14 @@
 				value1: '',
 				value2: '',
 				input: '',
+				procode: '',
+				pname: '',
+				wasteproductcode: '',
+				reporttime: '',
 				city: {},
 				receiptData: [],
+				currentPage: 1,
+				count: 0,
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
 				goodsList:[],
@@ -120,6 +143,7 @@
 					const dataReceipt = await getTransportWasteAll()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
 					const result = await getProList('')
 					this.goodsList = result.data.data
     			}catch(err){
@@ -132,13 +156,16 @@
 				this.$router.push('/transportWasteDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				const resData = await queryTransportWasteList(this.procode, this.pname, this.wasteproductcode, this.reporttime)
-//				this.receiptData = resData.data.data.list
+				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
+				const resData = await queryTransportWasteList(this.procode, this.pname, this.wasteproductcode, times)
 				console.log(resData.data)	
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
 				}
 			},
 			formatter(date){
@@ -159,6 +186,17 @@
 					this.initData()
 				}else {
 					this.$message(addInfo.data.message)
+				}
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = await getTransportWasteAll(this.currentPage)
+//				this.receiptData = dataReceipt.data.data.list
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
 				}
 			}
 		}

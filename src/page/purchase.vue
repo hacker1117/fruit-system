@@ -47,7 +47,14 @@
             <el-col :span="3" style="text-align:right;">订单编号：</el-col>
 			<el-col :span="4"><el-input v-model="orderno" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="3" style="text-align:right;">单据日期：</el-col>
-			<el-col :span="4"><el-input v-model="createtime" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4">
+				<el-date-picker
+				v-model="createtime"
+				type="date"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+			</el-col>
             <el-col :span="3" style="text-align:right;">采购部门：</el-col>
 			<el-col :span="4"><el-input v-model="buydepartmentid" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>

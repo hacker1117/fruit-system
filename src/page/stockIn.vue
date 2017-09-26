@@ -51,6 +51,15 @@
 			</template>
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -67,6 +76,8 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				currentPage: 1,
+				count: 0,
 				ordercode: '',
 				ordertime: ''
     		}
@@ -83,6 +94,7 @@
 					const dataReceipt = await getStockInAllB()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data
+					this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -95,14 +107,31 @@
 			async handleSearch(){
 				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
 				const resData = await queryStockIn(this.ordercode,sTime)
-				this.receiptData = resData.data.data.list
-				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = await getStockInAllB(this.currentPage)
+//				this.receiptData = dataReceipt.data.data.list
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}
 			}
 		}
     }
