@@ -48,6 +48,15 @@
 			label="数量">
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -67,7 +76,9 @@
                 repoList: [],
                 form:{
                     respositysource: ''
-                }
+                },
+				currentPage: 1,
+				count: 0,
     		}
     	},
     	components: {
@@ -81,6 +92,7 @@
     			try{
 					const repos = await getRepoAll()
 					this.repoList = repos.data.data
+					this.count = repos.data.data.length
     			}catch(err){
     				console.log(err);
     			}
@@ -122,6 +134,16 @@
 					this.$message('出库成功')
 				}else {
 					this.$message(addInfo.data.message)
+				}
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt =await getRepoAll(this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data
+					this.count = dataReceipt.data.data.length
+				}else {
+					this.receiptData = []
 				}
 			}
  		}

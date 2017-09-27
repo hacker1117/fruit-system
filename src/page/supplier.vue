@@ -137,7 +137,8 @@
 				sname: '',
 				mantelephone: '',
 				currentPage: 1,
-				count: 0
+				count: 0,
+				get: 0,
     		}
     	},
     	components: {
@@ -163,6 +164,8 @@
 				this.$router.push('/supplierDetails/'+ row.supplierid)
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
 				const resData = await querySupplierList(this.supplytype,this.sname,this.mantelephone)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
@@ -192,8 +195,13 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getSupplierAll(this.currentPage)
-				this.receiptData = dataReceipt.data.data.list
+				const dataReceipt = this.get = 0 ? await getSupplierAll(this.currentPage) : await querySupplierList(this.supplytype,this.sname,this.mantelephone,this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}
 			}
 		}
     }

@@ -146,6 +146,7 @@
 				value2: '',
 				input: '',
 				count: 0,
+				get: 0,
 				city: {},
 				receiptData: [],
 				pname: '',
@@ -195,6 +196,8 @@
 				this.appBindId = row.proid
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
 				const resData = await queryGoodsList(this.pname, this.procode)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
@@ -256,10 +259,15 @@
 					}
 				}
 			},
-			async handleCurrentChange(event) {
-				this.currentPage = event
-				const dataReceipt = await getGoodsAll(this.currentPage)
-				this.receiptData = dataReceipt.data.data.list
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt = this.get = 0 ? await getGoodsAll(this.currentPage) : await queryGoodsList(this.pname, this.procode,this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}
 			},
 			handleSizeChange() {
 

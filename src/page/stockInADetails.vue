@@ -2,13 +2,13 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
-		<el-row style="margin-top: 20px;">
+		<!--<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">单据编号：</el-col>
 			<el-col :span="4"><el-input v-model="ordernumber" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
-		</el-row>
+		</el-row>-->
         <el-dialog title="完善入库信息" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="实际入库数量" :label-width="formLabelWidth">
@@ -104,6 +104,15 @@
 			</template>
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page="currentPage"
+				:page-size="10"
+				layout="total, prev, pager, next"
+				:total="count">
+			</el-pagination>
+		</div>
 		</div>
     </div>
 </template>
@@ -135,7 +144,10 @@
 					supplierid: ''
 				},
 				dialogFormVisible: false,
-				formLabelWidth: '120px'
+				formLabelWidth: '120px',
+				currentPage: 1,
+				count: 0,
+				get: 0,
     		}
     	},
     	components: {
@@ -150,6 +162,7 @@
 					const dataReceipt = await getNotStockInA()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data
+					this.count = dataReceipt.data.data.length
 					const repos = await getRepoAll()
 					this.repoList = repos.data.data
 					const vRepos = await getVirtualRepoAll()
@@ -197,6 +210,16 @@
 					this.initData()
 				}else {
 					this.$message(addInfo.data.message)
+				}
+			},
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt =await getNotStockInA(this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data
+					this.count = dataReceipt.data.data.length
+				}else {
+					this.receiptData = []
 				}
 			}
 		}
@@ -271,6 +294,6 @@
 		height: 32px !important;
 	}
 	.fruit-content {
-		padding: 0 4%;
+		padding: 20px 4% 0;
 	}
 </style>

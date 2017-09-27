@@ -108,7 +108,8 @@
 				city: {},
 				receiptData: [],
 				currentPage: 1,
-				count: 0
+				count: 0,
+				get: 0,
     		}
     	},
     	components: {
@@ -134,6 +135,8 @@
 				this.$router.push('/transportWasteDetails/'+ row.orderid)
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
 				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
 				const resData = await queryWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,times)
 				if(resData.data.code === '1111'){
@@ -153,8 +156,14 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getWasteAll(this.currentPage)
-				this.receiptData = dataReceipt.data.data.list
+				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
+				const dataReceipt = this.get = 0 ? await getWasteAll(this.currentPage) : await queryWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,times,this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}
 			}
 		}
     }

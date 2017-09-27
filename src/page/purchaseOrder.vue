@@ -141,7 +141,8 @@
 				formLabelWidth: '120px',
 				supplierList:[],
 				currentPage: 1,
-				count: 0
+				count: 0,
+				get: 0,
     		}
     	},
     	components: {
@@ -170,10 +171,10 @@
 				this.ordercode = row.ordercode
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
 				let cTime = this.creattime === '' ? '' : this.formatter(this.creattime)
-				console.log(cTime)
 				const resData = await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,1,10)
-				console.log(resData.data)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -202,9 +203,13 @@
 			},
 			async handleCurrentChange(num) {
 				this.currentPage = num
-				const dataReceipt = await getPurchaseOrderAll(this.currentPage, 10)
+				let cTime = this.creattime === '' ? '' : this.formatter(this.creattime)
+				const dataReceipt = this.get = 0 ? await getPurchaseOrderAll(this.currentPage) : await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
 				}
 			}
 		}

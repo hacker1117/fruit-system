@@ -109,7 +109,8 @@
 				ordernumber: '',
 				ordertime: '',
 				currentPage: 1,
-				count: 0
+				count: 0,
+				get: 0,
     		}
     	},
     	components: {
@@ -134,12 +135,17 @@
 			// 	this.$router.push('/stockInListDetails/'+ row.orderid)
 			// },
 			async handleSearch(){
-				const resData = await queryStockInList(this.ordernumber,this.ordertime)
+				this.get = 1
+				this.count = 0
+				let cTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
+				const resData = await queryStockInList(this.ordernumber,cTime)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
-					console.log(this.receiptData)
+					this.count = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
 				}
 			},
 			formatter(date){
@@ -154,8 +160,14 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getStockInaAll(this.currentPage)
-				this.receiptData = dataReceipt.data.data.list
+				let cTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
+				const dataReceipt = this.get = 0 ? await getStockInaAll(this.currentPage) : await queryStockInList(this.ordernumber,cTime,this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}
 			}
 		}
     }

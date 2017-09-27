@@ -69,7 +69,8 @@
 				currentPage: 1,
 				count: 0,
 				repocode: '',
-				proname: ''
+				proname: '',
+				get: 0,
     		}
     	},
     	components: {
@@ -97,6 +98,8 @@
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
 				const resData = await queryBalanceB(this.repocode,this.proname)
 				console.log(resData.data)
 				if(resData.data.code === '1111'){
@@ -116,7 +119,7 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getStockBalanceaAll(num)
+				const dataReceipt = this.get = 0 ? await getStockBalanceaAll(this.currentPage) : await queryBalanceB(this.repocode,this.proname,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
