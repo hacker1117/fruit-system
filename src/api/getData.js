@@ -2,6 +2,11 @@ import "babel-polyfill"
 import fetch from '@/config/fetch'
 import axio from '@/config/axio'
 import yichu from '@/config/yichu'
+import local from '@/api/local'
+
+let isLogin = local.get('userInfo')
+isLogin = JSON.parse(isLogin)
+const repoId = isLogin.repositoryid
 
 /**
  * 登陆
@@ -331,7 +336,7 @@ export const getStockOutDetailsHead = data => axio('/Outputorderb/queryOutPutHea
  * 获取出库单详情表格
  */
 
-export const getStockOutDetailsDetail = data => axio('/Outputorderb/queryOutPutDetail/' + data);
+export const getStockOutDetailsDetail = (data, repositoryid = repoId) => axio('/Outputorderb/queryOutPutDetail/' + data,{repositoryid});
 
 /**
  * 查询出库单
@@ -391,19 +396,19 @@ export const getStockInAll = (bpid = '',ordertime = '', inrepotype = '', handlep
  * 获取入库单列表
  */
 
-export const getStockInAllB = (bpid = '',ordertime = '', inrepotype = '', handleperson = '', pageNum = 1, pageSize = 10) => axio('/repositoryb/queryInstorageOrder',{bpid, ordertime, inrepotype, handleperson, pageNum, pageSize});
+export const getStockInAllB = (bpid = '',ordertime = '', inrepotype = '', handleperson = '', pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryInstorageOrder',{bpid, ordertime, inrepotype, handleperson, pageNum, pageSize, repositoryid});
 
 /**
  * 获取入库单详情
  */
 
-export const getStockInDetails = outputcode => axio('/repositoryb/selectTinstoragebByCondition' , {outputcode});
+export const getStockInDetails = (outputcode, repositoryid = repoId) => axio('/repositoryb/selectTinstoragebByCondition' , {outputcode, repositoryid});
 
 /**
  * 获取入库清单列表
  */
 
-export const getStockInListAll = (pageNum = 1, pageSize = 10) => axio('/innetstorageb/getTotal',{pageNum, pageSize});
+export const getStockInListAll = (pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/innetstorageb/getTotal',{pageNum, pageSize, repositoryid});
 
 /**
  * 获取入库清淡详情
@@ -415,19 +420,19 @@ export const getStockInListDetails = orderid => axio('/innetstorageb/get/'+ orde
  * 查询入库清单
  */
 
-export const queryStockInList = (ordernumber, ordertime, pageNum = 1, pageSize = 10) => axio('/storageordera/selectByExamples',{ordernumber, ordertime, pageNum, pageSize});
+export const queryStockInList = (ordernumber, ordertime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/storageordera/selectByExamples',{ordernumber, ordertime, pageNum, pageSize, repositoryid});
 
 /**
  * 获取运输损耗列表
  */
 
-export const getTransportWasteAll = (pageNum = 1, pageSize = 10) => axio('/repositoryb/getTransferWasteb',{pageNum, pageSize});
+export const getTransportWasteAll = (pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getTransferWasteb',{pageNum, pageSize, repositoryid});
 
 /**
  * 新增运输损耗
  */
 
-export const addTransportWasteAll = (procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, pageNum = '1', pageSize = '1000') => axio('/bTWastageordera/addWeastorder', {procount, productcount, procode, ordercode, customer, proname, prostandard, prounite} );
+export const addTransportWasteAll = (procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, pageNum = '1', pageSize = '1000', repositoryid = repoId) => axio('/bTWastageordera/addWeastorder', {procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, repositoryid} );
 
 /**
  * 查询A库损耗管理
@@ -439,7 +444,7 @@ export const queryWasteList = (procode, pname, wasteproductcode, createhuman, re
  * 查询运输损耗清单
  */
 
-export const queryTransportWasteList = (procode, pname, wasteproductcode, reporttime, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, reporttime, pageNum , pageSize});
+export const queryTransportWasteList = (procode, pname, wasteproductcode, reporttime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, reporttime, pageNum , pageSize, repositoryid});
 
 /**
  * 查询B库日常损耗管理
@@ -499,7 +504,7 @@ export const getStockBalanceaAll = (pageNum = 1, pageSize = 10) => axio('/abalan
  * 获取库存余额列表 -B库
  */
 
-export const getStockBalancebAll = (repository,repocode,mnemoniccode,proname,pageNum = 1, pageSize = 10) => axio('/repositoryb/getStoragebAblance',{repository,repocode,mnemoniccode,proname,pageNum, pageSize});
+export const getStockBalancebAll = (repository,repocode,mnemoniccode,proname,pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getStoragebAblance',{repository,repocode,mnemoniccode,proname,pageNum, pageSize,repositoryid});
 
 /**
  * 获取损耗列表
@@ -529,7 +534,7 @@ export const getStockOutaDetails= outputCode => axio('/outputordera/findDetails'
  * 查询B库入库单
  */
 
-export const queryStockIn= (ordercode, ordertime, pageNum = 1, pageSize = 10) => axio('/repositoryb/selectTinstoragebByCondition',{ordercode, ordertime, pageNum, pageSize});
+export const queryStockIn= (ordercode, ordertime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/selectTinstoragebByCondition',{ordercode, ordertime, pageNum, pageSize, repositoryid});
 
 
 /**
@@ -693,19 +698,19 @@ export const bindUser = (saleid,uids) => axio('/mappingGroupUser/bandSomeUserswi
  * B库-查询采购单列表
  */
 
-export const getPuschaseOrderB = (orderno,createtime,buydepartmentid,repositorysource,pageNum = 1,pageSize = 10) => axio('/repositoryb/queryNeedOfBuyb',{orderno,createtime,buydepartmentid,repositorysource,pageNum,pageSize});
+export const getPuschaseOrderB = (orderno,createtime,buydepartmentid,repositorysource,pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryNeedOfBuyb',{orderno,createtime,buydepartmentid,repositorysource,pageNum,pageSize, repositoryid});
 
 /**
  * B库-查询分库列表
  */
 
-export const getRepoBranch = (pageNum = 1,pageSize = 10) => axio('/repositoryb/getBranREpob',{pageNum,pageSize});
+export const getRepoBranch = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getBranREpob',{pageNum,pageSize,repositoryid});
 
 /**
  * B库-添加采购单
  */
 
-export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber});
+export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber, repositoryid = repoId) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber ,repositoryid});
 
 /**
  * 货品分类-添加父分类

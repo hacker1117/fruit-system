@@ -75,7 +75,11 @@
                                 views.set(i.pagecode, false)
                             }
                             const rolePage = await loginRole(this.$store.state.adminInfo.uid)
-//                            let pages = rolePage.data.
+                            let pages = rolePage.data.data.split(',')
+                            console.log(pages)
+                            for (let i of pages) {
+							    views.set(i, true)
+                            }
                             this.$store.commit('setPageList', views)
 							this.$router.push('/manage')
 						}else{
