@@ -14,7 +14,6 @@
 				<el-date-picker
 				v-model="value1"
 				type="date"
-				size="small"
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
@@ -22,7 +21,6 @@
 				<el-date-picker
 				v-model="value2"
 				type="date"
-				size="small"
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
@@ -129,7 +127,8 @@
 				city: {},
 				receiptData: [],
                 count: 0,
-                currentPage: 1
+                currentPage: 1,
+				get: 0,
     		}
     	},
     	components: {
@@ -155,23 +154,27 @@
 				this.$router.push('/receiptDetails/'+ row.ordersid)
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
 				let radioCon =''
+				console.log(this.value1)
+				console.log(this.value2)
 				let sTime = this.value1 === '' ? '' : this.formatter(this.value1)
 				let eTime = this.value2 === '' ? '' : this.formatter(this.value2)
-				console.log(sTime)
-				console.log(eTime)
-				console.log(this.input)
-				console.log(this.radio2)
 				if(this.radio2 === 1) {
 					radioCon = '未完成'
 				}else if(this.radio2 === 2) {
 					radioCon = '已完成'
 				}
 				const resData = await queryOrders(this.input,radioCon,sTime,eTime,1,10)
-				this.receiptData = resData.data.data.list
-                this.count = resData.data.data.count
-                this.currentPage = 1
-				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData = []
+					this.count = 0
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())
@@ -184,18 +187,18 @@
                 let radioCon =''
                 let sTime = this.value1 === '' ? '' : this.formatter(this.value1)
                 let eTime = this.value2 === '' ? '' : this.formatter(this.value2)
-                console.log(sTime)
-                console.log(eTime)
-                console.log(this.input)
-                console.log(this.radio2)
-                if(this.radio2 === 1) {
+              if(this.radio2 === 1) {
                     radioCon = '未完成'
                 }else if(this.radio2 === 2) {
                     radioCon = '已完成'
                 }
-                const resData = await queryOrders(this.input,radioCon,sTime,eTime,this.currentPage,10)
-                this.receiptData = resData.data.data.list
-                this.count = resData.data.data.total
+				const dataReceipt = this.get = 0 ? await getOrderAll(this.currentPage) : await queryOrders(this.input,radioCon,sTime,eTime,this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}
             }
 		}
     }

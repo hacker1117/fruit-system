@@ -256,6 +256,12 @@ export const getUserCity = () => fetch('/v1/user/city/count');
 export const getBomAll = (pageNum = 1, pageSize = 10) => axio('/Bom/findAllParent/',{pageNum, pageSize});
 
 /**
+ * 查询BOM管理
+ */
+
+export const getqueryBomAll = (procode, proname,pageNum = 1, pageSize = 10) => axio('/Bom/findBySth/',{procode, proname,pageNum, pageSize});
+
+/**
  * 根据id获取BOM组
  */
 

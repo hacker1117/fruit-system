@@ -153,6 +153,7 @@
                     const countData = await getCategoryAll(1,10);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
+                    this.count = countData.data.data.total
                 }catch(err){
                     console.log('获取数据失败', err);
                 }

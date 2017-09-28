@@ -23,7 +23,6 @@
 				<el-date-picker
 				v-model="value1"
 				type="date"
-				size="small"
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
@@ -31,7 +30,6 @@
 				<el-date-picker
 				v-model="value2"
 				type="date"
-				size="small"
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
@@ -156,7 +154,8 @@
 				batchData:[],
 				batchID:'',
                 count: 0,
-                currentPage: 1
+                currentPage: 1,
+				get: 0,
     		}
     	},
     	components: {
@@ -186,7 +185,17 @@
     			}
 			},
 			async handleBatchSearch() {
-
+				this.get = 1
+				this.count = 0
+				const resData = await queryPlanByBatch(this.batchID)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData = []
+					this.count = 0
+				}
 			},
 			handleEdit(index,row) {
 				console.log(index,row)
@@ -194,6 +203,8 @@
 				this.$router.push('/receiptDetails/'+ row.ordersid)
 			},
 			async handleSearch(){
+				this.get = 2
+				this.count = 0
 				let radioCon =''
 				let sTime = this.value1 === '' ? '' : this.formatter(this.value1)
 				let eTime = this.value2 === '' ? '' : this.formatter(this.value2)
@@ -207,10 +218,13 @@
 					radioCon = '已完成'
 				}
 				const resData = await queryPlan(this.input,radioCon,sTime,eTime,1,10)
-				if(resData.data.code && resData.data.code === '1111'){
+				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
 				} else {
-					console.log(resData.data.message)
+					this.$message(resData.data.message)
+					this.receiptData = []
+					this.count = 0
 				}
 			},
 			formatter(date){
@@ -221,12 +235,19 @@
 			},
             async handleCurrentChange(num) {
 			    this.currentPage = num
-                const dataReceipt = await getPlanAll(this.currentPage)
-                if(dataReceipt.data.code === '1111'){
-                    this.receiptData = dataReceipt.data.data.list
-                } else {
-                    console.log('获取生产计划数据出错')
-                }
+				if(this.get = 0){
+					const dataReceipt = await getPlanAll(this.currentPage)
+				}else if(this.get = 1){
+					const dataReceipt = await queryPlanByBatch(this.batchID,this.currentPage)
+				}else{
+					const dataReceipt = await queryPlan(this.input,radioCon,sTime,eTime,this.currentPage)
+				}
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}   
             }
 		}
     }

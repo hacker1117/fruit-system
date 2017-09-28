@@ -8,7 +8,6 @@
 				<el-date-picker
 				v-model="value1"
 				type="date"
-				size="small"
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
@@ -16,7 +15,6 @@
 				<el-date-picker
 				v-model="value2"
 				type="date"
-				size="small"
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
@@ -85,6 +83,15 @@
 			</template>
 			</el-table-column>
 		</el-table>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
+                <el-pagination
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-size="10"
+                    layout="total, prev, pager, next"
+                    :total="count">
+                </el-pagination>
+            </div>
 		</div>
     </div>
 </template>
@@ -101,6 +108,9 @@
 				input: '',
 				city: {},
 				receiptData: [],
+				count: 0,
+				currentPage: 1,
+				get: 0,
     		}
     	},
     	components: {
@@ -115,6 +125,7 @@
 					const dataReceipt = await getStockOutAll(1,10)
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
+                    this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -125,15 +136,32 @@
 				this.$router.push('/stockOutDetails/'+ row.outputrepositorycode)
 			},
 			async handleSearch(){
-				let sTime = this.formatter(this.value1)
-				let eTime = this.formatter(this.value2)
-				console.log(sTime)
-				console.log(eTime)
-				console.log(this.input)
+				this.get = 1
+				this.count = 0
+				let sTime = this.value1 === '' ? '' : this.formatter(this.value1)
+				let eTime = this.value2 === '' ? '' : this.formatter(this.value2)
 				const resData = await queryStockOut(this.input,sTime,eTime,1,10)
-				this.receiptData = resData.data.data.list
-				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData = []
+					this.count = 0
+				}
 			},
+            async handleCurrentChange(num){
+			    this.currentPage = num
+                let sTime = this.value1 === '' ? '' : this.formatter(this.value1)
+                let eTime = this.value2 === '' ? '' : this.formatter(this.value2)
+				const dataReceipt = this.get = 0 ? await getStockOutAll(this.currentPage) : await queryStockOut(this.input,sTime,eTime,this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}
+            },
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''

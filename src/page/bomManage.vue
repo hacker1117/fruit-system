@@ -9,16 +9,16 @@
 		</el-row>
 		<el-row>
 			<el-col :span="3" style="text-aligh:right;">产品编号：</el-col>
-			<el-col :span="5"><el-input v-model="proid" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="5"><el-input v-model="procode" placeholder="请输入内容"></el-input></el-col>
 			<el-col :span="3" style="text-aligh:right;">产品名称：</el-col>
-			<el-col :span="5"><el-input v-model="procon" placeholder="请输入内容"></el-input></el-col>
-			<el-col :span="3" style="text-aligh:right;">计量单位：</el-col>
-			<el-col :span="5"><el-input v-model="prounit" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="5"><el-input v-model="proname" placeholder="请输入内容"></el-input></el-col>
+			<!--<el-col :span="3" style="text-aligh:right;">计量单位：</el-col>-->
+			<!--<el-col :span="5"><el-input v-model="prounit" placeholder="请输入内容"></el-input></el-col>-->
 		</el-row>
 		<el-row>
 			<el-col :span="24">
-				<el-button style="float: right;" type="primary">清空</el-button>
-				<el-button style="float: right; margin-right:10px;" type="primary">查询</el-button>
+				<!--<el-button style="float: right;" type="primary">清空</el-button>-->
+				<el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
 			</el-col>
 		</el-row>
 		<el-table
@@ -73,7 +73,7 @@
 			</template>
 			</el-table-column>
 		</el-table>
-		<el-row style="float:right;">
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">
 			<el-pagination
 				@current-change="handleCurrentChange"
 				:current-page="currentPage"
@@ -81,14 +81,14 @@
 				layout="total, prev, pager, next"
 				:total="total">
 			</el-pagination>
-		</el-row>
+		</div>
 		</div>
     </div>
 </template>
 
 <script>
  	import headTop from '@/components/headTop'
-    import {getCategory, addCategory, addFood, getBomAll, deleteBom} from '@/api/getData'
+    import {getCategory, addCategory, addFood, getBomAll, deleteBom, getqueryBomAll} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -96,11 +96,12 @@
     			baseUrl,
     			baseImgPath,
 				bomList: [],
-				proid: '',
-				procon: '',
+				procode: '',
+				proname: '',
 				prounit: '',
 				total: 0,
-				currentPage: 1
+				currentPage: 1,
+				get: 0,
     		}
     	},
     	components: {
@@ -157,12 +158,28 @@
 					this.total -= 1
 				}
 			},
+			async handleSearch(){
+				this.get = 1
+				this.count = 0
+				const resData = await getqueryBomAll(this.procode,this.proname)
+				if(resData.data.code === '1111'){
+					this.bomList = resData.data.data.list
+					this.total = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.bomList = []
+					this.total = 0
+				}
+			},
 			async handleCurrentChange(num){
-				this.currentPage = num 
-					const bomData = await getBomAll(this.currentPage)
-					if (bomData.data.code === '1111') {
-						this.bomList = bomData.data.data.list
-					}
+				this.currentPage = num
+				const dataReceipt = this.get = 0 ? await getBomAll(this.currentPage) : await getqueryBomAll(this.proid,this.proname,this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.bomList = dataReceipt.data.data.list
+					this.total = dataReceipt.data.data.total
+				}else {
+					this.bomList = []
+				}
 			}
 		}
     }
