@@ -420,7 +420,7 @@ export const getStockInListDetails = orderid => axio('/innetstorageb/get/'+ orde
  * 查询入库清单
  */
 
-export const queryStockInList = (ordernumber, ordertime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/storageordera/selectByExamples',{ordernumber, ordertime, pageNum, pageSize, repositoryid});
+export const queryStockInList = (orderid, ordertime, ordercode, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryInnetStorageb',{orderid, ordertime, ordercode, pageNum, pageSize, repositoryid});
 
 /**
  * 获取运输损耗列表
@@ -547,7 +547,7 @@ export const getStockOutaDetails= outputCode => axio('/outputordera/findDetails'
  * 查询B库入库单
  */
 
-export const queryStockIn= (ordercode, ordertime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/selectTinstoragebByCondition',{ordercode, ordertime, pageNum, pageSize, repositoryid});
+export const queryStockIn= (outputcode, ordertime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/selectTinstoragebByCondition',{outputcode, ordertime, pageNum, pageSize, repositoryid});
 
 
 /**

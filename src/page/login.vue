@@ -113,13 +113,13 @@
 		},
 		watch: {
 			adminInfo: function (newValue){
-				if (newValue.username) {
-					this.$message({
-                        type: 'success',
-                        message: '检测到您之前登录过，将自动登录'
-                    });
-					this.$router.push('/manage')
-				}
+//				if (newValue.username) {
+//					this.$message({
+//                        type: 'success',
+//                        message: '检测到您之前登录过，将自动登录'
+//                    });
+//					this.$router.push('/manage')
+//				}
 			}
 		}
 	}

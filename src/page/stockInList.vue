@@ -115,10 +115,12 @@
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
 			async handleSearch(){
+    		    this.currentPage = 1
 				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
-				const resData = await queryStockInList(this.orderid,sTime,this.ordercode)
+				const resData = await queryStockInList(this.orderid,sTime,this.ordercode,this.currentPage)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
+                    this.count = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
 				}
@@ -131,9 +133,20 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getStockInListAll(this.currentPage)
-				console.log('re: ',dataReceipt.data.data)
-				this.receiptData = dataReceipt.data.data.list
+                if (this.ordercode === '' && this.ordertime === '' && this.orderid === ''){
+                    const dataReceipt = await getStockInListAll(this.currentPage)
+                    console.log('re: ',dataReceipt.data.data)
+                    this.receiptData = dataReceipt.data.data.list
+                } else {
+                    let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
+                    const resData = await queryStockInList(this.orderid,sTime,this.ordercode,this.currentPage)
+                    if(resData.data.code === '1111'){
+                        this.receiptData = resData.data.data.list
+                        this.count = resData.data.data.total
+                    } else {
+                        this.$message(resData.data.message)
+                    }
+                }
 			}
 		}
     }

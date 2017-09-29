@@ -93,7 +93,7 @@
     			try{
 					const dataReceipt = await getStockInAllB()
 					console.log('re: ',dataReceipt.data.data)
-					this.receiptData = dataReceipt.data.data
+					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
@@ -105,8 +105,9 @@
 				this.$router.push('/stockInDetails/'+ row.outputcode)
 			},
 			async handleSearch(){
+    		    this.currentPage = 1
 				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
-				const resData = await queryStockIn(this.ordercode,sTime)
+				const resData = await queryStockIn(this.ordercode,sTime,this.currentPage)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -124,7 +125,8 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getStockInAllB(this.currentPage)
+                let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
+				const dataReceipt = await getStockInAllB('','','','',this.currentPage)
 //				this.receiptData = dataReceipt.data.data.list
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
