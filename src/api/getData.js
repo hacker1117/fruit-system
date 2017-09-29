@@ -426,7 +426,7 @@ export const queryStockInList = (orderid, ordertime, ordercode, pageNum = 1, pag
  * 获取运输损耗列表
  */
 
-export const getTransportWasteAll = (procode = '', pname = '', wasteproductcode = '', createhuman = '', reporttime ='',pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryDailyWaste',{procode, pname, wasteproductcode, createhuman, reporttime,pageNum, pageSize, repositoryid});
+export const getTransportWasteAll = (pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryDailyWaste',{pageNum, pageSize, repositoryid});
 
 /**
  * 新增运输损耗
