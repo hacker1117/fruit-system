@@ -66,48 +66,36 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderid" width="120px"
+			prop="orderid"
 			label="订单号">
 			</el-table-column>
 			<el-table-column
-			prop="procode" width="120px"
+			prop="procode"
 			label="商品编号">
 			</el-table-column>
 			<el-table-column
-			prop="pname" width="120px"
+			prop="pname"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="productunite" width="120px"
+			prop="productunite"
 			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="wasteproductcode" width="120px"
+			prop="wasteproductcode"
 			label="损耗商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="productnumber" width="120px"
+			prop="productnumber"
 			label="数量">
 			</el-table-column>
-			</el-table-column>
 			<el-table-column
-			prop="wastetype" width="120px"
+			prop="wastetype"
 			label="损耗类别">
 			</el-table-column>
 			<el-table-column
-			prop="remarkable" width="120px"
+			prop="remarkable"
 			label="其他">
-			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">修改</el-button>
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">删除</el-button>
-			</template>
 			</el-table-column>
 		</el-table>
 		<div class="Pagination" style="text-align: left;margin-top: 10px;">
@@ -202,7 +190,7 @@
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
 			},
-			async handleCurrentChange(num){			
+			async handleCurrentChange(num){
 				this.currentPage = num
 				let sTime = this.timeofreport === '' ? '' : this.formatter(this.timeofreport)
 				console.log(this.currentPage)
@@ -218,8 +206,8 @@
 				}
 			},
 			async handleInsert(){
-				
-				
+
+
 			}
 		}
     }
