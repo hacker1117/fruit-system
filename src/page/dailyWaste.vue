@@ -46,6 +46,9 @@
 			<el-form-item label="单位" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.productunite" auto-complete="off"></el-input>
            </el-form-item>
+            <el-form-item label="损耗类别" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>
+            </el-form-item>
 			<el-form-item label="制单员" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.createhuman" auto-complete="off"></el-input>
             </el-form-item>
@@ -175,7 +178,7 @@
 			},
 			async confirmAdd() {
 				console.log(this.form)
-                const supplierAdd = await addTransportWaste(this.form.productcode,this.form.productnumber,this.form.procuctstanderd,this.form.pname,this.form.productunite,this.form.createhuman,this.form.timeofreport,this.form.remarkable)
+                const supplierAdd = await addTransportWaste(this.form.productcode,this.form.productnumber,this.form.procuctstanderd,this.form.pname,this.form.productunite,this.form.createhuman,this.form.timeofreport,this.form.remarkable,this.form.wastetype)
                 if(supplierAdd.data.code === '1111') {
                     this.$message('添加供应商成功!')
                     this.dialogFormVisible = false

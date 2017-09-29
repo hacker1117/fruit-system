@@ -21,12 +21,12 @@
 				format="yyyy-MM-dd"
 				placeholder="选择日期">
 				</el-date-picker>
-			</el-col>			
+			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24">
                 <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-                <el-button style="float: right;" @click="" type="primary">新增</el-button>
+                <!--<el-button style="float: right;" @click="" type="primary">新增</el-button>-->
             </el-col>
 		</el-row>
 		<el-table
@@ -34,48 +34,37 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderid" width="120px"
+			prop="orderid"
 			label="订单号">
 			</el-table-column>
 			<el-table-column
-			prop="procode" width="120px"
+			prop="procode"
 			label="商品编号">
 			</el-table-column>
 			<el-table-column
-			prop="pname" width="120px"
+			prop="pname"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="unite" width="120px"
+			prop="unite"
 			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="wasteproductcode" width="120px"
+			prop="wasteproductcode"
 			label="损耗商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="productcount" width="120px"
+			prop="productcount"
 			label="数量">
 			</el-table-column>
 			</el-table-column>
 			<el-table-column
-			prop="wastetype" width="120px"
+			prop="wastetype"
 			label="损耗类别">
 			</el-table-column>
 			<el-table-column
-			prop="unincludeelse" width="120px"
+			prop="unincludeelse"
 			label="其他">
-			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">修改</el-button>
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">删除</el-button>
-			</template>
 			</el-table-column>
 		</el-table>
 		<div class="Pagination" style="text-align: left;margin-top: 10px;">
