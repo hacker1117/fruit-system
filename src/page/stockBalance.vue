@@ -59,7 +59,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockBalancebAll, queryStockInList} from '@/api/getData'
+    import {getStockBalancebAll, queryStockInList,getqueryBalancebAll} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -71,6 +71,7 @@
 				receiptData: [],
 				currentPage: 1,
 				count: 0,
+				get: 0,
 				repository: '',
 				repocode: '',
 				mnemoniccode: '',
@@ -102,7 +103,9 @@
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
 			async handleSearch(){
-				const resData = await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname)
+				this.get = 1
+				this.count = 0
+				const resData = await getqueryBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -120,11 +123,13 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,num)
+				console.log(this.currentPage)
+				const dataReceipt = this.get = 0 ? await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,this.currentPage) : await getqueryBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
 				}else {
-					this.receiptData = []
+					this.bomList = []
 				}
 			}
 		}

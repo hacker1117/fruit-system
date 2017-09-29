@@ -450,7 +450,13 @@ export const queryTransportWasteList = (procode, pname, wasteproductcode, report
  * 查询B库日常损耗管理
  */
 
-export const queryDailyLossList = (productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum , pageSize});
+export const queryDailyLossList = (productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum = 1, pageSize = 10) => axio('/repositoryb/queryDailyWaste',{productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum , pageSize});
+
+/**
+ * 新增B库日常损耗管理
+ */
+
+export const addTransportWaste = (productcode,productnumber,procuctstanderd,pname,productunite,createhuman,timeofreport,remarkable, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/addDailyWaste',{productcode,productnumber,procuctstanderd,pname,productunite,createhuman,timeofreport,remarkable, pageNum , pageSize, repositoryid});
 
 /**
  * 获取采购单（A库）列表
@@ -505,6 +511,13 @@ export const getStockBalanceaAll = (pageNum = 1, pageSize = 10) => axio('/abalan
  */
 
 export const getStockBalancebAll = (repository,repocode,mnemoniccode,proname,pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getStoragebAblance',{repository,repocode,mnemoniccode,proname,pageNum, pageSize,repositoryid});
+
+
+/**
+ * 查询库存余额列表 -B库
+ */
+
+export const getqueryBalancebAll = (repository,repocode,mnemoniccode,proname,pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getStoragebAblance',{repository,repocode,mnemoniccode,proname,pageNum, pageSize,repositoryid});
 
 /**
  * 获取损耗列表

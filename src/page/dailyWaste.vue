@@ -25,21 +25,52 @@
 		</el-row>
 		<el-row>
 			<el-col :span="24">
-                <el-button style="float: right;" @click="handleSearch" type="primary">清空</el-button>
                 <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-                <el-button style="float: right;" @click="handleInsert" type="primary">新增</el-button>
+                <el-button style="float: right;" @click="dialogFormVisible = true" type="primary">新增</el-button>
             </el-col>
 		</el-row>
+        <el-dialog title="新增日常损耗" v-model="dialogFormVisible">
+        <el-form :model="form">
+			<el-form-item label="商品编号" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.productcode" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="数量" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.productnumber" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="规格" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.procuctstanderd" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="商品名称" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.pname" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="单位" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.productunite" auto-complete="off"></el-input>
+           </el-form-item>
+			<el-form-item label="制单员" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.createhuman" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="报损时间" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.timeofreport" auto-complete="off"></el-input>
+           </el-form-item>
+			<el-form-item label="备注" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+        </el-dialog>
 		<el-table
 			:data="receiptData"
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="ordernumber" width="120px"
+			prop="orderid" width="120px"
 			label="订单号">
 			</el-table-column>
 			<el-table-column
-			prop="productcode" width="120px"
+			prop="procode" width="120px"
 			label="商品编号">
 			</el-table-column>
 			<el-table-column
@@ -94,7 +125,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getTransportWasteAll, queryDailyLossList} from '@/api/getData'
+    import {getTransportWasteAll, queryDailyLossList,addTransportWaste} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -105,12 +136,16 @@
 				productcode: '',
 				pname: '',
 				wasteproductcode: '',
+				dialogFormVisible: false,
+				formLabelWidth: '120px',
 				createhuman: '',
 				timeofreport: '',
 				city: {},
+				form: {},
 				receiptData: [],
 				currentPage: 1,
 				count: 0,
+				get: 0,
     		}
     	},
     	components: {
@@ -136,8 +171,11 @@
 				this.$router.push('/transportWasteDetails/'+ row.orderid)
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
 				let sTime = this.timeofreport === '' ? '' : this.formatter(this.timeofreport)
 				const resData = await queryDailyLossList(this.productcode,this.pname,this.wasteproductcode,this.createhuman,sTime)
+				console.log(resData.data.data.list)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -147,22 +185,41 @@
 					this.count = 0
 				}
 			},
+			async confirmAdd() {
+				console.log(this.form)
+                const supplierAdd = await addTransportWaste(this.form.productcode,this.form.productnumber,this.form.procuctstanderd,this.form.pname,this.form.productunite,this.form.createhuman,this.form.timeofreport,this.form.remarkable)
+                if(supplierAdd.data.code === '1111') {
+                    this.$message('添加供应商成功!')
+                    this.dialogFormVisible = false
+                    this.initData()
+                } else {
+                    this.$message(supplierAdd.data.message)
+                }
+			},
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
 			},
-			async handleCurrentChange(num){
-				this.currentPage = num 
-				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
-				const dataReceipt = await getTransportWasteAll(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+			async handleCurrentChange(num){			
+				this.currentPage = num
+				let sTime = this.timeofreport === '' ? '' : this.formatter(this.timeofreport)
+				console.log(this.currentPage)
+				console.log(this.get)
+//				const dataReceipt = await getTransportWasteAll(this.currentPage)
+				const dataReceipt = this.get = 0 ? await getTransportWasteAll(this.currentPage) : await queryDailyLossList(this.productcode,this.pname,this.wasteproductcode,this.createhuman,sTime,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
+					console.log(1111)
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.receiptData = []
-				}				
+				}
+			},
+			async handleInsert(){
+				
+				
 			}
 		}
     }

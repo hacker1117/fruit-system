@@ -143,6 +143,7 @@
 				confirmIndex: '',
 				currentPage: 1,
 				count: 0,
+				get: 0,
 				createtime: '',
 				orderno: '',
 				respositysource: '',
@@ -182,11 +183,18 @@
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
 				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
 				const resData = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource)
-				this.receiptData = resData.data.data.list
-				this.total = resData.data.data.total
-				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())
@@ -228,12 +236,21 @@
 				}
 			},
 			async handleCurrentChange(num){
-				this.currentPage = num 
+//				this.currentPage = num 
 				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
-				const dataReceipt = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+//				const dataReceipt = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+//				if(dataReceipt.data.code === '1111'){
+//					this.receiptData = dataReceipt.data.data.list
+//				}				
+				this.currentPage = num
+				console.log(this.currentPage)
+				const dataReceipt = this.get = 0 ? await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage) : await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
-				}				
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.bomList = []
+				}
 			}
 		}
     }
