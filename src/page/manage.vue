@@ -88,6 +88,10 @@
 		},
         methods: {
             getRole(index) {
+                if (!this.views) {
+                    this.$router.push('/')
+                    return false
+                }
 //                return true
                 for (let i of this.views) {
                     if (i[0] === index) return i[1]
