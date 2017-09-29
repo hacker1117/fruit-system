@@ -74,10 +74,11 @@
 </template>
 
 <script>
+    import local from '@/api/local'
     export default {
         data() {
             return {
-                views: this.$store.state.pageList
+                views: JSON.parse(local.get('pageInfo'))
             }
         },
 		computed: {

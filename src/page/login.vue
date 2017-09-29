@@ -81,6 +81,7 @@
 							    views.set(i, true)
                             }
                             this.$store.commit('setPageList', views)
+                            local.set('pageInfo', JSON.stringify(views))
 							this.$router.push('/manage')
 						}else{
 							this.$message({
