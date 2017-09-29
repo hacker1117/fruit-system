@@ -88,7 +88,10 @@
         methods: {
             getRole(index) {
 //                return true
-                return this.views.get(index)
+                for (let i of this.views) {
+                    if (i[0] === index) return i[1]
+                }
+                return false
             }
         }
     }
