@@ -2,6 +2,33 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+		
+        <el-dialog title="新增损耗" v-model="dialogFormVisible">
+        <el-form :model="form">
+            <el-form-item label="商品名称" :label-width="formLabelWidth">
+                 <el-input style="width: 195px" v-model="form.pname" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="商品编码" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.procode" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="损耗商品编码" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.wasteproductcode" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="单位" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.unite" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="损耗类型" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>
+           </el-form-item>
+			<el-form-item label="损耗数量" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.productcount" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+        </div>
+        </el-dialog>
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">商品编号：</el-col>
 			<el-col :span="4"><el-input v-model="procode" siez="mini" placeholder="请输入内容"></el-input></el-col>
@@ -26,7 +53,7 @@
 		<el-row>
 			<el-col :span="24">
                 <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-                <!--<el-button style="float: right;" @click="" type="primary">新增</el-button>-->
+                <el-button style="float: right; margin-right:10px;" @click="dialogFormVisible = true" type="primary">新增</el-button>
             </el-col>
 		</el-row>
 		<el-table
@@ -82,7 +109,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getWasteAll, queryWasteList} from '@/api/getData'
+    import {getWasteAll, queryWasteList,addWasteAll} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -99,6 +126,13 @@
 				currentPage: 1,
 				count: 0,
 				get: 0,
+				formLabelWidth: '120px',
+				dialogFormVisible: false,
+				goodsList:[],
+				form:{
+					goodsIndex: '',
+					reporttime: ''
+				}
     		}
     	},
     	components: {
@@ -133,7 +167,7 @@
 					this.count = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
-					this.receiptData =""
+					this.receiptData = []
 					this.count = 0
 				}
 			},
@@ -142,6 +176,17 @@
 				let res = ''
 				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate()
 				return res
+			},
+			async confirmAdd(){
+				const addInfo = await addWasteAll(this.form.pname, this.form.procode, this.form.wasteproductcode, this.form.procode, this.form.wastetype, this.form.productcount)
+				console.log(addInfo.data)
+				if(addInfo.data.code === '1111'){
+					this.$message('添加运输损耗成功')
+					this.dialogFormVisible = false
+					this.initData()
+				}else {
+					this.$message(addInfo.data.message)
+				}
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num

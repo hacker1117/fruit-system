@@ -435,6 +435,12 @@ export const getTransportWasteAll = (pageNum = 1, pageSize = 10, repositoryid = 
 export const addTransportWasteAll = (procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, pageNum = '1', pageSize = '1000', repositoryid = repoId) => axio('/bTWastageordera/addWeastorder', {procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, repositoryid} );
 
 /**
+ * A库新增损耗管理
+ */
+
+export const addWasteAll = (pname, procode, wasteproductcode, unite, wastetype, productcount, pageNum = '1', pageSize = '10') => axio('/wastageordera/insertWastage', {pname, procode, wasteproductcode, unite, wastetype, productcount, pageNum , pageSize} );
+
+/**
  * 查询A库损耗管理
  */
 
