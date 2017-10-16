@@ -297,6 +297,12 @@ export const insertParentBom = (proname, prostandard, prounite) => axio('/Bom/cr
 export const insertChildBom = (proname, prostandard, prounite, proid, pid, count) => axio('/Bom/createChildBom', {proname, prostandard, prounite, proid, pid, count}, 'POST');
 
 /**
+ * 插入Bom子节点
+ */
+
+export const updateChildBom = (procode, prostandard, prounite, count) => axio('/Bom/modifyOneBom', {procode, prostandard, prounite, count}, 'POST');
+
+/**
  * 删除Bom节点（父子均可）
  */
 
@@ -495,10 +501,16 @@ export const addSupplier = (supplierid,sname,supplytype,cmpanyaddress,ranks,link
 export const getGoodsAll = (pageNum = 1, pageSize = 10) => axio('/productmanager/findAllProduct',{pageNum, pageSize});
 
 /**
- * 获取货品列表
+ * 添加商品信息
  */
 
 export const addGoods = (proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice,createman) => axio('/productmanager/insertProduct',{proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice,createman});
+
+/**
+ * 修改商品信息
+ */
+
+export const updateGoods = (proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice) => axio('/productmanager/updateProduct',{proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice});
 
 /**
  * 获取入库单列表

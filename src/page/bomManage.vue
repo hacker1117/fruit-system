@@ -148,7 +148,7 @@
 					this.$message({
 						type: 'info',
 						message: '已取消删除'
-					})       
+					})
 				})
 			},
 			async handleDelete(index,row) {
@@ -173,7 +173,7 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = this.get = 0 ? await getBomAll(this.currentPage) : await getqueryBomAll(this.proid,this.proname,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getBomAll(this.currentPage) : await getqueryBomAll(this.proid,this.proname,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.bomList = dataReceipt.data.data.list
 					this.total = dataReceipt.data.data.total
@@ -241,7 +241,7 @@
 		}
 		span{
 			.sc(14px, #999);
-			transition: all 400ms;	
+			transition: all 400ms;
 		}
 		.edit_icon{
 			color: #ccc;

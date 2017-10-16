@@ -67,6 +67,35 @@
             <el-button type="primary" @click="confirmAdd">确 定</el-button>
         </div>
         </el-dialog>
+            <el-dialog title="编辑货品" v-model="dialogFormVisible2">
+                <el-form :model="form">
+                    <el-form-item label="商品名称" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.pname" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="规格" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.prostandered" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商品属性" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.commodityattribute" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="厂家" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.factories" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="品牌" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.brand" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="供应商编码" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.supplierid" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="参考进价" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.referenceinprice" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="confirmEditOld">确 定</el-button>
+                </div>
+            </el-dialog>
 		<el-table
 			:data="receiptData"
 			stripe
@@ -116,8 +145,11 @@
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
-				size="small" 
+				size="small"
 				@click="handleEdit(scope.$index, scope.row)">绑定商品</el-button>
+                <el-button
+                    size="small"
+                    @click="handleEditOld(scope.$index, scope.row)">修改商品</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
@@ -137,7 +169,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getGoodsAll, queryGoodsList, addGoods, appGoodsList, bindAppGoods} from '@/api/getData'
+    import {getGoodsAll, queryGoodsList, addGoods, appGoodsList, bindAppGoods, updateGoods} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -162,10 +194,12 @@
 				form:{
 					appGoodsIndex:''
 				},
+                form2:{},
 				appBindId:'',
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
 				dialogFormVisibleGood: false,
+                dialogFormVisible2: false,
 				appGoodsList:[],
 				confirmIndex: '',
 				currentPage: 1
@@ -225,6 +259,21 @@
                     this.$message(goodsAdd.data.message)
                 }
 			},
+            async confirmEditOld(){
+                console.log(this.form)
+                const goodsAdd = await updateGoods(this.form2.proid,this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.factories,this.form2.brand,this.form2.supplierid,this.form2.referenceinprice)
+                if(goodsAdd.data.code === '1111') {
+                    this.$message('修改货品成功!')
+                    this.dialogFormVisible2 = false
+                    this.initData()
+                } else {
+                    this.$message(goodsAdd.data.message)
+                }
+            },
+            handleEditOld(index, row) {
+                this.dialogFormVisible2 = true
+                this.form2 = row
+            },
 			async confirmBind(){
 				console.log(this.appGoodsList)
 				console.log(this.confirmIndex)

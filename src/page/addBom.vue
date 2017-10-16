@@ -24,6 +24,7 @@
             <el-select v-model="form.prounite" placeholder="请选择计量单位">
                 <el-option label="个" value="个"></el-option>
                 <el-option label="克" value="克"></el-option>
+                <el-option label="份" value="份"></el-option>
             </el-select>
             </el-form-item>
             <el-form-item label="数量" :label-width="formLabelWidth">
@@ -35,6 +36,27 @@
             <el-button type="primary" @click="confirmBomChild">确 定</el-button>
         </div>
         </el-dialog>
+            <el-dialog title="编辑料件" v-model="dialogFormVisible1">
+                <el-form :model="form">
+                    <el-form-item label="规格" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.prostandard" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="单位" :label-width="formLabelWidth">
+                        <el-select v-model="form2.prounite" placeholder="请选择计量单位">
+                            <el-option label="个" value="个"></el-option>
+                            <el-option label="克" value="克"></el-option>
+                            <el-option label="份" value="份"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="数量" :label-width="formLabelWidth">
+                        <el-input style="width: 195px" v-model="form2.count" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+                    <el-button type="primary" @click="confirmEditChild(form2.index)">确 定</el-button>
+                </div>
+            </el-dialog>
 		<el-row>
 			<el-col :span="3" style="text-align:right;">产品规格：</el-col>
 			<el-col :span="5"><el-input v-model="prostandard" placeholder="请输入内容" :disabled="isDisabled"></el-input></el-col>
@@ -92,6 +114,17 @@
 			prop="count"
 			label="数量">
 			</el-table-column>
+            <el-table-column
+                label="操作">
+                <template scope="scope">
+                    <el-button
+                        size="mini"
+                        @click="confirmDelete(scope.$index, scope.row)">删除</el-button>
+                    <el-button
+                        size="mini"
+                        @click="confirmEdit(scope.$index, scope.row)">修改</el-button>
+                </template>
+            </el-table-column>
 		</el-table>
 		<el-row style="margin-top:20px; float:right">
 			<el-col :span="24" >
@@ -104,7 +137,7 @@
 
 <script>
  	import headTop from '@/components/headTop'
-    import {getBomDetail, getProList, getBomGroup, insertParentBom, insertChildBom} from '@/api/getData'
+    import {getBomDetail, getProList, getBomGroup, insertParentBom, insertChildBom, deleteBom, updateChildBom} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -117,6 +150,7 @@
 				prounite: '请选择单位',
                 dropDownList: ['个', '克'],
                 dialogFormVisible: false,
+                dialogFormVisible1: false,
                 form: {
 					procode: '',
                     proname: '',
@@ -125,6 +159,15 @@
 					proid: '',
 					count: '',
 					level: ''
+                },
+                form2: {
+                    procode: '',
+                    proname: '',
+                    prounite: '',
+                    prostandard: '',
+                    proid: '',
+                    count: '',
+                    level: ''
                 },
 				formLabelWidth: '120px',
 				pid: '',
@@ -219,6 +262,36 @@
 					})
 				}
 			},
+            confirmDelete(index,row) {
+                this.$confirm('此操作将删除该料件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.handleDelete(index,row)
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
+            },
+            confirmEdit(index,row) {
+                this.dialogFormVisible1 = true
+                this.form2 = row
+                this.form2.index = index
+            },
+            async handleDelete(index,row) {
+                const isDeleted = await deleteBom(row.procode)
+                if(isDeleted.data.code === '1111') {
+                    this.bomList.splice(index, 1)
+                    this.total -= 1
+                }
+            },
 			initForm() {
 				this.form.procode = ''
 				this.form.proname = ''
@@ -264,7 +337,14 @@
 				this.bomChildList.push(childData)
 				this.dialogFormVisible = false
 				this.initForm()
-			}
+			},
+            async confirmEditChild(index) {
+                const insertStatus = await updateChildBom(this.form2.procode, this.form2.prostandard, this.form2.prounite, this.form2.count)
+                let childData = insertStatus.data.data
+                this.dialogFormVisible1 = false
+                this.initForm()
+                this.initData()
+            }
 		}
     }
 </script>

@@ -165,6 +165,7 @@
                 dialogFormVisibleChild: false,
                 dialogFormVisibleGroup: false,
                 cateList:[],
+                useList: [],
                 fid: '',
                 saleid: '',
                 form:{
@@ -236,8 +237,8 @@
                 this.saleid = row.saleid
                 for(let i = 0;i < this.receiptData.length; i++){
                     for(let j = 0;j < userViews.data.data.length; j++){
-                        if(this.receiptData[i].pagecode === userViews.data.data[j].pagecode){
-                            console.log('table', this.$refs)
+                        if(this.receiptData[i].uid === userViews.data.data[j].uid){
+                            console.log('table', this.receiptData[i],userViews.data.data[j])
                             this.$refs.multipleTable.toggleRowSelection(this.receiptData[i])
                             console.log(i,j)
                         }
@@ -288,6 +289,8 @@
                 }
             },
             async confirmChildGroup() {
+                console.log('choose', this.multipleSelection)
+                this.idArray = []
                 for(let i=0;i<this.multipleSelection.length;i++){
                     this.idArray.push(this.multipleSelection[i].uid)
                 }
