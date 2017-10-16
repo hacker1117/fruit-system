@@ -366,7 +366,7 @@ export const getCategoryChild = data => axio('/productCategory/findChildByID/' +
  * 删除货品分类（父子均可）
  */
 
-export const deleteCategory = data => axio('/productCategory/deleteById/' + data);
+export const deleteCategory = data => axio('/productCategory/deleteById/' + data, {}, 'DELETE');
 
 /**
  * 获取生产计划列表

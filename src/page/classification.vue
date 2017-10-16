@@ -49,10 +49,10 @@
                     @click="handleAdd(scope.$index, scope.row)">增加</el-button>
                     <el-button
                     size="mini"
-                    @click="handleDelete(scope.$index, scope.row)">修改</el-button>
+                    @click="handleEdit(scope.$index, scope.row)">修改</el-button>
                     <el-button
                     size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">删除</el-button>
+                    @click="confirmDelete(scope.$index, scope.row)">删除</el-button>
                     <el-button
                     size="mini"
                     @click="handleAddChild(scope.$index, scope.row)">添加二级分类</el-button>
@@ -102,7 +102,7 @@
                     @click="handleEditChild(scope.$index, scope.row)">修改</el-button>
                     <el-button
                     size="mini"
-                    @click="handleDeleteChild(scope.$index, scope.row)">删除</el-button>
+                    @click="confirmDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -175,8 +175,29 @@
             handleEdit() {
 
             },
-            handleDelete() {
-
+            confirmDelete(index,row) {
+                this.$confirm('此操作将删除该分类, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.handleDelete(index,row)
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
+            },
+            async handleDelete(index,row) {
+                const isDeleted = await deleteCategory(row.categorycode)
+                if(isDeleted) {
+                    this.initData()
+                }
             },
             handleAddChild() {
                 this.dialogFormVisibleChild = true
