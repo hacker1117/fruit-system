@@ -675,7 +675,7 @@ export const getGroupAll = () => axio('/group/findAllGroups');
  * 查询子类分组列表
  */
 
-export const getChildGroupAll = (saleid) => axio('/group/findChildrenGroupBysaleid' , {saleid});
+export const getChildGroupAll = (saleid ,pageNum = 1, pageSize = 10) => axio('/group/findChildrenGroupBysaleid' , {saleid, pageNum, pageSize});
 
 /**
  * 查询所有仓库

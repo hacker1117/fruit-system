@@ -89,16 +89,6 @@
                 </template>
                 </el-table-column>
             </el-table>
-            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="5"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
-            </div>
             <el-row style="margin-top: 20px;margin-bottom: 20px;">
                 <el-col :span="24">
                     <h1>当前分类:{{currentClass}}</h1>
@@ -137,7 +127,7 @@
                   @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
-                  :page-size="5"
+                  :page-size="10"
                   layout="total, prev, pager, next"
                   :total="count">
                 </el-pagination>
@@ -198,9 +188,11 @@
             },
             async handleChoose(row) {
                 console.log(row)
-                const classData = await getChildGroupAll(row.saleid)
+                this.saleid = row.saleid
+                const classData = await getChildGroupAll(row.saleid, this.currentPage)
                 if(classData.data.code === '1111'){
-                    this.childData = classData.data.data
+                    this.childData = classData.data.data.list
+                    this.count = classData.data.data.total
                 }else {
                     this.childData = []
                 }
@@ -262,9 +254,17 @@
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
             },
-            handleCurrentChange(val) {
+            async handleCurrentChange(val) {
                 this.currentPage = val;
                 this.offset = (val - 1)*this.limit;
+                const classData = await getChildGroupAll(this.saleid, this.currentPage)
+                if(classData.data.code === '1111'){
+                    this.childData = classData.data.data.list
+                    this.count = classData.data.data.total
+                }else {
+                    this.childData = []
+                }
+                this.currentClass = row.salegroupname
                 this.getUsers()
             },
             async getUsers(){
