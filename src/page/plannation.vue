@@ -241,6 +241,14 @@
 				}else if(this.get === 1){
                     dataReceipt = await queryPlanByBatch(this.batchID,this.currentPage)
 				}else{
+                    let radioCon =''
+                    if(this.radio2 === 1) {
+                        radioCon = '未完成'
+                    }else if(this.radio2 === 2) {
+                        radioCon = '已完成'
+                    }
+                    let sTime = this.value1 === '' ? '' : this.formatter(this.value1)
+                    let eTime = this.value2 === '' ? '' : this.formatter(this.value2)
                     dataReceipt = await queryPlan(this.input,radioCon,sTime,eTime,this.currentPage)
 				}
 				if(dataReceipt.data.code === '1111'){
