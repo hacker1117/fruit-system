@@ -235,19 +235,20 @@
 			},
             async handleCurrentChange(num) {
 			    this.currentPage = num
-				if(this.get = 0){
-					const dataReceipt = await getPlanAll(this.currentPage)
-				}else if(this.get = 1){
-					const dataReceipt = await queryPlanByBatch(this.batchID,this.currentPage)
+                let dataReceipt = {}
+				if(this.get === 0){
+                    dataReceipt = await getPlanAll(this.currentPage)
+				}else if(this.get === 1){
+                    dataReceipt = await queryPlanByBatch(this.batchID,this.currentPage)
 				}else{
-					const dataReceipt = await queryPlan(this.input,radioCon,sTime,eTime,this.currentPage)
+                    dataReceipt = await queryPlan(this.input,radioCon,sTime,eTime,this.currentPage)
 				}
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.receiptData = []
-				}   
+				}
             }
 		}
     }
