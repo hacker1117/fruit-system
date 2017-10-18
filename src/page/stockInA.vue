@@ -4,7 +4,7 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
             <el-col :span="3" style="text-align:right;">单据编号：</el-col>
-			<el-col :span="4"><el-input v-model="ordernumber" siez="mini" placeholder="请输入内容"></el-input></el-col>
+			<el-col :span="4"><el-input v-model="storgeaid" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="3" style="text-align:right;">单据日期：</el-col>
 			<el-col :span="4">
 				<el-date-picker
@@ -14,6 +14,8 @@
 				placeholder="选择日期">
 				</el-date-picker>
 			</el-col>
+			<el-col :span="3" style="text-align:right;">商品名称：</el-col>
+			<el-col :span="4"><el-input v-model="storagename" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
@@ -96,7 +98,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInaAll, queryStockInList} from '@/api/getData'
+    import {getStockInaAll, queryStockInaAll} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -138,7 +140,7 @@
 				this.get = 1
 				this.count = 0
 				let cTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
-				const resData = await queryStockInList(this.ordernumber,cTime)
+				const resData = await queryStockInaAll(this.storgeaid,cTime,this.storagename)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -161,7 +163,7 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
 				let cTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
-				const dataReceipt = this.get = 0 ? await getStockInaAll(this.currentPage) : await queryStockInList(this.ordernumber,cTime,this.currentPage)
+				const dataReceipt = this.get = 0 ? await getStockInaAll(this.currentPage) : await queryStockInaAll(this.storgeaid,cTime,this.storagename,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

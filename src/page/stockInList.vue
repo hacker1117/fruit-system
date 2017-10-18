@@ -29,20 +29,24 @@
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="marke" width="120px"
-			label="标记">
+			prop="ordercode" width="120px"
+			label="采购订单编号">
 			</el-table-column>
 			<el-table-column
-			prop="orderid" width="180px"
-			label="单据编号">
+			prop="orderid" width="120px"
+			label="入库清单编号">
 			</el-table-column>
 			<el-table-column
 			prop="ordertime" width="180px"
 			label="单据日期">
 			</el-table-column>
 			<el-table-column
-			prop="inrepotype" width="120px"
-			label="入库类别">
+			prop="netweight" width="120px"
+			label="净重数量">
+			</el-table-column>
+			<el-table-column
+			prop="pronumber" width="120px"
+			label="数量">
 			</el-table-column>
 			<el-table-column
 			prop="prounite" width="120px"
@@ -52,14 +56,35 @@
 			prop="prostandered" width="120px"
 			label="规格">
 			</el-table-column>
+			
 			<el-table-column
+			prop="goodsname" width="120px"
+			label="商品名称">
+			</el-table-column>
+			<el-table-column
+			prop="storagecode" width="120px"
+			label="商品编码">
+			</el-table-column>
+			<el-table-column
+			prop="storagetype" width="120px"
+			label="商品分类名称">
+			</el-table-column>
+			<el-table-column
+			prop="prostandered" width="120px"
+			label="规格型号">
+			</el-table-column>
+			<el-table-column
+			prop="repositories" width="120px"
+			label="仓库">
+			</el-table-column>
+			<!--<el-table-column
 			label="操作" width="120px">
 			<template scope="scope">
 				<el-button
 				size="small"
 				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
 			</template>
-			</el-table-column>
+			</el-table-column>-->
 		</el-table>
 		<div class="Pagination" style="text-align: left;margin-top: 10px;">
 			<el-pagination
@@ -102,7 +127,7 @@
     		async initData(){
     			try{
 					const dataReceipt = await getStockInListAll()
-					console.log('re: ',dataReceipt.data.data)
+					console.log('re: ',dataReceipt.data)
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
     			}catch(err){

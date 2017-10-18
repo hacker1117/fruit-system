@@ -519,6 +519,12 @@ export const updateGoods = (proid,pname,prostandered,commodityattribute,factorie
 export const getStockInaAll = (pageNum = 1, pageSize = 10) => axio('/storageordera/findAllData',{pageNum, pageSize});
 
 /**
+ * 查询入库单
+ */
+
+export const queryStockInaAll = (storgeaid, ordertime, storagename, pageNum = 1, pageSize = 10) => axio('/repositoryb/queryInnetStorageb',{storgeaid, ordertime, storagename, pageNum, pageSize});
+
+/**
  * 获取库存余额列表 -A库
  */
 

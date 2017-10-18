@@ -8,12 +8,12 @@
                <el-select v-model="form.supplierid" placeholder="请选择供应商">
                     <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.sname" :value="supplier.supplierid"></el-option>
                 </el-select>
-            </el-form-item>
-            <el-form-item label="采购部门" :label-width="formLabelWidth">
+           </el-form-item>
+            <!--<el-form-item label="采购部门" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buydepartment" auto-complete="off"></el-input>
-            </el-form-item>
+            </el-form-item>-->
 			<el-form-item label="采购员" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.salesmanname" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="采购费用" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buyfare" auto-complete="off"></el-input>
@@ -69,7 +69,7 @@
 			label="创建时间">
 			</el-table-column>
 			<el-table-column
-			prop="sname" width="120px"
+			prop="supplierid" width="120px"
 			label="供应商">
 			</el-table-column>
 			<el-table-column
@@ -114,6 +114,7 @@
 
 <script>
     import headTop from '@/components/headTop'
+    import {mapActions, mapState} from 'vuex'
     import {getPurchaseOrderAll, queryPurchaseOrderList, getSupplierAll, makePurchase} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
@@ -151,6 +152,9 @@
     	mounted(){
     		this.initData();
     	},
+    	computed: {
+    		...mapState(['adminInfo']),
+    	},
     	methods: {
     		async initData(){
     			try{
@@ -168,7 +172,6 @@
     		},
 			handleEdit(index,row) {
 				this.dialogFormVisible = true
-				this.ordercode = row.ordercode
 			},
 			async handleSearch(){
 				this.get = 1
@@ -196,7 +199,6 @@
 				if(addInfo.data.code === '1111'){
 					this.$message('完善采购单信息成功')
 					this.dialogFormVisible = false
-					this.initData()
 				}else {
 					this.$message(addInfo.data.message)
 				}
