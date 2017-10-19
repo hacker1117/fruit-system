@@ -66,28 +66,28 @@
 			label="采购订单号">
 			</el-table-column>
 			<el-table-column
-			prop="procode" 
+			prop="procode"
 			label="商品编号">
 			</el-table-column>
 			<el-table-column
-			prop="pname" 
+			prop="pname"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="unite" 
+			prop="unite"
 			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="wasteproductcode" 
+			prop="wasteproductcode"
 			label="损耗商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="productcount" 
+			prop="productcount"
 			label="损耗数量">
 			</el-table-column>
 			</el-table-column>
 			<el-table-column
-			prop="wastetype" 
+			prop="wastetype"
 			label="损耗类别">
 			</el-table-column>
 		</el-table>
@@ -137,6 +137,10 @@
     	mounted(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{
@@ -158,7 +162,7 @@
 			async handleSearch(){
 				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
 				const resData = await queryTransportWasteList(this.procode, this.pname, this.wasteproductcode, times)
-				console.log(resData.data)	
+				console.log(resData.data)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total

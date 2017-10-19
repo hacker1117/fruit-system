@@ -183,6 +183,10 @@
     	created(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	computed: {},
     	methods: {
     		async initData(){

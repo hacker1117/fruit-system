@@ -29,7 +29,7 @@
 				发运方式：&nbsp;{{receiptData.sendtype}}
 			</el-col>
 		</el-row>
-		<el-table 
+		<el-table
 			:data="receiptData"
 			stripe
 			style="width: 840px;text-align:left; margin-top: 20px;">
@@ -94,6 +94,10 @@
     	mounted(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{

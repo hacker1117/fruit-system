@@ -92,9 +92,9 @@
                     this.$router.push('/')
                     return false
                 }
-                console.log('views', this.views)
+//                console.log('views', this.views)
                 for (let i of this.views) {
-                    console.log(i[0], i[1])
+//                    console.log(i[0], i[1])
                     if (i[0] === index) return i[1]
                 }
                 return false

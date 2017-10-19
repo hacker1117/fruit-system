@@ -121,8 +121,16 @@
     		headTop,
     	},
     	mounted(){
-    		this.initData();
+
     	},
+        created() {
+            this.initData();
+            console.log('created')
+        },
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{

@@ -44,6 +44,10 @@
     	created(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	computed: {},
     	methods: {
 			async handleEdit() {
@@ -90,8 +94,8 @@
 			// 			this.$message({
 			// 				type: 'info',
 			// 				message: '已取消删除'
-			// 			}) 
-			// 			return false         
+			// 			})
+			// 			return false
 			// 		})
 			// 	} else {
 			// 		this.dialogFormVisible = true
@@ -157,8 +161,8 @@
 			// 		this.$message({
 			// 			type: 'info',
 			// 			message: '已取消删除'
-			// 		}) 
-			// 		return false         
+			// 		})
+			// 		return false
 			// 	})
 			// },
 			// async confirmBomChild() {
@@ -238,7 +242,7 @@
 		}
 		span{
 			.sc(14px, #999);
-			transition: all 400ms;	
+			transition: all 400ms;
 		}
 		.edit_icon{
 			color: #ccc;

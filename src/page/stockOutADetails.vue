@@ -7,31 +7,31 @@
 			stripe
 			style="text-align:left;margin-top:20px;">
 			<el-table-column
-			prop="proname" 
+			prop="proname"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="procode" 
+			prop="procode"
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="protype" 
+			prop="protype"
 			label="商品类别">
 			</el-table-column>
 			<el-table-column
-			prop="prostandard" 
+			prop="prostandard"
 			label="规格型号">
 			</el-table-column>
 			<el-table-column
-			prop="prounite" 
+			prop="prounite"
 			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="ordercode" 
+			prop="ordercode"
 			label="B库采购需求编号">
 			</el-table-column>
             <el-table-column
-			prop="procount" 
+			prop="procount"
 			label="数量">
 			</el-table-column>
 		</el-table>
@@ -69,6 +69,10 @@
     	mounted(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{

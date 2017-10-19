@@ -2,7 +2,7 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
-		
+
         <el-dialog title="新增损耗" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="商品名称" :label-width="formLabelWidth">
@@ -141,6 +141,10 @@
     	mounted(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{

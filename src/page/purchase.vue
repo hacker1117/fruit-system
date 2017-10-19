@@ -59,39 +59,39 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate" 
+			prop="orderstate"
 			label="单据状态">
 			</el-table-column>
 			<el-table-column
-			prop="orderno" 
+			prop="orderno"
 			label="订单编号">
 			</el-table-column>
 			<el-table-column
-			prop="respositysource" 
+			prop="respositysource"
 			label="仓库来源">
 			</el-table-column>
 			<el-table-column
-			prop="pname" 
+			prop="pname"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="productcode" 
+			prop="productcode"
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="buynumber" 
+			prop="buynumber"
 			label="采购量">
 			</el-table-column>
 			<el-table-column
-			prop="buydepartmentid" 
+			prop="buydepartmentid"
 			label="申请部门">
 			</el-table-column>
 			<el-table-column
-			prop="buyer" 
+			prop="buyer"
 			label="申请人">
 			</el-table-column>
 			<el-table-column
-			prop="createtime" 
+			prop="createtime"
 			label="创建时间">
 			</el-table-column>
 		</el-table>
@@ -149,6 +149,10 @@
     	computed: {
     		...mapState(['adminInfo']),
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{
@@ -160,12 +164,12 @@
 					}
 					const result = await getProList('')
 					if(result.data.code === '1111'){
-						this.goodsList = result.data.data	
+						this.goodsList = result.data.data
 					}
 					const repos = await getRepoAll()
 					if(repos.data.code === '1111'){
 						this.repoList = repos.data.data
-					}	
+					}
     			}catch(err){
     				console.log(err);
     			}
@@ -229,12 +233,12 @@
 				}
 			},
 			async handleCurrentChange(num){
-//				this.currentPage = num 
+//				this.currentPage = num
 				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
 //				const dataReceipt = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
 //				if(dataReceipt.data.code === '1111'){
 //					this.receiptData = dataReceipt.data.data.list
-//				}				
+//				}
 				this.currentPage = num
 				console.log(this.currentPage)
 				const dataReceipt = this.get = 0 ? await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage) : await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)

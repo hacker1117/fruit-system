@@ -123,7 +123,7 @@
 					      label="价格">
 					    </el-table-column>
 					    <el-table-column label="操作" >
-					    <template scope="scope"> 
+					    <template scope="scope">
 					        <el-button
 					          size="small"
 					          type="danger"
@@ -138,8 +138,8 @@
                 <el-button type="primary" @click="updateFood">确 定</el-button>
               </div>
             </el-dialog>
-			
-           
+
+
             <el-dialog title="添加规格" v-model="specsFormVisible">
 			  	<el-form :rules="specsFormrules" :model="specsForm">
 				    <el-form-item label="规格" label-width="100px" prop="specs">
@@ -199,6 +199,10 @@
         created(){
         	this.restaurant_id = this.$route.query.restaurant_id;
             this.initData();
+        },
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
         },
         computed: {
         	specs: function (){
@@ -309,10 +313,10 @@
                 this.selectTable = {...row, ...{restaurant_name: restaurant.name, restaurant_address: restaurant.address, category_name: category.name}};
 
                 this.selectMenu = {label: category.name, value: row.category_id}
-                this.tableData.splice(row.index, 1, {...this.selectTable}); 
+                this.tableData.splice(row.index, 1, {...this.selectTable});
                 this.$nextTick(() => {
                     this.expendRow.push(row.index);
-                })  
+                })
                 if (type == 'edit' && this.restaurant_id != row.restaurant_id) {
                 	this.getMenu();
                 }

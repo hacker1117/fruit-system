@@ -52,7 +52,7 @@
 			</el-col>
 			<a target="blank" :href="toPrint"><el-button style="float:right; margin-left:20px;" type="primary">预览打印</el-button></a>
 		</el-row>
-		<el-table 
+		<el-table
 			:data="receiptData"
 			stripe
 			style="width: 840px;text-align:left; margin-top: 20px;">
@@ -118,6 +118,10 @@
     	mounted(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{

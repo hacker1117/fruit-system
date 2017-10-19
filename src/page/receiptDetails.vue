@@ -2,7 +2,7 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
-		<el-table 
+		<el-table
 			:data="receiptData"
 			stripe
 			style="width: 100%;text-align:left; margin-top: 20px;">
@@ -102,6 +102,10 @@
     	mounted(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{

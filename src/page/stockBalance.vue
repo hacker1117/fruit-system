@@ -24,23 +24,23 @@
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="proname" 
+			prop="proname"
 			label="商品名称">
 			</el-table-column>
 			<el-table-column
-			prop="goodstype" 
+			prop="goodstype"
 			label="商品分类">
 			</el-table-column>
 			<el-table-column
-			prop="prostandard" 
+			prop="prostandard"
 			label="规格型号">
 			</el-table-column>
 			<el-table-column
-			prop="prounite" 
+			prop="prounite"
 			label="库存单位">
 			</el-table-column>
 			<el-table-column
-			prop="existamount" 
+			prop="existamount"
 			label="库存单位现存量">
 			</el-table-column>
 		</el-table>
@@ -84,6 +84,10 @@
     	mounted(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{

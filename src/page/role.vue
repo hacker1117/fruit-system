@@ -23,11 +23,11 @@
 			stripe
 			style="margin-top:20px;text-align:left;">
 			<el-table-column
-			prop="roleid" 
+			prop="roleid"
 			label="角色ID">
 			</el-table-column>
 			<el-table-column
-			prop="rolename" 
+			prop="rolename"
 			label="角色名称">
 			</el-table-column>
 			<el-table-column
@@ -80,6 +80,10 @@
     	mounted(){
     		this.initData();
     	},
+        beforeRouteLeave (to, from, next) {
+            this.$destroy()
+            next()
+        },
     	methods: {
     		async initData(){
     			try{
