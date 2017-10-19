@@ -30,11 +30,7 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="state" width="120px"
-			label="单据状态">
-			</el-table-column>
-			<el-table-column
-			prop="ordernumber" width="120px"
+			prop="storgeaid" width="120px"
 			label="单据编号">
 			</el-table-column>
 			<el-table-column
@@ -109,7 +105,9 @@
 				city: {},
 				receiptData: [],
 				ordernumber: '',
+				storgeaid: '',
 				ordertime: '',
+				storagename: '',
 				currentPage: 1,
 				count: 0,
 				get: 0,

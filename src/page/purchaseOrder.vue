@@ -13,7 +13,7 @@
                 <el-input style="width: 195px" v-model="form.buydepartment" auto-complete="off"></el-input>
             </el-form-item>-->
 			<el-form-item label="采购员" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="采购费用" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buyfare" auto-complete="off"></el-input>

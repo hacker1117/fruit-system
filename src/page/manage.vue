@@ -109,4 +109,7 @@
 	.manage_page{
 
 	}
+	.el-submenu .el-menu-item:hover, .el-menu-item:hover {
+    background-color: #d1dbe5 !important;
+}
 </style>

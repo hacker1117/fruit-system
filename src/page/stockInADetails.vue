@@ -88,6 +88,7 @@
 			label="总价">
 			</el-table-column>
 			<el-table-column
+			 prop="supplierid"
 			 width="120px"
 			label="供应商">
 			</el-table-column>

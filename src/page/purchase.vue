@@ -16,24 +16,13 @@
 				placeholder="请输入名称模糊搜索"
 				@select="handleAddChild"
 				></el-autocomplete>
-            </el-form-item>
-            <el-form-item label="申请部门" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.buydepartmentid" auto-complete="off"></el-input>
-            </el-form-item>
+           </el-form-item>
 			<el-form-item label="申请人" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.buyer" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="单位" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buyunite" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="仓库" :label-width="formLabelWidth">
-                <el-select v-model="form.defaultrepo" placeholder="请选择仓库">
-                    <el-option v-for="repo in repoList" :key="repo.id" :label="repo.reponame" :value="repo.reponame"></el-option>
-                </el-select>
-            </el-form-item>
-			<el-form-item label="规格" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.productionstandard" auto-complete="off"></el-input>
-            </el-form-item>
+           </el-form-item>
 			<el-form-item label="采购量" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buynumber" auto-complete="off"></el-input>
             </el-form-item>
@@ -121,6 +110,7 @@
 
 <script>
     import headTop from '@/components/headTop'
+    import {mapActions, mapState} from 'vuex'
     import {getPuschaseOrderB, queryStockInList, addPurchaseOrderB, getProList, getRepoAll} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
@@ -155,6 +145,9 @@
     	},
     	mounted(){
     		this.initData();
+    	},
+    	computed: {
+    		...mapState(['adminInfo']),
     	},
     	methods: {
     		async initData(){
