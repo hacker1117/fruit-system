@@ -432,7 +432,7 @@ export const queryStockInList = (orderid, ordertime, ordercode, pageNum = 1, pag
  * 获取运输损耗列表
  */
 
-export const getTransportWasteAll = (pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryDailyWaste',{pageNum, pageSize, repositoryid});
+export const getTransportWasteAll = (pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getTransferWasteb',{pageNum, pageSize, repositoryid});
 
 /**
  * 新增运输损耗
@@ -522,7 +522,7 @@ export const getStockInaAll = (pageNum = 1, pageSize = 10) => axio('/storageorde
  * 查询入库单
  */
 
-export const queryStockInaAll = (storgeaid, ordertime, storagename, pageNum = 1, pageSize = 10) => axio('/repositoryb/queryInnetStorageb',{storgeaid, ordertime, storagename, pageNum, pageSize});
+export const queryStockInaAll = (storgeaid, ordertime, storagename, pageNum = 1, pageSize = 10) => axio('/storageordera/selectByExamples',{storgeaid, ordertime, storagename, pageNum, pageSize});
 
 /**
  * 获取库存余额列表 -A库
@@ -742,6 +742,11 @@ export const getPuschaseOrderB = (orderno,createtime,buydepartmentid,repositorys
  */
 
 export const getRepoBranch = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getBranREpob',{pageNum,pageSize,repositoryid});
+
+/**
+ * B库-新增分库
+ */
+export const IncreasePool = (repocode, reponame, id, isDefault, repostate, isDelete, repositoryid = repoId) => axio('/repositoryb/addBranRepo',{repocode, reponame, id, isDefault, repostate, isDelete ,repositoryid});
 
 /**
  * B库-添加采购单
