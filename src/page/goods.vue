@@ -14,7 +14,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisibleGood = false">取 消</el-button>
+            <el-button @click="cancel">取 消</el-button>
             <el-button type="primary" @click="confirmBind">确 定</el-button>
         </div>
         </el-dialog>
@@ -289,6 +289,10 @@
 				}else {
 					this.$message(bindInfo.data.message)
 				}
+			},
+			async cancel(){
+				this.dialogFormVisibleGood =false
+				this.form.appGoodsIndex=""
 			},
 			async querySearchAsync(queryString, cb) {
 				let results=[]

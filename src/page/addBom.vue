@@ -158,7 +158,8 @@
 					prostandard: '',
 					proid: '',
 					count: '',
-					level: ''
+					level: '',
+					goodsName: '',
                 },
                 form2: {
                     procode: '',

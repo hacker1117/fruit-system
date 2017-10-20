@@ -208,7 +208,7 @@
 				this.$router.push('/stockInADetails')
 			},
 			async confirmAdd() {
-				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.pronumber, this.form.perprice, this.form.totalmoney, this.form.netweight)
+				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.pronumber, this.form.perprice, this.form.totalmoney, this.form.netweight,this.supplierid,)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善入库单成功')
 					this.dialogFormVisible = false

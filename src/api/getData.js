@@ -782,7 +782,7 @@ export const makeStockOut = (respositysource) => axio('/outputordera/insertOutpu
  * 新增入库单
  */
 
-export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, storagetype});
+export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, supplierid, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, supplierid, storagetype});
 
 /**
  * 完善入库单信息

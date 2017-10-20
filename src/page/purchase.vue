@@ -20,8 +20,11 @@
 			<el-form-item label="申请人" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
+			<el-form-item label="规格" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.prostandered" auto-complete="off"></el-input>
+           </el-form-item>
 			<el-form-item label="单位" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.buyunite" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.pronuite" auto-complete="off"></el-input>
            </el-form-item>
 			<el-form-item label="采购量" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buynumber" auto-complete="off"></el-input>
@@ -229,6 +232,8 @@
 				for(let i = 0; i<this.goodsList.length; i++){
 					if(this.form.goodsName == this.goodsList[i].pname) {
 						this.confirmIndex = i
+						this.form.prostandered=this.goodsList[i].prostandered
+						this.form.pronuite=this.goodsList[i].pronuite
 					}
 				}
 			},
