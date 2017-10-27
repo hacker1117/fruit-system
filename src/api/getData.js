@@ -749,6 +749,12 @@ export const getRepoBranch = (pageNum = 1,pageSize = 10, repositoryid = repoId) 
 export const IncreasePool = (repocode, reponame, id, isDefault, repostate, isDelete, repositoryid = repoId) => axio('/repositoryb/addBranRepo',{repocode, reponame, id, isDefault, repostate, isDelete ,repositoryid});
 
 /**
+ * 删除B库-分库
+ */
+
+export const deleteLibrary = (repocode, repositoryid = repoId) => axio('/repositoryb/delBranRepo', {repocode,repositoryid}, 'DELETE');
+
+/**
  * B库-添加采购单
  */
 
@@ -801,3 +807,81 @@ export const insertVirtualRepo = (reponame, protype) => axio('/virtualrepomanage
  */
 
 export const queryBalanceB = (repocode,proname,pageNum = 1,pageSize = 10) => axio('/abalancerepository/selectAbalanceByExamples',{repocode,proname,pageNum,pageSize});
+
+/**
+ * B库-查询盘点列表
+ */
+
+export const getInventory_b = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/getAll',{pageNum,pageSize,repositoryid});
+
+/**
+ * B库-条件查询盘点
+ */
+
+export const getInventoryChild_b = (startTime, endTime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/tinspect/getByCondition',{startTime, endTime, pageNum, pageSize, repositoryid});
+
+/**
+ * B库-查询盘点详情列表
+ */
+
+export const getInventoryDetails_b = (checkid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/getDetail',{checkid,pageNum,pageSize,repositoryid});
+
+/**
+ * B库-查询新增盘点列表
+ */
+
+export const getinventoryadd_b = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/addHtmlInspect',{pageNum,pageSize,repositoryid});
+
+/**
+ * B库-查询新增盘点--商品分类
+ */
+export const getclassification_b = () => axio('/tinspect/getAllCategoryname');
+
+/**
+ * B库-条件查询盘点新增
+ */
+
+export const queryInventoryAdded_b = (proname, goodstype, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/findProductByname',{proname, goodstype, pageNum,pageSize,repositoryid});
+
+
+/**
+ * B库-盘点新增--确认盘点
+ */
+
+export const getinventoryPreservation_b = (accountcount,categorycode,categoryname,checkdate,checkdtailid,checkid,infactcount,losscount,overagecount,pname,proid,prostandard,prounite,repocode,reponame,username, repositoryid = repoId) => axio('/tinspect/addInspect',{accountcount,categorycode,categoryname,checkdate,checkdtailid,checkid,infactcount,losscount,overagecount,pname,proid,prostandard,prounite,repocode,reponame,username,repositoryid});
+
+/**
+ * A库-查询包装管理列表
+ */
+
+export const getPacking_a = (pageNum = 1,pageSize = 10) => axio('/packagemanager/findAll',{pageNum,pageSize});
+
+/**
+ * A库-添加品类
+ */
+
+export const addcategory_a = (packid,packagename,prostandard,packcount,prounite) => axio('/packagemanager/insertpackage',{packid,packagename,prostandard,packcount,prounite});
+
+/**
+ * A库-删除品类
+ */
+
+export const deleteCategory_a = (packid) => axio('/packagemanager/deletepackage',{packid});
+
+/**
+ * A库-修改品类
+ */
+
+export const modifycategory_a = (packid,packagename,prostandard,packcount,prounite) => axio('/packagemanager/updatepackage',{packid,packagename,prostandard,packcount,prounite});
+
+/**
+ * A库-扣减品类数量
+ */
+
+export const numberdeduction_a = (packid,packCount,useCount) => axio('/packagemanager/usepackage',{packid,packCount,useCount});
+
+/**
+ * A库-增加品类数量
+ */
+
+export const numberadd_a = (packid,packcount,addcount) => axio('/packagemanager/addpackage',{packid,packcount,addcount});

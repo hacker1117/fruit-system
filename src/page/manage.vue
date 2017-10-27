@@ -19,6 +19,7 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('07')" index="/virtualStock">虚拟库</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('08')" index="/stockBalanceA">库存余额表</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('09')" index="/waste">损耗管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('47')" index="/packagingManagement_a">包装管理</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="9">
 							<template  slot="title"><i class="el-icon-plus"></i><span style="color:#333;">出库管理</span></template>
@@ -39,6 +40,7 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('22')" index="/dailyWaste">日常损耗管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('23')" index="/branchHouse">分库管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('24')" index="/stockBalance">库存余额表</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('46')" index="/Inventory_b">盘点</el-menu-item>
 						</el-submenu>
 					</el-submenu>
 					<el-submenu style="background-color: #009a76;" index="4" v-if="getRole('28')">

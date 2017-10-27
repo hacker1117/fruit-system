@@ -49,12 +49,16 @@ const purchaseDetails = r => require.ensure([], () => r(require('@/page/purchase
 const dailyWaste = r => require.ensure([], () => r(require('@/page/dailyWaste')), 'dailyWaste');
 const branchHouse = r => require.ensure([], () => r(require('@/page/branchHouse')), 'branchHouse');
 const stockBalance = r => require.ensure([], () => r(require('@/page/stockBalance')), 'stockBalance');
+const Inventory_b = r => require.ensure([], () => r(require('@/page/Inventory_b')), 'Inventory_b');
+const InventoryDetails_b = r => require.ensure([], () => r(require('@/page/InventoryDetails_b')), 'Inventory_b');
+const InventoryAdded_b = r => require.ensure([], () => r(require('@/page/InventoryAdded_b')), 'Inventory_b');
 const person = r => require.ensure([], () => r(require('@/page/person')), 'person');
 const personDetails = r => require.ensure([], () => r(require('@/page/personDetails')), 'person');
 const role = r => require.ensure([], () => r(require('@/page/role')), 'role');
 const roleDetails = r => require.ensure([], () => r(require('@/page/roleDetails')), 'role');
 const group = r => require.ensure([], () => r(require('@/page/group')), 'group');
 const addStockOutA = r => require.ensure([], () => r(require('@/page/addStockOutA')), 'stockOutA');
+const packagingManagement_a = r => require.ensure([], () => r(require('@/page/packagingManagement_a')), 'packagingManagement_a');
 
 const routes = [
 	{
@@ -137,6 +141,10 @@ const routes = [
 			path: '/waste',
 			component: waste,
 			meta: ['A库进销存管理', '库存管理', '损耗管理'],
+		},{
+			path: '/packagingManagement_a',
+			component: packagingManagement_a,
+			meta: ['A库进销存管理', '库存管理', '包装管理'],
 		},{
 			path: '/stockOutA',
 			component: stockOutA,
@@ -229,6 +237,18 @@ const routes = [
 			path: '/stockBalance',
 			component: stockBalance,
 			meta: ['B库进销存管理', '库存管理', '库存余额表']
+		},{
+			path: '/Inventory_b',
+			component: Inventory_b,
+			meta: ['B库进销存管理', '库存管理', '盘点']
+		},{
+			path: '/InventoryDetails_b/:id',
+			component: InventoryDetails_b,
+			meta: ['B库进销存管理', '库存管理', '盘点'],
+		},{
+			path: '/InventoryAdded_b',
+			component: InventoryAdded_b,
+			meta: ['B库进销存管理', '库存管理', '盘点']
 		}]
 	}
 ]

@@ -1,12 +1,11 @@
 <template>
     <div class="fillcontain">
         <head-top></head-top>
-		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+		<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 			<el-col :span="24">
 				<el-button @click="dialogFormVisible = true" >新增分库</el-button>
 			</el-col>
 		</el-row>
-		
         <el-dialog title="新增分库" v-model="dialogFormVisible">
         <el-form :model="form">
 			<el-form-item label="仓库编码" :label-width="formLabelWidth">
@@ -43,26 +42,34 @@
         </div>
         </el-dialog>
         <div class="table_container">
-            <el-table @row-click="handleChoose"
+            <el-table
                 :data="tableData"
                 highlight-current-row
                 style="width: 100%">
-                <el-table-column @click="handleChoose"
+                <el-table-column
                   property="reponame"
                   label="仓库名称">
                 </el-table-column>
-               <el-table-column @click="handleChoose"
+               <el-table-column
                   property="repocode"
                   label="仓库编码">
                 </el-table-column>
-               <el-table-column @click="handleChoose"
+               <!--<el-table-column @click="handleChoose"
                   property="isDefault"
                   label="是否默认仓库">
                 </el-table-column>
                 <el-table-column @click="handleChoose"
                   property="repostate"
                   label="状态">
-                </el-table-column>
+                </el-table-column>-->
+                <el-table-column
+				label="操作">
+					<template scope="scope">
+						<el-button
+						size="mini"
+						@click="confirmDelete(scope.$index, scope.row)">删除</el-button>
+					</template>
+				</el-table-column>
             </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
                 <el-pagination
@@ -80,7 +87,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getRepoBranch, getCategoryChild, deleteCategory, IncreasePool} from '@/api/getData'
+    import {getRepoBranch, getCategoryChild, deleteCategory, IncreasePool,deleteLibrary} from '@/api/getData'
     export default {
         data(){
             return {
@@ -150,27 +157,33 @@
                 }
                 this.currentClass = row.categoryname
             },
-            handleAdd() {
-
-            },
-            handleEdit() {
-
-            },
-            handleDelete() {
-
-            },
-            handleAddChild() {
-
-            },
-            handleEditChild() {
-
-            },
-            handleEditChild() {
-
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
+			confirmDelete(index,row) {
+				this.$confirm('此操作将删除该分库, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.handleDelete(index,row)
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			async handleDelete(index,row) {
+				console.log(index)
+				console.log(row)
+				const isDeleted = await deleteLibrary(row.repocode)
+				console.log(isDeleted.data)
+				if(isDeleted.data.code === '1111') {
+					this.initData()
+				}
+			},
             handleCurrentChange(val) {
                 this.currentPage = val;
                 this.offset = (val - 1)*this.limit;
@@ -181,7 +194,6 @@
                 this.tableData = [];
                 Users.forEach(item => {
                     const tableData = {};
-                    tableData.username = item.username;
                     tableData.registe_time = item.registe_time;
                     tableData.city = item.city;
                     this.tableData.push(tableData);
