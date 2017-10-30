@@ -2,6 +2,11 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
+			<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+				<el-col :span="24">
+					<el-button @click="" >导出EXCEL</el-button>
+				</el-col>
+			</el-row>
 	    	<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>

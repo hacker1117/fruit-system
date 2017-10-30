@@ -885,3 +885,9 @@ export const numberdeduction_a = (packid,packCount,useCount) => axio('/packagema
  */
 
 export const numberadd_a = (packid,packcount,addcount) => axio('/packagemanager/addpackage',{packid,packcount,addcount});
+
+/**
+ * A库-入库单--》加工损耗
+ */
+
+export const addStockInaA = (storgeaid,storagename,visualreposity,netweight,prounite,perprice,totalmoney,prostandered,ordertime,storagetype,supplierid,remarkable,workwastecount) => axio('/storageordera/workwastecount',{storgeaid,storagename,visualreposity,netweight,prounite,perprice,totalmoney,prostandered,ordertime,storagetype,supplierid,remarkable,workwastecount});

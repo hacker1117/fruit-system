@@ -53,15 +53,7 @@
                <el-table-column
                   property="repocode"
                   label="仓库编码">
-                </el-table-column>
-               <!--<el-table-column @click="handleChoose"
-                  property="isDefault"
-                  label="是否默认仓库">
-                </el-table-column>
-                <el-table-column @click="handleChoose"
-                  property="repostate"
-                  label="状态">
-                </el-table-column>-->
+               </el-table-column>
                 <el-table-column
 				label="操作">
 					<template scope="scope">
@@ -73,7 +65,6 @@
             </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
                 <el-pagination
-                  @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
                   :page-size="5"

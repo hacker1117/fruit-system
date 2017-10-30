@@ -2,6 +2,28 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
+		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="handleAdd" >新增入库单</el-button>
+			</el-col>
+		</el-row>
+        <el-dialog title="加工损耗" v-model="dialogFormVisible">
+	        <el-form :model="form">
+				<el-form-item label="单据编号：" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.storgeaid" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+	            <el-form-item label="净重量：" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.netweight" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+	            <el-form-item label="损耗：" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.workwastecount" auto-complete="off"></el-input>
+	            </el-form-item>
+	        </el-form>
+	        <div slot="footer" class="dialog-footer">
+	            <el-button @click="dialogFormVisible = false">取 消</el-button>
+	            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+	        </div>
+        </el-dialog>
 		<el-row style="margin-top: 20px;">
             <el-col :span="3" style="text-align:right;">单据编号：</el-col>
 			<el-col :span="4"><el-input v-model="storgeaid" siez="mini" placeholder="请输入内容"></el-input></el-col>
@@ -19,11 +41,6 @@
 		</el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
-		</el-row>
-		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
-			<el-col :span="24">
-				<el-button @click="handleAdd" >新增入库单</el-button>
-			</el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
@@ -78,6 +95,14 @@
 			prop="remarkable" width="120px"
 			label="备注">
 			</el-table-column>
+			<el-table-column fixed="right"
+			label="操作" width="120px">
+			<template scope="scope">
+				<el-button
+				size="small"
+				@click="handleEdit(scope.$index, scope.row)">加工损耗</el-button>
+			</template>
+			</el-table-column>
 		</el-table>
 		<div class="Pagination" style="text-align: left;margin-top: 10px;">
 			<el-pagination
@@ -94,7 +119,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockInaAll, queryStockInaAll} from '@/api/getData'
+    import {getStockInaAll, queryStockInaAll,addStockInaA} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -111,6 +136,14 @@
 				currentPage: 1,
 				count: 0,
 				get: 0,
+				dialogFormVisible: false,
+				formLabelWidth: '120px',
+				form: {
+					storgeaid: '',
+					netweight: '',
+					workwastecount: '',
+				},
+				ind: 0,
     		}
     	},
     	components: {
@@ -133,11 +166,24 @@
     				console.log(err);
     			}
     		},
-			// handleEdit(index,row) {
-			// 	console.log(index,row)
-			// 	this.$destroy()
-			// 	this.$router.push('/stockInListDetails/'+ row.orderid)
-			// },
+			 handleEdit(index,row) {
+			 	this.dialogFormVisible = true
+			 	this.form=row
+			 	this.ind=index
+			 },
+			async confirmAdd(){
+//				console.log(this.receiptData[this.ind])
+//				console.log(this.receiptData[this.ind].storgeaid)
+//				this.tableData[this.ind].infactcount=this.form.workwastecount
+				const resData = await addStockInaA(this.receiptData[this.ind].storgeaid,this.receiptData[this.ind].storagename,this.receiptData[this.ind].visualreposity,this.receiptData[this.ind].netweight,this.receiptData[this.ind].prounite,this.receiptData[this.ind].perprice,this.receiptData[this.ind].totalmoney,this.receiptData[this.ind].prostandered,this.receiptData[this.ind].ordertime,this.receiptData[this.ind].storagetype,this.receiptData[this.ind].supplierid,this.receiptData[this.ind].remarkable,this.form.workwastecount)
+				if(resData.data.code === '1111'){
+					this.$message('成功')
+//					this.$message(resData.data.message)
+				} else {
+					this.$message(resData.data.message)
+				}
+				this.dialogFormVisible = false
+			},
 			async handleSearch(){
 				this.get = 1
 				this.count = 0

@@ -20,6 +20,7 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('08')" index="/stockBalanceA">库存余额表</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('09')" index="/waste">损耗管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('47')" index="/packagingManagement_a">包装管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('48')" index="/Inventory_a">盘点</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="9">
 							<template  slot="title"><i class="el-icon-plus"></i><span style="color:#333;">出库管理</span></template>

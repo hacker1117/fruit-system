@@ -2,6 +2,11 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
+		<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="" >导出EXCEL</el-button>
+			</el-col>
+		</el-row>
         <el-dialog title="新增采购单" v-model="dialogFormVisible">
 	        <el-form :model="form">
 				<el-form-item label="实际数量" :label-width="formLabelWidth">
@@ -118,6 +123,7 @@
 				pname:'',
 				get: 0,
 				ind: '',
+				Success: 0,
             }
         },
     	components: {
@@ -170,29 +176,25 @@
 				console.log(this.tableData.length)
 				console.log(this.tableData[0])
 				for(let i = 0; i<this.tableData.length; i++){
-				const resData = await getinventoryPreservation_b(this.tableData[i].accountcount,this.tableData[i].categorycode,this.tableData[i].categoryname,this.tableData[i].checkdate,this.tableData[i].checkdtailid,this.tableData[i].checkid,this.tableData[i].infactcount,this.tableData[i].losscount,this.tableData[i].overagecount,this.tableData[i].pname,this.tableData[i].proid,this.tableData[i].prostandard,this.tableData[i].prounite,this.tableData[i].repocode,this.tableData[i].reponame,this.tableData[i].username)
+					const resData = await getinventoryPreservation_b(this.tableData[i].accountcount,this.tableData[i].categorycode,this.tableData[i].categoryname,this.tableData[i].checkdate,this.tableData[i].checkdtailid,this.tableData[i].checkid,this.tableData[i].infactcount,this.tableData[i].losscount,this.tableData[i].overagecount,this.tableData[i].pname,this.tableData[i].proid,this.tableData[i].prostandard,this.tableData[i].prounite,this.tableData[i].repocode,this.tableData[i].reponame,this.tableData[i].username)
 					if(resData.data.code === '1111'){
 						console.log("this.tableData"+[i]+"成功")
+						this.Success+=1
 					}else {
 						console.log("this.tableData"+[i]+"失败")
 					}
-//					if(i=10){
-//						this.$message('盘点成功!')
-//					}
 				}
-//				const resData = await getinventoryPreservation_b(this.tableData)
-//				if(resData.data.code === '1111'){
-//					console.log("成功")
-//				}else {
-//					console.log("失败")
-//				}
+				if(this.Success = '10'){
+					this.$message('盘点成功!')
+					this.Success = 0
+				}else {
+					this.$message('盘点失败!')
+				}
 			},
 			handleEdit(index,row) {
 				this.dialogFormVisible = true
 				this.form.infactcount =row.infactcount
 				this.ind=index
-				console.log(this.ind)
-				
 			},
 			async confirmAdd(){
 				this.tableData[this.ind].infactcount=this.form.infactcount
