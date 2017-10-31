@@ -200,10 +200,7 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
 				let sTime = this.timeofreport === '' ? '' : this.formatter(this.timeofreport)
-				console.log(this.currentPage)
-				console.log(this.get)
-//				const dataReceipt = await getTransportWasteAll(this.currentPage)
-				const dataReceipt = this.get = 0 ? await getTransportWasteAll(this.currentPage) : await queryDailyLossList(this.productcode,this.pname,this.wasteproductcode,this.createhuman,sTime,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getTransportWasteAll(this.currentPage) : await queryDailyLossList(this.productcode,this.pname,this.wasteproductcode,this.createhuman,sTime,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					console.log(1111)
 					this.receiptData = dataReceipt.data.data.list

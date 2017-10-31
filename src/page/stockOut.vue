@@ -158,7 +158,7 @@
 			    this.currentPage = num
                 let sTime = this.value1 === '' ? '' : this.formatter(this.value1)
                 let eTime = this.value2 === '' ? '' : this.formatter(this.value2)
-				const dataReceipt = this.get = 0 ? await getStockOutAll(this.currentPage) : await queryStockOut(this.input,sTime,eTime,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getStockOutAll(this.currentPage) : await queryStockOut(this.input,sTime,eTime,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

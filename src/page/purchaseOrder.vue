@@ -210,7 +210,7 @@
 			async handleCurrentChange(num) {
 				this.currentPage = num
 				let cTime = this.creattime === '' ? '' : this.formatter(this.creattime)
-				const dataReceipt = this.get = 0 ? await getPurchaseOrderAll(this.currentPage) : await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getPurchaseOrderAll(this.currentPage) : await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

@@ -8,9 +8,7 @@
 			</el-col>
 		</el-row>
 		<el-row style="margin-top: 20px;">
-            <el-col :span="3" style="text-align:right;">B库采购需求单号：</el-col>
-			<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="3" style="text-align:right;">出库单号：</el-col>
+			<el-col :span="3" style="text-align:right;">出库单号：</el-col>
 			<el-col :span="4"><el-input v-model="outputcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="7" style="text-align:right;">单据日期：
 				<el-date-picker
@@ -20,11 +18,10 @@
 				placeholder="选择日期">
 				</el-date-picker>
 			</el-col>
-		</el-row>
-		<el-row style="margin-top: 20px;">
             <el-col :span="3" style="text-align:right;">去向：</el-col>
 			<el-col :span="4"><el-input v-model="customer" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
+		<el-row style="margin-top: 20px;"></el-row>
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
@@ -39,10 +36,6 @@
 			<el-table-column
 			prop="ordertime"
 			label="单据日期">
-			</el-table-column>
-			<el-table-column
-			prop="ordercode"
-			label="B库采购需求单号">
 			</el-table-column>
 			<el-table-column
 			prop="customer"
@@ -82,7 +75,6 @@
 				input: '',
 				city: {},
 				receiptData: [],
-				ordercode: '',
 				outputcode: '',
 				ordertime: '',
 				customer: '',
@@ -118,7 +110,7 @@
 			},
 			async handleSearch(){
 				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
-				const resData = await queryStockOutA(this.ordercode,this.outputcode,sTime,this.customer)
+				const resData = await queryStockOutA(this.outputcode,sTime,this.customer)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total

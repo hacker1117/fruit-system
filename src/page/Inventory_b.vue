@@ -145,7 +145,8 @@
 				}
 			},
 			async empty(){
-				this.checkdate=""
+				this.startTime=""
+				this.endTime=""
 			},
 			handleEdit(index,row) {
 				console.log(index, row)
@@ -167,7 +168,7 @@
 				this.currentPage = num
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const dataReceipt = this.get = 0 ? await getInventory_b(this.currentPage) : await getInventoryChild_b(times1,times2, this.currentPage)
+				const dataReceipt = this.get === 0 ? await getInventory_b(this.currentPage) : await getInventoryChild_b(times1,times2, this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

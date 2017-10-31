@@ -559,7 +559,7 @@ export const getStockOutaAll = (pageNum = 1, pageSize = 10) => axio('/outputorde
  * 查询A库出库单
  */
 
-export const queryStockOutA= (ordercode,outputcode , ordertime, customer, pageNum = 1, pageSize = 10) => axio('/outputordera/findByExamples',{ordercode, ordertime, customer, pageNum, pageSize});
+export const queryStockOutA= (outputcode , ordertime, customer, pageNum = 1, pageSize = 10) => axio('/outputordera/findByExamples',{ordertime, customer, pageNum, pageSize});
 
 /**
  * 查询A库出库单
@@ -891,3 +891,32 @@ export const numberadd_a = (packid,packcount,addcount) => axio('/packagemanager/
  */
 
 export const addStockInaA = (storgeaid,storagename,visualreposity,netweight,prounite,perprice,totalmoney,prostandered,ordertime,storagetype,supplierid,remarkable,workwastecount) => axio('/storageordera/workwastecount',{storgeaid,storagename,visualreposity,netweight,prounite,perprice,totalmoney,prostandered,ordertime,storagetype,supplierid,remarkable,workwastecount});
+
+/**
+ * A库-查询盘点列表
+ */
+
+export const getInventory_a = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/inspecta/querycheckHand',{pageNum,pageSize,repositoryid});
+
+/**
+ * A库-查询盘点详情列表
+ */
+
+export const getInventoryDetails_a = (checkid, pageNum = 1,pageSize = 10) => axio('/inspecta/checkdetailsBycheckid',{checkid,pageNum,pageSize});
+
+/**
+ * A库-查询新增盘点--仓库
+ */
+export const getclassification_a = () => axio('/repositoryb/getBranREpob');
+
+/**
+ * A库-条件查询盘点
+ */
+
+export const getInventoryChild_a = (startTime, endTime, repcode, pageNum = 1, pageSize = 10) => axio('/inspecta/selectByExamples',{startTime, endTime, repcode, pageNum, pageSize});
+
+/**
+ * A库-查询新增盘点列表
+ */
+
+export const getinventoryadd_a = (pageNum = 1, pageSize = 10) => axio('/abalancerepository/selectAllDatas',{pageNum, pageSize});

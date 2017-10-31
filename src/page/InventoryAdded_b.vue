@@ -148,7 +148,7 @@
 					if(dataBatch.data.code === '1111'){
 						this.batchData = dataBatch.data.data
 					}else {
-						console.log('获取商品分类出错')
+						this.$message(resData.data.message)
 					}
                 }catch(err){
                     console.log('获取数据失败', err);
@@ -207,7 +207,7 @@
 			async handleCurrentChange(num){
 				console.log(this.get)
 				this.currentPage = num
-				const dataReceipt = this.get = 0 ? await getinventoryadd_b(this.currentPage) : await queryInventoryAdded_b(this.proname, this.goodstype, this.currentPage)
+				const dataReceipt = this.get === 0 ? await getinventoryadd_b(this.currentPage) : await queryInventoryAdded_b(this.proname, this.goodstype, this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

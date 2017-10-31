@@ -60,6 +60,9 @@ const group = r => require.ensure([], () => r(require('@/page/group')), 'group')
 const addStockOutA = r => require.ensure([], () => r(require('@/page/addStockOutA')), 'stockOutA');
 const packagingManagement_a = r => require.ensure([], () => r(require('@/page/packagingManagement_a')), 'packagingManagement_a');
 const Inventory_a = r => require.ensure([], () => r(require('@/page/Inventory_a')), 'Inventory_a');
+const InventoryDetails_a = r => require.ensure([], () => r(require('@/page/InventoryDetails_a')), 'Inventory_a');
+const InventoryAdded_a = r => require.ensure([], () => r(require('@/page/InventoryAdded_a')), 'Inventory_a');
+
 const routes = [
 	{
 		path: '/',
@@ -252,6 +255,14 @@ const routes = [
 		},{
 			path: '/Inventory_a',
 			component: Inventory_a,
+			meta: ['A库进销存管理', '库存管理', '盘点']
+		},{
+			path: '/InventoryDetails_a/:id',
+			component: InventoryDetails_a,
+			meta: ['A库进销存管理', '库存管理', '盘点'],
+		},{
+			path: '/InventoryAdded_a',
+			component: InventoryAdded_a,
 			meta: ['A库进销存管理', '库存管理', '盘点']
 		}]
 	}

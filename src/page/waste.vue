@@ -195,7 +195,7 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
 				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
-				const dataReceipt = this.get = 0 ? await getWasteAll(this.currentPage) : await queryWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,times,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getWasteAll(this.currentPage) : await queryWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,times,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

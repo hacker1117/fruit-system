@@ -240,13 +240,9 @@
 			async handleCurrentChange(num){
 //				this.currentPage = num
 				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
-//				const dataReceipt = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
-//				if(dataReceipt.data.code === '1111'){
-//					this.receiptData = dataReceipt.data.data.list
-//				}
 				this.currentPage = num
 				console.log(this.currentPage)
-				const dataReceipt = this.get = 0 ? await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage) : await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage) : await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

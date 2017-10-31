@@ -128,7 +128,7 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
 				console.log(this.currentPage)
-				const dataReceipt = this.get = 0 ? await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,this.currentPage) : await getqueryBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,this.currentPage) : await getqueryBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

@@ -199,7 +199,7 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = this.get = 0 ? await getSupplierAll(this.currentPage) : await querySupplierList(this.supplytype,this.sname,this.mantelephone,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getSupplierAll(this.currentPage) : await querySupplierList(this.supplytype,this.sname,this.mantelephone,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

@@ -155,7 +155,6 @@
 		</el-table>
 		<div class="Pagination" style="text-align: left;margin-top: 10px;">
 			<el-pagination
-				@size-change="handleSizeChange"
 				@current-change="handleCurrentChange"
 				:current-page="currentPage"
 				:page-size="10"
@@ -284,6 +283,7 @@
 				const bindInfo = await bindAppGoods(this.appGoodsList[this.confirmIndex].productId, this.appGoodsList[this.confirmIndex].sku, this.appBindId)
 				if(bindInfo.data.code === '1111'){
 					this.$message('绑定成功')
+					this.form.appGoodsIndex=""
 					this.dialogFormVisibleGood =false
 					this.initData()
 				}else {
@@ -318,16 +318,13 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = this.get = 0 ? await getGoodsAll(this.currentPage) : await queryGoodsList(this.pname, this.procode,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getGoodsAll(this.currentPage) : await queryGoodsList(this.pname, this.procode,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.receiptData = []
 				}
-			},
-			handleSizeChange() {
-
 			}
 		}
     }
