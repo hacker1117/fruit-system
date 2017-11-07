@@ -37,23 +37,23 @@
         </div>
         </el-dialog>
         <div class="table_container">
-            <el-table @row-click="handleChoose"
+            <el-table
                 :data="tableData"
                 highlight-current-row
                 style="width: 100%">
-                <el-table-column @click="handleChoose"
+                <el-table-column
                   property="uid"
                   label="编号">
                 </el-table-column>
-                <el-table-column @click="handleChoose"
+                <el-table-column
                   property="uname"
                   label="姓名">
                 </el-table-column>
-                <el-table-column @click="handleChoose"
+                <el-table-column
                   property="account"
                   label="账号">
                 </el-table-column>
-                <el-table-column @click="handleChoose"
+                <el-table-column
                   property="urole"
                   label="职位">
                 </el-table-column>
@@ -108,7 +108,6 @@
                 },
                 roleList: [],
                 repoList: [],
-                currentPage: 1
             }
         },
     	components: {
@@ -144,19 +143,6 @@
                     this.$message(repoList.data.message)
                 }
             },
-            async handleChoose(row) {
-                console.log(row)
-                const classData = await getCategoryChild(row.categorycode)
-                if(classData.data.code === '1111'){
-                    this.childData = classData.data.data.list
-                }else {
-                    this.childData = []
-                }
-                this.currentClass = row.categoryname
-            },
-            handleAdd() {
-
-            },
             handleEdit(index, row) {
                 this.$destroy()
 				this.$router.push('/personDetails/' + row.uid)
@@ -164,15 +150,16 @@
             handleDelete() {
 
             },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            async handleCurrentChange(val) {
-                this.currentPage = val;
-                const countData = await queryUserList(this.currentPage);
-                console.log(countData.data)
-                this.tableData = countData.data.data.list
-            },
+			async handleCurrentChange(num) {
+				this.currentPage = num
+				const dataReceipt = await queryUserList(this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.tableData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+				}else {
+					this.receiptData = []
+				}
+			},
             async getUsers(){
                 const Users = await getUserList({offset: this.offset, limit: this.limit});
                 this.tableData = [];

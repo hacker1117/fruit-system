@@ -205,6 +205,7 @@
 				if(addInfo.data.code === '1111'){
 					this.$message('完善采购单信息成功')
 					this.dialogFormVisible = false
+					this.initData()
 				}else {
 					this.$message(addInfo.data.message)
 				}

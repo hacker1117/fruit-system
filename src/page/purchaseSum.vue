@@ -96,16 +96,8 @@
 			</el-table-column>
 			</el-table-column>
 			<el-table-column
-			prop="buynumber" width="120px"
+			prop="buynumber"
 			label="采购数量">
-			</el-table-column>
-			<el-table-column
-			prop="aexistamount" width="120px"
-			label="A库库存">
-			</el-table-column>
-			<el-table-column
-			prop="advisebuynumber" width="120px"
-			label="建议采购量">
 			</el-table-column>
 		</el-table>
 		</div>

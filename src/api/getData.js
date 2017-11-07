@@ -277,7 +277,7 @@ export const getBomGroup = procode => axio('/Bom/queryOneGroup/' + procode);
  * 根据name模糊查询商品列表
  */
 
-export const getProList = (proName) => axio('/Bom/queryProductByName',{proName})
+export const getProList = (proName) => axio('/repositoryb/queryProductByName',{proName})
 
 /**
  * 根据id获取BOM组
@@ -633,7 +633,7 @@ export const queryGoodsList = (pname, proid, pageNum = '1', pageSize = '10') => 
  * 查询用户列表
  */
 
-export const queryUserList = (pageNum = 1,pageSize = 100) => axio('/user/findAllUser',{pageNum,pageSize});
+export const queryUserList = (pageNum = 1,pageSize = 10) => axio('/user/findAllUser',{pageNum,pageSize});
 
 /**
  * 更新用户信息
