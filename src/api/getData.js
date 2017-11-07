@@ -759,8 +759,7 @@ export const deleteLibrary = (repocode, repositoryid = repoId) => axio('/reposit
  * B库-添加采购单
  */
 
-//export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber, repositoryid = repoId) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber ,repositoryid});
-export const addPurchaseOrderB = (buynumber, protype, pronuite, repositoryid = repoId, username = unames) => axio('/repositoryb/addSummaryordera',{buynumber, protype, pronuite ,repositoryid,username});
+export const addPurchaseOrderB = (pname, productcode, buynumber, protype, pronuite, repositoryid = repoId, username = unames) => axio('/repositoryb/addSummaryordera',{pname, productcode, buynumber, protype, pronuite ,repositoryid,username});
 
 /**
  * 货品分类-添加父分类

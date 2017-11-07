@@ -128,9 +128,11 @@
 				city: {},
 				receiptData: [],
 				form: {
-					defaultrepo: '',
-					goodsIndex: '',
-					goodsName: ''
+					goodsName: '',
+					proid: '',
+					prostandered: '',
+					pronuite: '',
+					buynumber: '',
 				},
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
@@ -207,11 +209,13 @@
 			},
 			async confirmAdd(){
 				console.log(1)
+				console.log(this.form.goodsName)
+				console.log(this.form.proid)
 				console.log(this.form.buynumber)
 				console.log(this.goodsList[this.confirmIndex].protype)
 				console.log(this.goodsList[this.confirmIndex].pronuite)
 				console.log(2)
-				const addInfo = await addPurchaseOrderB(this.form.buynumber, this.goodsList[this.confirmIndex].protype, this.goodsList[this.confirmIndex].pronuite)
+				const addInfo = await addPurchaseOrderB(this.form.goodsName, this.form.proid, this.form.buynumber, this.goodsList[this.confirmIndex].protype, this.goodsList[this.confirmIndex].pronuite)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 					this.dialogFormVisible = false
