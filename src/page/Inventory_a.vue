@@ -19,6 +19,12 @@
 				      placeholder="选择日期时间">
 				    </el-date-picker>
 				</el-col>
+				<el-col :span="3" style="text-align:right;">仓库：</el-col>
+				<el-col :span="4">
+					<el-select v-model="repocode" placeholder="请选择仓库">
+						<el-option v-for="item in batchData" :key="item.id" :label="item.reponame" :value="item.repocode"></el-option>
+					</el-select>
+				</el-col>
 			</el-row>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
@@ -46,14 +52,6 @@
 	                  property="checkdate"
 	                  label="盘点日期">
 	               </el-table-column>
-	               <el-table-column
-	                  property="sta"
-	                  label="盘点状态">
-	               </el-table-column>
-	               <el-table-column
-	                  property="state"
-	                  label="盘点结果">
-	               </el-table-column>
 	                <el-table-column
 					label="操作">
 						<template scope="scope">
@@ -79,7 +77,8 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventory_b, getInventoryChild_b} from '@/api/getData'
+    import {mapActions, mapState} from 'vuex'
+    import {getInventory_a, getInventoryChild_a,getclassification_a} from '@/api/getData'
     export default {
         data(){
             return {
@@ -93,17 +92,12 @@
                 currentClass: '',
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
-				form: {
-					repocode: '',
-					reponame: '',
-					id: '',
-					isDefault: '',
-					repostate: '',
-					isDelete: '',
-				},
 				startTime:'',
 				endTime:'',
 				get: 0,
+				goodstype:'',
+				batchData:[],
+				repocode:'',
             }
         },
     	components: {
@@ -116,21 +110,24 @@
             this.$destroy()
             next()
         },
+    	computed: {
+    		...mapState(['adminInfo']),
+    	},
         methods: {
             async initData(){
                 try{
-                    const countData = await getInventory_b(1,10);
+                    const countData = await getInventory_a(1,10);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
-                    console.log(this.tableData)
-                    for(let i = 0;i<this.tableData.length;i++){
-                    	console.log(i)
-                    	console.log(this.tableData[i].losscount)
-                    	console.log(this.tableData[i].overagecount)
-                        this.tableData[i].state = this.tableData[i].losscount === 0||this.tableData[i].overagecount === 0 ? '有盈亏' : '无盈亏'
-                        this.tableData[i].sta = this.tableData[i].state === ""? "未盘点" : "已盘点"
-                    }
+//                  //获取仓库
+					this.repocode = this.adminInfo.repositoryid//默认仓库
+					const dataBatch = await getclassification_a()
+					if(dataBatch.data.code === '1111'){
+						this.batchData = dataBatch.data.data.list
+					}else {
+						console.log('获取商品分类出错')
+					}
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -140,7 +137,7 @@
 				this.count = 0
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const resData = await getInventoryChild_b(times1,times2)
+				const resData = await getInventoryChild_a(times1,times2,this.repocode)
 				console.log(resData.data)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
@@ -154,15 +151,16 @@
 			async empty(){
 				this.startTime=""
 				this.endTime=""
+				this.repocode = this.adminInfo.repositoryid
 			},
 			handleEdit(index,row) {
 				console.log(index, row)
 				this.$destroy()
-				this.$router.push('/InventoryDetails_b/'+ row.checkid)
+				this.$router.push('/InventoryDetails_a/'+ row.checkid)
 			},
             handleAdd() {
 				this.$destroy()
-				this.$router.push('/InventoryAdded_b')
+				this.$router.push('/InventoryAdded_a')
             },
 			formatter(date){
 				console.log(date.getMonth())
@@ -175,7 +173,7 @@
 				this.currentPage = num
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const dataReceipt = this.get === 0 ? await getInventory_b(this.currentPage) : await getInventoryChild_b(times1,times2, this.currentPage)
+				const dataReceipt = this.get === 0 ? await getInventory_a(this.currentPage) : await getInventoryChild_a(times1,times2, this.repocode, this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

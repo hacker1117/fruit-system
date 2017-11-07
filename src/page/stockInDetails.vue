@@ -5,7 +5,9 @@
         <el-dialog title="报损" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="数量" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.productcount" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.productcount" auto-complete="off">
+                	<template slot="append">{{this.prou}}</template>
+                </el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -86,7 +88,9 @@
 				dialogFormVisible:false,
 				formLabelWidth: '120px',
 				repository: '',
-				procount: ''
+				procount: '',
+				ind: '',
+				prou: '',
     		}
     	},
     	components: {
@@ -114,16 +118,12 @@
 			},
 			handleEdit(index,row) {
 				this.dialogFormVisible = true
-				this.procode = row.procode
-				this.proname = row.proname
-				this.prostandered = row.prostandard
-				this.prounite = row.prounite
-				this.ordercode = row.ordercode
-				this.repository = row.customer
-				this.procount = row.procount
+				this.ind = index
+				this.prou = row.prounite
+				console.log(row.prounite)
 			},
 			async confirmAdd(){
-				const addInfo = await addTransportWasteAll(this.procount, this.form.productcount, this.procode, this.ordercode, this.repository, this.proname, this.prostandard, this.prounite)
+				const addInfo = await addTransportWasteAll(this.form.productcount, this.receiptData[this.ind].ordercode,this.receiptData[this.ind].proname,this.receiptData[this.ind].procode,this.receiptData[this.ind].protype,this.receiptData[this.ind].prostandard,this.receiptData[this.ind].prounite,this.receiptData[this.ind].procount)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加运输损耗成功')
 					this.dialogFormVisible = false

@@ -2,12 +2,7 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
-		<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
-			<el-col :span="24">
-				<el-button @click="" >导出EXCEL</el-button>
-			</el-col>
-		</el-row>
-        <el-dialog title="新增采购单" v-model="dialogFormVisible">
+        <el-dialog title="修改实际数量" v-model="dialogFormVisible">
 	        <el-form :model="form">
 				<el-form-item label="实际数量" :label-width="formLabelWidth">
 	                <el-input style="width: 195px" v-model="form.infactcount" auto-complete="off"></el-input>
@@ -18,25 +13,66 @@
 	            <el-button type="primary" @click="confirmAdd">确 定</el-button>
 	        </div>
         </el-dialog>
-		<el-row style="margin-top: 20px;">
-            <el-col :span="3" style="text-align:right;">商品名称：</el-col>
-            <el-col :span="4"><el-input v-model="proname" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="3" style="text-align:right;">商品分类：</el-col>
-			<el-col :span="4">
-				<el-select v-model="goodstype" placeholder="请选择商品分类">
-					<el-option v-for="(item,index) in batchData" :key="item.id" :label="item" :value="item"></el-option>
-				</el-select>
-			</el-col>
-		</el-row>
+        <el-dialog title="添加" v-model="dialogFormVisible1">
+	        <el-row>
+	            <el-col :span="4" style="text-align:right;">商品名称：</el-col>
+	            <el-col :span="7"><el-input v-model="proname" siez="mini" placeholder="请输入内容"></el-input></el-col>
+	            <el-col :span="4" style="text-align:right;">商品分类：</el-col>
+				<el-col :span="7">
+					<el-select v-model="goodstype" placeholder="请选择商品分类">
+						<el-option v-for="(item,index) in batchData" :key="item.id" :label="item" :value="item"></el-option>
+					</el-select>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="24" style="margin-top: 20px;">
+					<el-button style="float: right;margin-left: 20px;" @click="empty" type="primary">清空</el-button>
+					<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
+				</el-col>
+			</el-row>
+			<el-table
+		            ref="multipleTable"
+					:data="tableData"
+					stripe
+		            @selection-change="handleSelectionChange"
+					style="margin-top:20px;text-align:left;">
+		            <el-table-column
+		            type="selection"
+		            width="55">
+		            </el-table-column>
+		            <el-table-column
+	                  type="index"
+	                  width="80"
+	                  label="序号">
+	                </el-table-column>
+	               <el-table-column
+	                  property="pname"
+	                  label="商品名称">
+	                </el-table-column>
+	               <el-table-column
+	                  property="proid"
+	                  label="商品编码">
+	               </el-table-column>
+	               <el-table-column
+	                  property="prounite"
+	                  label="单位">
+	               </el-table-column>
+				</el-table>
+	        <div slot="footer" class="dialog-footer">
+	            <el-button @click="dialogFormVisible = false">取 消</el-button>
+	            <el-button type="primary" @click="handle">确 定</el-button>
+	        </div>
+       </el-dialog>
 		<el-row>
 			<el-col :span="24" style="margin-top: 20px;">
-				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
-				<el-button style="float: left;" @click="Inventory" type="primary">确认盘点</el-button>
+				<el-button style="float: right;" @click="Inventory" type="primary">待盘点</el-button>
+				<el-button style="float: left;" @click="dialogFormVisible1 = true" type="primary">添加</el-button>
 			</el-col>
 		</el-row>
 	        <div class="table_container">
-	            <el-table
-	                :data="tableData"
+	        	<el-table
+	                :data="tableData1"
+	                stripe
 	                highlight-current-row
 	                style="width: 100%">
 	                <el-table-column
@@ -72,24 +108,8 @@
 	                  property="overagecount"
 	                  label="盘盈数量">
 	               </el-table-column>
-	                <el-table-column
-					label="操作">
-						<template scope="scope">
-						<el-button
-						size="mini"
-						@click="handleEdit(scope.$index, scope.row)">修改实际数量</el-button>
-						</template>
-					</el-table-column>
 	            </el-table>
-	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-	                <el-pagination
-	                  @current-change="handleCurrentChange"
-	                  :current-page="currentPage"
-	                  :page-size="10"
-	                  layout="total, prev, pager, next"
-	                  :total="count">
-	                </el-pagination>
-	            </div>
+	            <div class="Pagination" style="text-align: left;margin-top: 10px;"> 共 {{this.count}} 条</div>
 	        </div>
 	    </div>
 	</div>
@@ -102,6 +122,7 @@
         data(){
             return {
                 tableData: [],
+                tableData1: [],
                 currentRow: null,
                 offset: 0,
                 limit: 5,
@@ -110,6 +131,7 @@
                 childData:[],
                 currentClass: '',
 				dialogFormVisible: false,
+				dialogFormVisible1: false,
 				formLabelWidth: '120px',
 				form: {
 					infactcount: '',
@@ -121,9 +143,9 @@
 				startTime:'',
 				endTime:'',
 				pname:'',
-				get: 0,
 				ind: '',
 				Success: 0,
+                multipleSelection: [],
             }
         },
     	components: {
@@ -139,10 +161,9 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getinventoryadd_b(1,10);
+                    const countData = await getinventoryadd_b();
                     console.log(countData.data)
-                    this.tableData = countData.data.data.list
-                    this.count = countData.data.data.total
+                    this.tableData = countData.data.data
                     //获取分类
 					const dataBatch = await getclassification_b()
 					if(dataBatch.data.code === '1111'){
@@ -154,14 +175,23 @@
                     console.log('获取数据失败', err);
                 }
             },
+            handleSelectionChange(val) {
+                this.multipleSelection = val
+                console.log(val)
+            },
+            async handle() {
+				this.tableData1 = this.multipleSelection.concat(this.tableData1);
+                 console.log(this.tableData1)
+                this.dialogFormVisible1 = false
+                this.count =this.tableData1.length
+            },
 			async handleSearch(){
-				this.get = 1
 				this.count = 0
 				const resData = await queryInventoryAdded_b(this.proname, this.goodstype)
 				console.log(resData.data)
 				if(resData.data.code === '1111'){
-					this.tableData = resData.data.data.list
-					this.count = resData.data.data.total
+					this.tableData = resData.data.data
+					this.count = resData.data.data.length
 				} else {
 					this.$message(resData.data.message)
 					this.tableData =""
@@ -169,22 +199,23 @@
 				}
 			},
 			async empty(){
-				this.procode=""
+				this.proname=""
+				this.goodstype=""
 			},
 			async Inventory(){
-				console.log(this.tableData)
-				console.log(this.tableData.length)
-				console.log(this.tableData[0])
-				for(let i = 0; i<this.tableData.length; i++){
-					const resData = await getinventoryPreservation_b(this.tableData[i].accountcount,this.tableData[i].categorycode,this.tableData[i].categoryname,this.tableData[i].checkdate,this.tableData[i].checkdtailid,this.tableData[i].checkid,this.tableData[i].infactcount,this.tableData[i].losscount,this.tableData[i].overagecount,this.tableData[i].pname,this.tableData[i].proid,this.tableData[i].prostandard,this.tableData[i].prounite,this.tableData[i].repocode,this.tableData[i].reponame,this.tableData[i].username)
+				console.log(this.tableData1)
+				console.log(this.tableData1.length)
+				console.log(this.tableData1[0])
+				for(let i = 0; i<this.tableData1.length; i++){
+					const resData = await getinventoryPreservation_b(this.tableData1[i].accountcount,this.tableData1[i].categorycode,this.tableData1[i].categoryname,this.tableData1[i].checkdate,this.tableData1[i].checkdtailid,this.tableData1[i].checkid,this.tableData1[i].infactcount,this.tableData1[i].losscount,this.tableData1[i].overagecount,this.tableData1[i].pname,this.tableData1[i].proid,this.tableData1[i].prostandard,this.tableData1[i].prounite,this.tableData1[i].repocode,this.tableData1[i].reponame,this.tableData1[i].username)
 					if(resData.data.code === '1111'){
-						console.log("this.tableData"+[i]+"成功")
+						console.log("this.tableData1"+[i]+"成功")
 						this.Success+=1
 					}else {
-						console.log("this.tableData"+[i]+"失败")
+						console.log("this.tableData1"+[i]+"失败")
 					}
 				}
-				if(this.Success = '10'){
+				if(this.Success = this.multipleSelection.length){
 					this.$message('盘点成功!')
 					this.Success = 0
 				}else {
@@ -199,22 +230,6 @@
 			async confirmAdd(){
 				this.tableData[this.ind].infactcount=this.form.infactcount
 				this.dialogFormVisible = false
-			},
-            handleAdd() {
-				this.$destroy()
-				this.$router.push('/Inventory_b')
-            },
-			async handleCurrentChange(num){
-				console.log(this.get)
-				this.currentPage = num
-				const dataReceipt = this.get === 0 ? await getinventoryadd_b(this.currentPage) : await queryInventoryAdded_b(this.proname, this.goodstype, this.currentPage)
-				if(dataReceipt.data.code === '1111'){
-					this.tableData = dataReceipt.data.data.list
-					this.count = dataReceipt.data.data.total
-				}else {
-					this.tableData = []
-					this.count = 0
-				}
 			}
         },
     }

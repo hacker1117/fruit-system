@@ -17,14 +17,17 @@
 				@select="handleAddChild"
 				></el-autocomplete>
            </el-form-item>
+			<el-form-item label="商品编码" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.proid" auto-complete="off" :disabled="true"></el-input>
+           </el-form-item>
 			<el-form-item label="申请人" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="规格" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.prostandered" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.prostandered" auto-complete="off" :disabled="true"></el-input>
            </el-form-item>
 			<el-form-item label="单位" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.pronuite" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.pronuite" auto-complete="off" :disabled="true"></el-input>
            </el-form-item>
 			<el-form-item label="采购量" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buynumber" auto-complete="off"></el-input>
@@ -203,7 +206,12 @@
 				return res
 			},
 			async confirmAdd(){
-				const addInfo = await addPurchaseOrderB(this.goodsList[this.confirmIndex].pname, this.goodsList[this.confirmIndex].proid, this.goodsList[this.confirmIndex].producttype, this.form.buydepartmentid, this.form.buyer, this.form.buyunite, this.form.productionstandard, this.form.defaultrepo, this.form.buynumber)
+				console.log(1)
+				console.log(this.form.buynumber)
+				console.log(this.goodsList[this.confirmIndex].protype)
+				console.log(this.goodsList[this.confirmIndex].pronuite)
+				console.log(2)
+				const addInfo = await addPurchaseOrderB(this.form.buynumber, this.goodsList[this.confirmIndex].protype, this.goodsList[this.confirmIndex].pronuite)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 					this.dialogFormVisible = false
@@ -234,6 +242,7 @@
 						this.confirmIndex = i
 						this.form.prostandered=this.goodsList[i].prostandered
 						this.form.pronuite=this.goodsList[i].pronuite
+						this.form.proid=this.goodsList[i].proid
 					}
 				}
 			},

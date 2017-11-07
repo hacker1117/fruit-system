@@ -3,28 +3,25 @@
 	    <head-top></head-top>
 	    <div class="fruit-content">
 			<el-row style="margin-top: 20px;">
-	            <el-col :span="3" style="text-align:right;">开始时间：</el-col>
+				<el-col :span="3" style="text-align:right;">A库：</el-col>
 				<el-col :span="4">
-					<el-date-picker
-				      v-model="startTime"
-				      type="datetime"
-				      placeholder="选择日期时间">
-				    </el-date-picker>
+					<el-select v-model="repocode" placeholder="请选择仓库">
+						<el-option v-for="item in batchData" :key="item.id" :label="item.reponame" :value="item.repocode"></el-option>
+					</el-select>
 				</el-col>
-				<el-col :span="3" style="text-align:right;">结束时间：</el-col>
+				<el-col :span="3" style="text-align:right;">B库：</el-col>
 				<el-col :span="4">
-					<el-date-picker
-				      v-model="endTime"
-				      type="datetime"
-				      placeholder="选择日期时间">
-				    </el-date-picker>
+					<el-select v-model="repocode" placeholder="请选择仓库">
+						<el-option v-for="item in batchData" :key="item.id" :label="item.reponame" :value="item.repocode"></el-option>
+					</el-select>
 				</el-col>
+				<el-col :span="3" style="text-align:right;">商品名称：</el-col>
+				<el-col :span="4"><el-input v-model="storgeaid" siez="mini" placeholder="请输入内容"></el-input></el-col>
 			</el-row>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 	                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
 	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-	                <el-button style="float: left;" @click="handleAdd" type="primary">新增</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -40,28 +37,50 @@
 	                </el-table-column>
 	               <el-table-column
 	                  property="checkid"
-	                  label="单据编号">
+	                  label="商品编码">
 	                </el-table-column>
 	               <el-table-column
 	                  property="checkdate"
-	                  label="盘点日期">
+	                  label="商品名称">
 	               </el-table-column>
 	               <el-table-column
-	                  property="sta"
-	                  label="盘点状态">
+	                  property="checkdate"
+	                  label="所属仓库">
 	               </el-table-column>
 	               <el-table-column
-	                  property="state"
-	                  label="盘点结果">
+	                  property="checkdate"
+	                  label="商品分类">
 	               </el-table-column>
-	                <el-table-column
-					label="操作">
-						<template scope="scope">
-						<el-button
-						size="mini"
-						@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-						</template>
-					</el-table-column>
+	               <el-table-column
+	                  property="checkdate"
+	                  label="规格型号">
+	               </el-table-column>
+	               <el-table-column
+	                  property="checkdate"
+	                  label="单位">
+	               </el-table-column>
+	               <el-table-column
+	                  property="checkdate"
+	                  label="库存单位现存量">
+	               </el-table-column>
+	               <el-table-column
+	                  label="库存上限提醒">
+	                  <template scope="scope">
+				        <li style="color: red">{{ scope.row.checkdate }}</li>
+				      </template>
+	               </el-table-column>
+	               <el-table-column
+	                  label="库存下限提醒">
+	                  <template scope="scope">
+				        <li style="color: red">{{ scope.row.checkdate }}</li>
+				      </template>
+	               </el-table-column>
+	               <el-table-column
+	                  label="安全阈值提醒">
+	                  <template scope="scope">
+				        <li style="color: red">{{ scope.row.checkdate }}</li>
+				      </template>
+	               </el-table-column>
 	            </el-table>
 	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
 	                <el-pagination
@@ -79,31 +98,19 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventory_b, getInventoryChild_b} from '@/api/getData'
+    import {mapActions, mapState} from 'vuex'
+    import {getInventory_a, getInventoryChild_a, getclassification_a} from '@/api/getData'
     export default {
         data(){
             return {
                 tableData: [],
-                currentRow: null,
-                offset: 0,
-                limit: 5,
-                count: 0,
+				count: 0,
                 currentPage: 1,
-                childData:[],
-                currentClass: '',
-				dialogFormVisible: false,
-				formLabelWidth: '120px',
-				form: {
-					repocode: '',
-					reponame: '',
-					id: '',
-					isDefault: '',
-					repostate: '',
-					isDelete: '',
-				},
-				startTime:'',
-				endTime:'',
 				get: 0,
+				batchData:[],
+				repocode:'',
+				storgeaid:'',
+				checkdate:'',
             }
         },
     	components: {
@@ -116,21 +123,24 @@
             this.$destroy()
             next()
         },
+    	computed: {
+    		...mapState(['adminInfo']),
+    	},
         methods: {
             async initData(){
                 try{
-                    const countData = await getInventory_b(1,10);
+                    const countData = await getInventory_a(1,10);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
-                    console.log(this.tableData)
-                    for(let i = 0;i<this.tableData.length;i++){
-                    	console.log(i)
-                    	console.log(this.tableData[i].losscount)
-                    	console.log(this.tableData[i].overagecount)
-                        this.tableData[i].state = this.tableData[i].losscount === 0||this.tableData[i].overagecount === 0 ? '有盈亏' : '无盈亏'
-                        this.tableData[i].sta = this.tableData[i].state === ""? "未盘点" : "已盘点"
-                    }
+//                  //获取仓库
+//					this.repocode = this.adminInfo.repositoryid//默认仓库
+					const dataBatch = await getclassification_a()
+					if(dataBatch.data.code === '1111'){
+						this.batchData = dataBatch.data.data.list
+					}else {
+						console.log('获取商品分类出错')
+					}
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -140,7 +150,7 @@
 				this.count = 0
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const resData = await getInventoryChild_b(times1,times2)
+				const resData = await getInventoryChild_a(times1,times2,this.repocode)
 				console.log(resData.data)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
@@ -152,18 +162,8 @@
 				}
 			},
 			async empty(){
-				this.startTime=""
-				this.endTime=""
+				this.repocode = ""
 			},
-			handleEdit(index,row) {
-				console.log(index, row)
-				this.$destroy()
-				this.$router.push('/InventoryDetails_b/'+ row.checkid)
-			},
-            handleAdd() {
-				this.$destroy()
-				this.$router.push('/InventoryAdded_b')
-            },
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''
@@ -175,7 +175,7 @@
 				this.currentPage = num
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const dataReceipt = this.get === 0 ? await getInventory_b(this.currentPage) : await getInventoryChild_b(times1,times2, this.currentPage)
+				const dataReceipt = this.get === 0 ? await getInventory_a(this.currentPage) : await getInventoryChild_a(times1,times2, this.repocode, this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

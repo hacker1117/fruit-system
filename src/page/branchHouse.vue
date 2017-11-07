@@ -44,6 +44,7 @@
         <div class="table_container">
             <el-table
                 :data="tableData"
+                stripe
                 highlight-current-row
                 style="width: 100%">
                 <el-table-column
@@ -167,8 +168,6 @@
 				})
 			},
 			async handleDelete(index,row) {
-				console.log(index)
-				console.log(row)
 				const isDeleted = await deleteLibrary(row.repocode)
 				console.log(isDeleted.data)
 				if(isDeleted.data.code === '1111') {

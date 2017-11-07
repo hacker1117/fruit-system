@@ -2,17 +2,6 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
-	        <el-dialog title="新增采购单" v-model="dialogFormVisible">
-		        <el-form :model="form">
-					<el-form-item label="实际数量" :label-width="formLabelWidth">
-		                <el-input style="width: 195px" v-model="form.infactcount" auto-complete="off"></el-input>
-		            </el-form-item>
-		        </el-form>
-		        <div slot="footer" class="dialog-footer">
-		            <el-button @click="dialogFormVisible = false">取 消</el-button>
-		            <el-button type="primary" @click="confirmAdd">确 定</el-button>
-		        </div>
-	        </el-dialog>
 			<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 				<el-col :span="24">
 					<el-button @click="" >导出EXCEL</el-button>
@@ -21,7 +10,6 @@
 	    	<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>
-					<el-button style="float: left;" @click="" type="primary">确认盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -63,14 +51,6 @@
 	                  property="overagecount"
 	                  label="盘盈数量">
 	               </el-table-column>
-	                <el-table-column
-					label="操作">
-						<template scope="scope">
-						<el-button
-						size="mini"
-						@click="handleEdit(scope.$index, scope.row)">修改实际数量</el-button>
-						</template>
-					</el-table-column>
 	            </el-table>
 	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
 	                <el-pagination
@@ -88,7 +68,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventoryDetails_b} from '@/api/getData'
+    import {getInventoryDetails_a} from '@/api/getData'
     export default {
         data(){
             return {
@@ -113,7 +93,6 @@
 					overageCount: '',
 				},
 				procode: '',
-				ind: '',
             }
         },
     	components: {
@@ -129,7 +108,7 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getInventoryDetails_b(this.id);
+                    const countData = await getInventoryDetails_a(this.id);
                     console.log("id"+this.id)
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
@@ -141,23 +120,14 @@
                     console.log('获取数据失败', err);
                 }
             },
-			handleEdit(index,row) {
-				this.dialogFormVisible = true
-				this.form.infactcount =row.infactcount
-				this.ind=index
-			},
-			async confirmAdd(){
-				this.tableData[this.ind].infactcount=this.form.infactcount
-				this.dialogFormVisible = false
-			},
             handleAdd() {
 				this.$destroy()
-				this.$router.push('/Inventory_b')
+				this.$router.push('/Inventory_a')
             },
 			async handleCurrentChange(num){
 				console.log(this.get)
 				this.currentPage = num
-				const dataReceipt = await getInventoryDetails_b(this.id,this.currentPage)
+				const dataReceipt = await getInventoryDetails_a(this.id,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

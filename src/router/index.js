@@ -59,9 +59,12 @@ const roleDetails = r => require.ensure([], () => r(require('@/page/roleDetails'
 const group = r => require.ensure([], () => r(require('@/page/group')), 'group');
 const addStockOutA = r => require.ensure([], () => r(require('@/page/addStockOutA')), 'stockOutA');
 const packagingManagement_a = r => require.ensure([], () => r(require('@/page/packagingManagement_a')), 'packagingManagement_a');
+const packagingManagement_b = r => require.ensure([], () => r(require('@/page/packagingManagement_b')), 'packagingManagement_b');
 const Inventory_a = r => require.ensure([], () => r(require('@/page/Inventory_a')), 'Inventory_a');
 const InventoryDetails_a = r => require.ensure([], () => r(require('@/page/InventoryDetails_a')), 'Inventory_a');
 const InventoryAdded_a = r => require.ensure([], () => r(require('@/page/InventoryAdded_a')), 'Inventory_a');
+const securityThresholdManagement_a = r => require.ensure([], () => r(require('@/page/securityThresholdManagement_a')), 'securityThresholdManagement_a');
+const productionLine = r => require.ensure([], () => r(require('@/page/productionLine')), 'productionLine');
 
 const routes = [
 	{
@@ -264,6 +267,18 @@ const routes = [
 			path: '/InventoryAdded_a',
 			component: InventoryAdded_a,
 			meta: ['A库进销存管理', '库存管理', '盘点']
+		},{
+			path: '/packagingManagement_b',
+			component: packagingManagement_b,
+			meta: ['B库进销存管理', '库存管理', '包装管理'],
+		},{
+			path: '/securityThresholdManagement_a',
+			component: securityThresholdManagement_a,
+			meta: ['A库进销存管理', '库存管理', '安全阈值管理']
+		},{
+			path: '/productionLine',
+			component: productionLine,
+			meta: ['生产执行管理', '资源分配管理', '生产线管理'],
 		}]
 	}
 ]

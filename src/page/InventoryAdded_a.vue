@@ -2,28 +2,39 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
-	        <el-dialog title="新增采购单" v-model="dialogFormVisible">
-		        <el-form :model="form">
-					<el-form-item label="实际数量" :label-width="formLabelWidth">
-		                <el-input style="width: 195px" v-model="form.infactcount" auto-complete="off"></el-input>
-		            </el-form-item>
-		        </el-form>
-		        <div slot="footer" class="dialog-footer">
-		            <el-button @click="dialogFormVisible = false">取 消</el-button>
-		            <el-button type="primary" @click="confirmAdd">确 定</el-button>
-		        </div>
-	        </el-dialog>
-			<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
-				<el-col :span="24">
-					<el-button @click="" >导出EXCEL</el-button>
-				</el-col>
-			</el-row>
-	    	<el-row style="margin-top: 20px;">
-				<el-col :span="24">
-					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>
-					<el-button style="float: left;" @click="" type="primary">确认盘点</el-button>
-	            </el-col>
-			</el-row>
+		<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
+			<el-col :span="24">
+				<el-button @click="" >导出EXCEL</el-button>
+			</el-col>
+		</el-row>
+        <el-dialog title="新增采购单" v-model="dialogFormVisible">
+	        <el-form :model="form">
+				<el-form-item label="实际数量" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.infactcount" auto-complete="off"></el-input>
+	            </el-form-item>
+	        </el-form>
+	        <div slot="footer" class="dialog-footer">
+	            <el-button @click="dialogFormVisible = false">取 消</el-button>
+	            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+	        </div>
+        </el-dialog>
+		<el-row style="margin-top: 20px;">
+            <el-col :span="3" style="text-align:right;">商品名称：</el-col>
+            <el-col :span="4"><el-input v-model="proname" siez="mini" placeholder="请输入内容"></el-input></el-col>
+            <el-col :span="3" style="text-align:right;">商品分类：</el-col>
+			<el-col :span="4">
+				<el-select v-model="goodstype" placeholder="请选择商品分类">
+					<el-option v-for="(item,index) in batchData" :key="item.id" :label="item" :value="item"></el-option>
+				</el-select>
+			</el-col>
+		</el-row>
+		<el-row>
+			<el-col :span="24" style="margin-top: 20px;">
+				<el-button style="float: right;margin-left: 20px;" @click="empty" type="primary">清空</el-button>
+				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
+				<el-button style="float: left;" @click="Inventory" type="primary">确认盘点</el-button>
+			</el-col>
+		</el-row>
 	        <div class="table_container">
 	            <el-table
 	                :data="tableData"
@@ -49,7 +60,7 @@
 	               </el-table-column>
 	               <el-table-column
 	                  property="accountcount"
-	                  label="账面数量">
+	                  label="系统数量">
 	               </el-table-column>
 	               <el-table-column
 	                  property="infactcount"
@@ -88,7 +99,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventoryDetails_b} from '@/api/getData'
+    import {getinventoryadd_a, getclassification_b, queryInventoryAdded_a, getinventoryPreservation_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -99,21 +110,22 @@
                 count: 0,
                 currentPage: 1,
                 childData:[],
-                id: this.$route.params.id,
                 currentClass: '',
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
 				form: {
-					pname: '',
-					proid: '',
-					prounite: '',
-					accountCount: '',
-					infactCount: '',
-					lossCount: '',
-					overageCount: '',
+					infactcount: '',
 				},
 				procode: '',
+				proname: '',
+				goodstype:'',
+				batchData:[],
+				startTime:'',
+				endTime:'',
+				pname:'',
+				get: 0,
 				ind: '',
+				Success: 0,
             }
         },
     	components: {
@@ -129,18 +141,60 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getInventoryDetails_b(this.id);
-                    console.log("id"+this.id)
+                    const countData = await getinventoryadd_a(1,10);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
-                    for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].isDefault = this.tableData[i].isDefault == 0 ? '否' : '是'
-                    }
+                    //获取分类
+					const dataBatch = await getclassification_b()
+					if(dataBatch.data.code === '1111'){
+						this.batchData = dataBatch.data.data
+					}else {
+						console.log('获取商品分类出错')
+						this.$message(resData.data.message)
+					}
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
             },
+			async handleSearch(){
+				this.get = 1
+				this.count = 0
+				const resData = await queryInventoryAdded_a(this.proname, this.goodstype)
+				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.tableData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.tableData =""
+					this.count = 0
+				}
+			},
+			async empty(){
+				this.proname=""
+				this.goodstype=""
+			},
+			async Inventory(){
+				console.log(this.tableData)
+				console.log(this.tableData.length)
+				console.log(this.tableData[0])
+				for(let i = 0; i<this.tableData.length; i++){
+					const resData = await getinventoryPreservation_b(this.tableData[i].accountcount,this.tableData[i].categorycode,this.tableData[i].categoryname,this.tableData[i].checkdate,this.tableData[i].checkdtailid,this.tableData[i].checkid,this.tableData[i].infactcount,this.tableData[i].losscount,this.tableData[i].overagecount,this.tableData[i].pname,this.tableData[i].proid,this.tableData[i].prostandard,this.tableData[i].prounite,this.tableData[i].repocode,this.tableData[i].reponame,this.tableData[i].username)
+					if(resData.data.code === '1111'){
+						console.log("this.tableData"+[i]+"成功")
+						this.Success+=1
+					}else {
+						console.log("this.tableData"+[i]+"失败")
+					}
+				}
+				if(this.Success = '10'){
+					this.$message('盘点成功!')
+					this.Success = 0
+				}else {
+					this.$message('盘点失败!')
+				}
+			},
 			handleEdit(index,row) {
 				this.dialogFormVisible = true
 				this.form.infactcount =row.infactcount
@@ -157,12 +211,13 @@
 			async handleCurrentChange(num){
 				console.log(this.get)
 				this.currentPage = num
-				const dataReceipt = await getInventoryDetails_b(this.id,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getinventoryadd_a(this.currentPage) : await queryInventoryAdded_a(this.proname, this.goodstype, this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.tableData = []
+					this.count = 0
 				}
 			}
         },

@@ -7,6 +7,7 @@ import local from '@/api/local'
 let isLogin = local.get('userInfo')
 isLogin = JSON.parse(isLogin)
 const repoId = isLogin.repositoryid
+const unames = isLogin.uname
 
 /**
  * 登陆
@@ -438,7 +439,7 @@ export const getTransportWasteAll = (pageNum = 1, pageSize = 10, repositoryid = 
  * 新增运输损耗
  */
 
-export const addTransportWasteAll = (procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, pageNum = '1', pageSize = '1000', repositoryid = repoId) => axio('/bTWastageordera/addWeastorder', {procount, productcount, procode, ordercode, customer, proname, prostandard, prounite, repositoryid} );
+export const addTransportWasteAll = (productcount, ordercode, proname, procode, protype, prostandard, prounite, procount, pageNum = '1', pageSize = '1000', repositoryid = repoId) => axio('/bTWastageordera/addWeastorder', {productcount, ordercode, proname, procode, protype, prostandard, prounite, procount, repositoryid} );
 
 /**
  * A库新增损耗管理
@@ -752,13 +753,14 @@ export const IncreasePool = (repocode, reponame, id, isDefault, repostate, isDel
  * 删除B库-分库
  */
 
-export const deleteLibrary = (repocode, repositoryid = repoId) => axio('/repositoryb/delBranRepo', {repocode,repositoryid}, 'DELETE');
+export const deleteLibrary = (repocode, repositoryid = repoId) => axio('/repositoryb/delBranRepo', {repocode,repositoryid});
 
 /**
  * B库-添加采购单
  */
 
-export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber, repositoryid = repoId) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber ,repositoryid});
+//export const addPurchaseOrderB = (pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber, repositoryid = repoId) => axio('/repositoryb/addSummaryordera',{pname, productcode, producttype, buydepartmentid, buyer, buyunite, productionstandard, respositysource, buynumber ,repositoryid});
+export const addPurchaseOrderB = (buynumber, protype, pronuite, repositoryid = repoId, username = unames) => axio('/repositoryb/addSummaryordera',{buynumber, protype, pronuite ,repositoryid,username});
 
 /**
  * 货品分类-添加父分类
@@ -794,7 +796,7 @@ export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, s
  * 完善入库单信息
  */
 
-export const makePurchase = (ordercode, supplierid, salesmanname, buydepartment, buyfare, moneyamount, allowance) => axio('/purchaseordera/updateByOrderCode',{ordercode, supplierid, salesmanname, buydepartment, buyfare, moneyamount, allowance});
+export const makePurchase = (ordercode,supplierid,salesmanname,buydepartment,buyfare,moneyamount,allowance) => axio('/purchaseordera/updateByOrderCode',{ordercode,supplierid,salesmanname,buydepartment,buyfare,moneyamount,allowance});
 
 /**
  * 完善入库单信息
@@ -830,7 +832,7 @@ export const getInventoryDetails_b = (checkid, pageNum = 1,pageSize = 10, reposi
  * B库-查询新增盘点列表
  */
 
-export const getinventoryadd_b = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/addHtmlInspect',{pageNum,pageSize,repositoryid});
+export const getinventoryadd_b = (repositoryid = repoId) => axio('/tinspect/addHtmlInspect',{repositoryid});
 
 /**
  * B库-查询新增盘点--商品分类
@@ -919,4 +921,53 @@ export const getInventoryChild_a = (startTime, endTime, repcode, pageNum = 1, pa
  * A库-查询新增盘点列表
  */
 
-export const getinventoryadd_a = (pageNum = 1, pageSize = 10) => axio('/abalancerepository/selectAllDatas',{pageNum, pageSize});
+export const getinventoryadd_a = (pageNum = 1, pageSize = 10) => axio('/inspecta/selectInAbalance',{pageNum, pageSize});
+
+/**
+ * A库-条件查询盘点新增
+ */
+
+export const queryInventoryAdded_a = (proname, goodstype, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/inspecta/selectInAbalance',{proname, goodstype, pageNum,pageSize,repositoryid});
+
+
+
+
+
+
+
+
+/**
+ * B库-包装管理加载列表
+ */
+
+export const getPacking_b = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/package/findAll',{pageNum,pageSize, repositoryid});
+
+/**
+ * B库-添加品类
+ */
+
+export const addcategory_b = (packid,packagename,prostandard,packcount,prounite, repositoryid = repoId) => axio('/package/addPackageInfo',{packid,packagename,prostandard,packcount,prounite, repositoryid});
+
+/**
+ * B库-删除品类
+ */
+
+export const deleteCategory_b = (packid, repositoryid = repoId) => axio('/package/delPackage',{packid, repositoryid});
+
+/**
+ * B库-修改品类
+ */
+
+export const modifycategory_b = (packid,packagename,prostandard,packcount,prounite, repositoryid = repoId) => axio('/package/updatePackage',{packid,packagename,prostandard,packcount,prounite, repositoryid});
+
+/**
+ * B库-扣减品类数量
+ */
+
+export const numberdeduction_b = (packid,packCount,useCount, repositoryid = repoId) => axio('/package/usepackage',{packid,packCount,useCount, repositoryid});
+
+/**
+ * B库-增加品类数量
+ */
+
+export const numberadd_b = (packid,packcount,addcount, repositoryid = repoId) => axio('/package/addPackage',{packid,packcount,addcount, repositoryid});

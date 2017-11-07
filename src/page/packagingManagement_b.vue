@@ -149,7 +149,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getPacking_a,addcategory_a,deleteCategory_a,modifycategory_a,numberdeduction_a,numberadd_a} from '@/api/getData'
+    import {getPacking_b,addcategory_b,deleteCategory_b,modifycategory_b,numberdeduction_b,numberadd_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -208,7 +208,7 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getPacking_a(1,10);
+                    const countData = await getPacking_b(1,10);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
@@ -218,10 +218,10 @@
             },
 			async categoryAdd(){
 				console.log(this.form)
-                const goodsAdd = await addcategory_a(this.form.packid,this.form.packagename,this.form.prostandard,this.form.packcount,this.form.prounite)
+                const goodsAdd = await addcategory_b(this.form.packid,this.form.packagename,this.form.prostandard,this.form.packcount,this.form.prounite)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('添加品类成功!')
-					this.dialogFormVisible = false
+                    this.dialogFormVisible = false
                     this.initData()
                 } else {
                     this.$message(goodsAdd.data.message)
@@ -250,7 +250,7 @@
 			async handleDelete(index,row) {
 				console.log(index)
 				console.log(row)
-				const isDeleted = await deleteCategory_a(row.packid)
+				const isDeleted = await deleteCategory_b(row.packid)
 				console.log(isDeleted.data)
 				if(isDeleted.data.code === '1111') {
 					this.initData()
@@ -264,7 +264,7 @@
 			},
 			async categoryModify(){
 				console.log(this.form1)
-                const goodsAdd = await modifycategory_a(this.form1.packid,this.form1.packagename,this.form1.prostandard,this.form1.packcount,this.form1.prounite)
+                const goodsAdd = await modifycategory_b(this.form1.packid,this.form1.packagename,this.form1.prostandard,this.form1.packcount,this.form1.prounite)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('修改品类成功!')
                     this.dialogFormVisible1 = false
@@ -282,7 +282,7 @@
 			},
 			async deductionNumber(){
 				console.log(this.form3)
-                const goodsAdd = await numberdeduction_a(this.form3.packid,this.form3.packCount,this.form3.useCount)
+                const goodsAdd = await numberdeduction_b(this.form3.packid,this.form3.packCount,this.form3.useCount)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('扣减品类数量成功!')
                     this.dialogFormVisible3 = false
@@ -299,7 +299,7 @@
 			},
 			async addNumber(){
 				console.log(this.form2)
-                const goodsAdd = await numberadd_a(this.form2.packid,this.form2.packcount,this.form2.addcount)
+                const goodsAdd = await numberadd_b(this.form2.packid,this.form2.packcount,this.form2.addcount)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('增加品类数量成功!')
                     this.dialogFormVisible2 = false
@@ -310,7 +310,7 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getPacking_a(this.currentPage)
+				const dataReceipt = await getPacking_b(this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

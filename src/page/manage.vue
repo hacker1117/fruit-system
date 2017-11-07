@@ -21,6 +21,7 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('09')" index="/waste">损耗管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('47')" index="/packagingManagement_a">包装管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('48')" index="/Inventory_a">盘点</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('50')" index="/securityThresholdManagement_a">安全阈值管理</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="9">
 							<template  slot="title"><i class="el-icon-plus"></i><span style="color:#333;">出库管理</span></template>
@@ -42,6 +43,7 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('23')" index="/branchHouse">分库管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('24')" index="/stockBalance">库存余额表</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('46')" index="/Inventory_b">盘点</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('49')" index="/packagingManagement_b">包装管理</el-menu-item>
 						</el-submenu>
 					</el-submenu>
 					<el-submenu style="background-color: #009a76;" index="4" v-if="getRole('28')">
@@ -52,6 +54,7 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('31')" index="/plannation">生产计划汇总</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('32')" index="/bomManage">BOM管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('35')" index="/classification">货品分类</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('51')" index="/productionLine">生产线管理</el-menu-item>
 						</el-submenu>
 						<el-submenu  style="background-color: #009a76;" index="14">
 							<template  slot="title"><i class="el-icon-plus"></i><span style="color:#333;">生产单元分配</span></template>

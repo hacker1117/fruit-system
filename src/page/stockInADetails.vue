@@ -11,8 +11,11 @@
 		</el-row>-->
         <el-dialog title="完善入库信息" v-model="dialogFormVisible">
         <el-form :model="form">
-            <el-form-item label="实际入库数量" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.pronumber" auto-complete="off"></el-input>
+            <el-form-item label="毛重" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.grossweight" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="皮重" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.tare" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="净重量" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.netweight" auto-complete="off"></el-input>

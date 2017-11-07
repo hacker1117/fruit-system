@@ -9,11 +9,11 @@
                     <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.sname" :value="supplier.supplierid"></el-option>
                 </el-select>
            </el-form-item>
-            <!--<el-form-item label="采购部门" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.buydepartment" auto-complete="off"></el-input>
-            </el-form-item>-->
 			<el-form-item label="采购员" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
+            </el-form-item>
+            <el-form-item label="采购部门" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.buydepartment" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="采购费用" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.buyfare" auto-complete="off"></el-input>
@@ -131,7 +131,7 @@
 				ordercode: '',
 				form:{
 					supplierid: '',
-					buydepartment: '',
+					buydepartment: '采购部',
 					salesmanname: '',
 					buyfare: '',
 					moneyamount: '',
@@ -144,6 +144,7 @@
 				currentPage: 1,
 				count: 0,
 				get: 0,
+				ind:"",
     		}
     	},
     	components: {
@@ -176,6 +177,7 @@
     		},
 			handleEdit(index,row) {
 				this.dialogFormVisible = true
+				this.ind = index
 			},
 			async handleSearch(){
 				this.get = 1
@@ -199,7 +201,7 @@
 				return res
 			},
 			async confirmAdd(){
-				const addInfo = await makePurchase(this.ordercode, this.form.supplierid, this.form.salesmanname, this.form.buydepartment, this.form.buyfare, this.form.moneyamount, this.form.allowance)
+				const addInfo = await makePurchase(this.receiptData[this.ind].ordercode, this.form.supplierid, this.adminInfo.uname, this.form.buydepartment,this.form.buyfare, this.form.moneyamount, this.form.allowance)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善采购单信息成功')
 					this.dialogFormVisible = false
