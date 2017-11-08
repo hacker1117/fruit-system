@@ -108,76 +108,7 @@
 				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
 			</template>
 			</el-table-column>
-  		</el-table>
-		<!--<el-table
-			:data="receiptData"
-			stripe
-			style="width: 100%;text-align:left;">
-			<el-table-column
-			prop="ordersstate" width="120px"
-			label="订单状态">
-			</el-table-column>
-			<el-table-column
-			prop="ordersid" width="120px"
-			label="订单ID">
-			</el-table-column>
-			<el-table-column
-			prop="customerid" width="120px"
-			label="客户ID">
-			</el-table-column>
-			<el-table-column
-			prop="shopinfoid" width="120px"
-			label="店铺ID">
-			</el-table-column>
-			<el-table-column
-			prop="totalordersno" width="120px"
-			label="总订单号">
-			</el-table-column>
-			<el-table-column
-			prop="ordersno" width="120px"
-			label="订单号">
-			</el-table-column>
-			<el-table-column
-			prop="createtime" width="120px"
-			label="订单生成时间">
-			</el-table-column>
-			<el-table-column
-			prop="updatetime" width="120px"
-			label="订单修改时间">
-			</el-table-column>
-			<el-table-column
-			prop="address" width="120px"
-			label="收货详细地址">
-			</el-table-column>
-			<el-table-column
-			prop="consignee" width="120px"
-			label="收货人">
-			</el-table-column>
-			<el-table-column
-			prop="bestsenddate" width="120px"
-			label="最佳配送时间">
-			</el-table-column>
-			<el-table-column
-			prop="sendtype" width="120px"
-			label="配送方式">
-			</el-table-column>
-			<el-table-column
-			prop="comments" width="120px"
-			label="订单附言">
-			</el-table-column>
-			<el-table-column
-			prop="ordersource" width="120px"
-			label="订单来源">
-			</el-table-column>
-			<el-table-column
-			label="操作" fixed="right" width="120px">
-			<template scope="scope">
-				<el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
-			</template>
-			</el-table-column>
-		</el-table>-->
+  		  </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
                 <el-pagination
                     @current-change="handleCurrentChange"
@@ -229,6 +160,40 @@
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
                     this.count = dataReceipt.data.data.total
+                    for(var i = 0;i<this.receiptData.length;i++){
+						switch(this.receiptData[i].ordersstate){
+						case 0:
+						  this.receiptData[i].ordersstate = "待处理";
+						  break;
+						case 1:
+						  this.receiptData[i].ordersstate = "未处理";
+						  break;
+						case 2:
+						  this.receiptData[i].ordersstate = "付款成功";
+						  break;
+						case 3:
+						  this.receiptData[i].ordersstate = "正在配货";
+						  break;
+						case 4:
+						  this.receiptData[i].ordersstate = "已经发货";
+						  break;
+						case 5:
+						  this.receiptData[i].ordersstate = "收货确认";
+						  break;
+						case 6:
+						  this.receiptData[i].ordersstate = "确认作废";
+						  break;
+						case 7:
+						  this.receiptData[i].ordersstate = "异常订单";
+						  break;
+						case 8:
+						  this.receiptData[i].ordersstate = "修改订单";
+						  break;
+						case 9:
+						  this.receiptData[i].ordersstate = "已评价";
+						  break;
+						}
+                    }
     			}catch(err){
     				console.log(err);
     			}
@@ -278,6 +243,41 @@
 					this.receiptData = []
 					this.count = 0
 				}
+				for(var i = 0;i<this.receiptData.length;i++){
+						switch(this.receiptData[i].ordersstate){
+						case 0:
+						  this.receiptData[i].ordersstate = "待处理";
+						  break;
+						case 1:
+						  this.receiptData[i].ordersstate = "未处理";
+						  break;
+						case 2:
+						  this.receiptData[i].ordersstate = "付款成功";
+						  break;
+						case 3:
+						  this.receiptData[i].ordersstate = "正在配货";
+						  break;
+						case 4:
+						  this.receiptData[i].ordersstate = "已经发货";
+						  break;
+						case 5:
+						  this.receiptData[i].ordersstate = "收货确认";
+						  break;
+						case 6:
+						  this.receiptData[i].ordersstate = "确认作废";
+						  break;
+						case 7:
+						  this.receiptData[i].ordersstate = "异常订单";
+						  break;
+						case 8:
+						  this.receiptData[i].ordersstate = "修改订单";
+						  break;
+						case 9:
+						  this.receiptData[i].ordersstate = "已评价";
+						  break;
+						}
+                    }
+				
 			},
 			formatter(date){
 				console.log(date.getMonth())
@@ -299,9 +299,43 @@
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
-				}else {
+				} else {
 					this.receiptData = []
 				}
+				for(var i = 0;i<this.receiptData.length;i++){
+						switch(this.receiptData[i].ordersstate){
+						case 0:
+						  this.receiptData[i].ordersstate = "待处理";
+						  break;
+						case 1:
+						  this.receiptData[i].ordersstate = "未处理";
+						  break;
+						case 2:
+						  this.receiptData[i].ordersstate = "付款成功";
+						  break;
+						case 3:
+						  this.receiptData[i].ordersstate = "正在配货";
+						  break;
+						case 4:
+						  this.receiptData[i].ordersstate = "已经发货";
+						  break;
+						case 5:
+						  this.receiptData[i].ordersstate = "收货确认";
+						  break;
+						case 6:
+						  this.receiptData[i].ordersstate = "确认作废";
+						  break;
+						case 7:
+						  this.receiptData[i].ordersstate = "异常订单";
+						  break;
+						case 8:
+						  this.receiptData[i].ordersstate = "修改订单";
+						  break;
+						case 9:
+						  this.receiptData[i].ordersstate = "已评价";
+						  break;
+						}
+                    }
             }
 		}
     }
