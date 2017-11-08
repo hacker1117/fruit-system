@@ -172,10 +172,7 @@
 			 	this.ind=index
 			 },
 			async confirmAdd(){
-//				console.log(this.receiptData[this.ind])
-//				console.log(this.receiptData[this.ind].storgeaid)
-//				this.tableData[this.ind].infactcount=this.form.workwastecount
-				const resData = await addStockInaA(this.receiptData[this.ind].storgeaid,this.receiptData[this.ind].storagename,this.receiptData[this.ind].visualreposity,this.receiptData[this.ind].netweight,this.receiptData[this.ind].prounite,this.receiptData[this.ind].perprice,this.receiptData[this.ind].totalmoney,this.receiptData[this.ind].prostandered,this.receiptData[this.ind].ordertime,this.receiptData[this.ind].storagetype,this.receiptData[this.ind].supplierid,this.receiptData[this.ind].remarkable,this.form.workwastecount)
+				const resData = await addStockInaA(this.receiptData[this.ind].prounite,this.receiptData[this.ind].prostandered,this.receiptData[this.ind].goodscode,this.receiptData[this.ind].storgeaid,this.receiptData[this.ind].storagename,this.receiptData[this.ind].visualreposity,this.receiptData[this.ind].netweight,this.receiptData[this.ind].prounite,this.receiptData[this.ind].perprice,this.receiptData[this.ind].totalmoney,this.receiptData[this.ind].prostandered,this.receiptData[this.ind].ordertime,this.receiptData[this.ind].storagetype,this.receiptData[this.ind].supplierid,this.receiptData[this.ind].remarkable,this.form.workwastecount)
 				if(resData.data.code === '1111'){
 					this.$message('成功')
 //					this.$message(resData.data.message)
