@@ -29,34 +29,86 @@
 		<el-row>
 			<el-col :span="2" style="text-aligh:right;">订单号：</el-col>
 			<el-col :span="6"><el-input v-model="input" placeholder="请输入内容"></el-input></el-col>
-			<el-col :span="16"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+			<el-col :span="16">
+				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
+				<el-button style="float: right;margin-right: 20px;" @click="abnormal" type="primary">批量转异常单</el-button>
+			</el-col>
 		</el-row>
 		 <el-table
-		    :data="tableData3"
-		    border
-		    tooltip-effect="dark"
-		    style="width: 100%"
-		    @selection-change="handleSelectionChange">
+		    ref="multipleTable"
+			:data="receiptData"
+			stripe
+		    @selection-change="handleSelectionChange"
+			style="margin-top:20px;text-align:left;">
 		    <el-table-column
-		      type="selection"
-		      width="55">
+		    type="selection"
+		    width="55">
 		    </el-table-column>
-		    <el-table-column
-		      label="日期"
-		      width="120">
-		      <template scope="scope">{{ scope.row.date }}</template>
-		    </el-table-column>
-		    <el-table-column
-		      prop="name"
-		      label="姓名"
-		      width="120">
-		    </el-table-column>
-		    <el-table-column
-		      prop="address"
-		      label="地址"
-		      show-overflow-tooltip>
-		    </el-table-column>
-		  </el-table>
+			<el-table-column
+			prop="ordersstate" width="120px"
+			label="订单状态">
+			</el-table-column>
+			<el-table-column
+			prop="ordersid" width="120px"
+			label="订单ID">
+			</el-table-column>
+			<el-table-column
+			prop="customerid" width="120px"
+			label="客户ID">
+			</el-table-column>
+			<el-table-column
+			prop="shopinfoid" width="120px"
+			label="店铺ID">
+			</el-table-column>
+			<el-table-column
+			prop="totalordersno" width="120px"
+			label="总订单号">
+			</el-table-column>
+			<el-table-column
+			prop="ordersno" width="120px"
+			label="订单号">
+			</el-table-column>
+			<el-table-column
+			prop="createtime" width="120px"
+			label="订单生成时间">
+			</el-table-column>
+			<el-table-column
+			prop="updatetime" width="120px"
+			label="订单修改时间">
+			</el-table-column>
+			<el-table-column
+			prop="address" width="120px"
+			label="收货详细地址">
+			</el-table-column>
+			<el-table-column
+			prop="consignee" width="120px"
+			label="收货人">
+			</el-table-column>
+			<el-table-column
+			prop="bestsenddate" width="120px"
+			label="最佳配送时间">
+			</el-table-column>
+			<el-table-column
+			prop="sendtype" width="120px"
+			label="配送方式">
+			</el-table-column>
+			<el-table-column
+			prop="comments" width="120px"
+			label="订单附言">
+			</el-table-column>
+			<el-table-column
+			prop="ordersource" width="120px"
+			label="订单来源">
+			</el-table-column>
+			<el-table-column
+			label="操作" fixed="right" width="120px">
+			<template scope="scope">
+				<el-button
+				size="small"
+				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+			</template>
+			</el-table-column>
+  		</el-table>
 		<!--<el-table
 			:data="receiptData"
 			stripe
@@ -141,7 +193,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getOrderAll, queryOrders} from '@/api/getData'
+    import {getOrderAll, queryOrders,sendAbnormal} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -155,6 +207,9 @@
                 count: 0,
                 currentPage: 1,
 				get: 0,
+                multipleSelection: [],
+                receipt: [],
+                orders: "",
     		}
     	},
     	components: {
@@ -182,6 +237,24 @@
 				console.log(index,row)
 				this.$destroy()
 				this.$router.push('/receiptDetails/'+ row.ordersid)
+			},
+            handleSelectionChange(val) {
+                this.multipleSelection = val
+                console.log(val)
+            },
+			async abnormal(){
+				this.receipt = this.multipleSelection.concat()
+                for(let i = 0; i<this.receipt.length; i++){
+ 					  this.orders += this.receipt[i].ordersid + ","
+                }
+				const resData = await sendAbnormal(this.orders)
+				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
 			async handleSearch(){
 				this.get = 1

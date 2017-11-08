@@ -322,6 +322,12 @@ export const getOrderAll = (pageNum = 1, pageSize = 10) => axio('/order/findAll'
 export const queryOrders = (orderID, status, startTime, endTime, pageNum = 1, pageSize = 10) => axio('/order/queryOrders',{orderID, status, startTime, endTime,pageNum, pageSize});
 
 /**
+ * 生产执行管理 销售订单汇总-批量转异常单
+ */
+
+export const sendAbnormal = (orderIds) => axio('/order/markOrderError',{orderIds}, 'POST');
+
+/**
  * 获取销售订单详情
  */
 
