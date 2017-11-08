@@ -36,6 +36,10 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
+			prop="ordersstate" width="120px"
+			label="订单状态">
+			</el-table-column>
+			<el-table-column
 			prop="ordersid" width="120px"
 			label="订单ID">
 			</el-table-column>
@@ -82,10 +86,6 @@
 			<el-table-column
 			prop="comments" width="120px"
 			label="订单附言">
-			</el-table-column>
-			<el-table-column
-			prop="ordersstate" width="120px"
-			label="订单状态">
 			</el-table-column>
 			<el-table-column
 			prop="ordersource" width="120px"

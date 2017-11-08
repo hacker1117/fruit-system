@@ -37,10 +37,6 @@
 			label="单据日期">
 			</el-table-column>
 			<el-table-column
-			prop="netweight" width="120px"
-			label="净重数量">
-			</el-table-column>
-			<el-table-column
 			prop="pronumber" width="120px"
 			label="数量">
 			</el-table-column>

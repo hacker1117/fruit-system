@@ -175,6 +175,8 @@
 					this.supplierList = suppliers.data.data.list
     			}catch(err){
     				console.log(err);
+    				this.receiptData =""
+					this.count = 0
     			}
     		},
 			handleEdit(index,row) {
