@@ -25,10 +25,6 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate" width="120px"
-			label="单据状态">
-			</el-table-column>
-			<el-table-column
 			prop="ordercode" width="120px"
 			label="采购订单编号">
 			</el-table-column>

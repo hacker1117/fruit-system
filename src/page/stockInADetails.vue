@@ -18,13 +18,13 @@
                 <el-input style="width: 195px" v-model="form.tare" auto-complete="off"></el-input> 克/g
             </el-form-item>
 			<el-form-item label="净重量" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.netweight" auto-complete="off"></el-input> 克/g
-            </el-form-item>
+                <el-input style="width: 195px" v-model="form.netweight" auto-complete="off">{{this.netweight}}</el-input> 克/g
+			</el-form-item>
 			<el-form-item label="单价" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.perprice" auto-complete="off"></el-input> RMB/￥
             </el-form-item>
 			<el-form-item label="总价" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.totalmoney" auto-complete="off"></el-input> RMB/￥
+                <el-input style="width: 195px" v-model="form.totalmoney" auto-complete="off">{{this.totalmoney}}</el-input> RMB/￥
             </el-form-item>
 			<el-form-item label="虚拟库" :label-width="formLabelWidth">
                 <el-select v-model="form.visualreposity" placeholder="请选择虚拟库">
@@ -145,7 +145,12 @@
 				prounite: '',
 				form:{
 					visualreposity: '',
-					supplierid: ''
+					supplierid: '',
+					grossweight: "",
+					tare: "",
+					netweight: "",
+					perprice: "",
+					totalmoney: "",
 				},
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
@@ -163,6 +168,17 @@
         beforeRouteLeave (to, from, next) {
             this.$destroy()
             next()
+        },
+        computed:{
+        	netweight:function(){
+        		this.form.netweight = Number(this.form.grossweight) - Number(this.form.tare)
+        		return this.form.netweight
+        	},
+        	totalmoney:function(){
+        		this.form.totalmoney = Number(this.form.grossweight) * Number(this.form.perprice)
+        		this.form.totalmoney = this.form.totalmoney.toFixed(2); 
+        		return this.form.totalmoney
+        	}
         },
     	methods: {
     		async initData(){
@@ -211,7 +227,8 @@
 				this.$router.push('/stockInADetails')
 			},
 			async confirmAdd() {
-				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.pronumber, this.form.perprice, this.form.totalmoney, this.form.netweight,this.supplierid,)
+				console.log(this.form.netweight)
+				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid,)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善入库单成功')
 					this.dialogFormVisible = false

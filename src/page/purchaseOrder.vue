@@ -46,7 +46,9 @@
 			<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
-			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+			<el-col :span="24">
+				<el-button style="float: left;" @click="stay" type="primary">完成待入库</el-button>
+				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
@@ -115,7 +117,7 @@
 <script>
     import headTop from '@/components/headTop'
     import {mapActions, mapState} from 'vuex'
-    import {getPurchaseOrderAll, queryPurchaseOrderList, getSupplierAll, makePurchase} from '@/api/getData'
+    import {getPurchaseOrderAll, querystay, queryPurchaseOrderList, getSupplierAll, makePurchase} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -179,6 +181,20 @@
 				this.dialogFormVisible = true
 				this.ind = index
 			},
+			async stay(){
+				this.get = 2
+				this.count = 0
+				const resData = await querystay()
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+					this.toggle= false
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
+			},
 			async handleSearch(){
 				this.get = 1
 				this.count = 0
@@ -211,9 +227,18 @@
 				}
 			},
 			async handleCurrentChange(num) {
+				console.log(this.get)
 				this.currentPage = num
 				let cTime = this.creattime === '' ? '' : this.formatter(this.creattime)
 				const dataReceipt = this.get === 0 ? await getPurchaseOrderAll(this.currentPage) : await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
+				if(this.get === 0){
+					const dataReceipt = await getPurchaseOrderAll(this.currentPage)
+				}else if(this.get === 1){
+					const dataReceipt = await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
+				}else{
+					const dataReceipt = await querystay(this.currentPage)
+				}
+				
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

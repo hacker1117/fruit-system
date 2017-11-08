@@ -32,10 +32,6 @@
 			label="规格型号">
 			</el-table-column>
 			<el-table-column
-			prop="inrepotype"
-			label="库存单位">
-			</el-table-column>
-			<el-table-column
 			prop="currentexist"
 			label="库存单位现存量">
 			</el-table-column>

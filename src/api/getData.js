@@ -475,7 +475,7 @@ export const addTransportWaste = (productcode,productnumber,procuctstanderd,pnam
  * 获取采购单（A库）列表
  */
 
-export const getPurchaseOrderAll = (pageNum = 1, pageSize = 10) => axio('/purchaseordera/selectTodaysData',{pageNum, pageSize});
+export const getPurchaseOrderAll = (pageNum = 1, pageSize = 10) => axio('/purchaseordera/selectnotinstorage',{pageNum, pageSize});
 
 /**
  * 获取供应商列表
@@ -580,6 +580,12 @@ export const queryStockIn= (outputcode, ordertime, pageNum = 1, pageSize = 10, r
  */
 
 export const queryPurchaseOrderList = (salesmanname, createtime, ordercode, supplierid, pageNum = 1, pageSize = 10) => axio('/purchaseordera/selectByPurchseordernumber',{salesmanname, createtime, ordercode, supplierid, salesmanname, createtime, ordercode, supplierid, pageNum, pageSize});
+
+/**
+ * A库采购单-完成待入库
+ */
+
+export const querystay = (pageNum = 1, pageSize = 10) => axio('/purchaseordera/selectTodaysData',{pageNum, pageSize});
 
 /**
  * 获取采购单（A库）详情
@@ -789,7 +795,8 @@ export const makeStockOut = (respositysource) => axio('/outputordera/insertOutpu
  * 新增入库单
  */
 
-export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, supplierid, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, supplierid, storagetype});
+//export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, supplierid, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, supplierid, storagetype});
+export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, storagetype});
 
 /**
  * 完善入库单信息

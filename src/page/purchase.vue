@@ -65,10 +65,6 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderstate"
-			label="单据状态">
-			</el-table-column>
-			<el-table-column
 			prop="orderno"
 			label="订单编号">
 			</el-table-column>

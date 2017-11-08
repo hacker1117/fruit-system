@@ -23,10 +23,6 @@
 			stripe
 			style="text-align:left;">
 			<el-table-column
-			prop="orderstate"
-			label="单据状态">
-			</el-table-column>
-			<el-table-column
 			prop="outputcode"
 			label="入库单据号">
 			</el-table-column>
