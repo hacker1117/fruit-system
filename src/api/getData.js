@@ -898,7 +898,7 @@ export const numberadd_a = (packid,packcount,addcount) => axio('/packagemanager/
  * A库-入库单--》加工损耗
  */
 
-export const addStockInaA = (prounite,prostandered,goodscode,storgeaid,storagename,visualreposity,netweight,prounite,perprice,totalmoney,prostandered,ordertime,storagetype,supplierid,remarkable,workwastecount) => axio('/storageordera/workwastecount',{prounite,prostandered,goodscode,storgeaid,storagename,visualreposity,netweight,prounite,perprice,totalmoney,prostandered,ordertime,storagetype,supplierid,remarkable,workwastecount});
+export const addStockInaA = (goodscode,storgeaid,storagename,visualreposity,netweight,prounite,perprice,totalmoney,prostandered,ordertime,storagetype,supplierid,remarkable,workwastecount) => axio('/storageordera/workwastecount',{goodscode,storgeaid,storagename,visualreposity,netweight,prounite,perprice,totalmoney,prostandered,ordertime,storagetype,supplierid,remarkable,workwastecount});
 
 /**
  * A库-查询盘点列表

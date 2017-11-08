@@ -31,7 +31,33 @@
 			<el-col :span="6"><el-input v-model="input" placeholder="请输入内容"></el-input></el-col>
 			<el-col :span="16"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
-		<el-table
+		 <el-table
+		    :data="tableData3"
+		    border
+		    tooltip-effect="dark"
+		    style="width: 100%"
+		    @selection-change="handleSelectionChange">
+		    <el-table-column
+		      type="selection"
+		      width="55">
+		    </el-table-column>
+		    <el-table-column
+		      label="日期"
+		      width="120">
+		      <template scope="scope">{{ scope.row.date }}</template>
+		    </el-table-column>
+		    <el-table-column
+		      prop="name"
+		      label="姓名"
+		      width="120">
+		    </el-table-column>
+		    <el-table-column
+		      prop="address"
+		      label="地址"
+		      show-overflow-tooltip>
+		    </el-table-column>
+		  </el-table>
+		<!--<el-table
 			:data="receiptData"
 			stripe
 			style="width: 100%;text-align:left;">
@@ -99,7 +125,7 @@
 				@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
 			</template>
 			</el-table-column>
-		</el-table>
+		</el-table>-->
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
                 <el-pagination
                     @current-change="handleCurrentChange"
