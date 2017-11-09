@@ -46,10 +46,6 @@
 			label="采购订单编号">
 			</el-table-column>
 			<el-table-column
-			width="120px"
-			label="单据号">
-			</el-table-column>
-			<el-table-column
 			prop="storagename" width="120px"
 			label="商品名称">
 			</el-table-column>
@@ -75,8 +71,12 @@
 			label="仓库">
 			</el-table-column>
 			<el-table-column
-			 width="120px"
-			label="实际入库数量">
+			width="120px"
+			label="毛重">
+			</el-table-column>
+			<el-table-column
+			width="120px"
+			label="皮重">
 			</el-table-column>
 			<el-table-column
 			 width="120px"
@@ -157,6 +157,7 @@
 				currentPage: 1,
 				count: 0,
 				get: 0,
+				ind: 0,
     		}
     	},
     	components: {
@@ -205,6 +206,7 @@
 				this.storageproducttype = row.storageproducttype
 				this.prostandered = row.prostandered
 				this.prounite = row.prounite
+				this.ind = index
 			},
 			async handleSearch(){
 				// let sTime = this.formatter(this.value1)
@@ -228,7 +230,8 @@
 			},
 			async confirmAdd() {
 				console.log(this.form.netweight)
-				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid,)
+				console.log(this.receiptData[this.ind].prostandared)
+				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid, this.receiptData[this.ind].prostandared)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善入库单成功')
 					this.dialogFormVisible = false

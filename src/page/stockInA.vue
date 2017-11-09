@@ -55,12 +55,32 @@
 			label="入库商品">
 			</el-table-column>
 			<el-table-column
+			prop="goodscode" width="120px"
+			label="商品编码">
+			</el-table-column>
+			<el-table-column
 			prop="visualreposity" width="120px"
 			label="虚拟库">
 			</el-table-column>
 			<el-table-column
+			prop="grossweight" width="120px"
+			label="毛重">
+			</el-table-column>
+			<el-table-column
+			prop="tare" width="120px"
+			label="皮重">
+			</el-table-column>
+			<el-table-column
 			prop="netweight" width="120px"
 			label="净重量">
+			</el-table-column>
+			<el-table-column
+			prop="wastecount" width="120px"
+			label="加工损耗">
+			</el-table-column>
+			<el-table-column
+			prop="pronumber" width="120px"
+			label="最终入库量">
 			</el-table-column>
 			<el-table-column
 			prop="prounite" width="120px"
@@ -162,6 +182,7 @@
 					const dataReceipt = await getStockInaAll()
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+					console.log(this.receiptData)
     			}catch(err){
     				console.log(err);
     			}

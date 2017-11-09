@@ -466,10 +466,16 @@ export const queryWasteList = (procode, pname, wasteproductcode, createhuman, re
 export const queryTransportWasteList = (procode, pname, wasteproductcode, reporttime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, reporttime, pageNum , pageSize, repositoryid});
 
 /**
+ * 获取B库日常损耗管理列表
+ */
+
+export const getDailyLossList = (pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getAllDailyWaste',{pageNum, pageSize, repositoryid});
+
+/**
  * 查询B库日常损耗管理
  */
 
-export const queryDailyLossList = (productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryDailyWaste',{productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum , pageSize, repositoryid});
+export const queryDailyLossList = (productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('repositoryb/queryDailyWaste',{productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum , pageSize, repositoryid});
 
 /**
  * 新增B库日常损耗管理
@@ -801,8 +807,7 @@ export const makeStockOut = (respositysource) => axio('/outputordera/insertOutpu
  * 新增入库单
  */
 
-//export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, supplierid, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, pronumber, perprice, totalmoney, netweight, supplierid, storagetype});
-export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, storagetype});
+export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, storagetype});
 
 /**
  * 完善入库单信息

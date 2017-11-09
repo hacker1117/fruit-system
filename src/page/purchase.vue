@@ -30,7 +30,7 @@
                 <el-input style="width: 195px" v-model="form.pronuite" auto-complete="off" :disabled="true"></el-input>
            </el-form-item>
 			<el-form-item label="采购量" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.buynumber" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.buynumber" auto-complete="off"><template slot="append">{{this.pronuite}}</template></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -141,7 +141,8 @@
 				createtime: '',
 				orderno: '',
 				respositysource: '',
-				buydepartmentid: ''
+				buydepartmentid: '',
+				pronuite: '',
     		}
     	},
     	components: {
@@ -243,6 +244,7 @@
 						this.form.prostandered=this.goodsList[i].prostandered
 						this.form.pronuite=this.goodsList[i].pronuite
 						this.form.proid=this.goodsList[i].proid
+						this.pronuite=this.goodsList[i].pronuite
 					}
 				}
 			},

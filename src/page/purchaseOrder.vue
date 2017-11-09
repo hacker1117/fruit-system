@@ -16,13 +16,13 @@
                 <el-input style="width: 195px" v-model="form.buydepartment" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="采购费用" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.buyfare" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.buyfare" auto-complete="off"></el-input> RMB/￥
             </el-form-item>
 			<el-form-item label="采购金额" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.moneyamount" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.moneyamount" auto-complete="off"></el-input> RMB/￥
             </el-form-item>
 			<el-form-item label="折让金额" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.allowance" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.allowance" auto-complete="off"></el-input> RMB/￥
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -47,7 +47,9 @@
 		</el-row>
 		<el-row>
 			<el-col :span="24">
-				<el-button style="float: left;" @click="stay" type="primary">完成待入库</el-button>
+				<el-button style="float: left;" @click="nocomplete">未完成</el-button>
+				<el-button style="float: left;" @click="staycomplete">完成待入库</el-button>
+				<el-button style="float: left;" @click="warehousing">已入库</el-button>
 				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
 		<el-table
@@ -170,29 +172,69 @@
 					if(dataReceipt.data.code === '1111'){
 						this.receiptData = dataReceipt.data.data.list
 						this.count = dataReceipt.data.data.total
+						for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
+                    	}
+					}else{
+						this.receiptData = []
+						this.count = 0
 					}
 					const suppliers = await getSupplierAll()
 					this.supplierList = suppliers.data.data.list
     			}catch(err){
-    				console.log(err);
-    				this.receiptData =""
-					this.count = 0
+    				console.log(err)
     			}
     		},
 			handleEdit(index,row) {
 				this.dialogFormVisible = true
 				this.ind = index
+				this.form.supplierid = row.supplierid
 			},
-			async stay(){
-				this.get = 2
+			async warehousing(){
+				this.get = 1
 				this.count = 0
-				const resData = await querystay()
+				const resData = await queryPurchaseOrderList()
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
 					this.toggle= false
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
+                    	}
 				} else {
 					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
+			},
+			async nocomplete(){
+				this.get = 0
+				const dataReceipt = await getPurchaseOrderAll(1, 10)
+				console.log('re: ',dataReceipt.data.data)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data.list
+					this.count = dataReceipt.data.data.total
+					this.toggle= true
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
+                    	}
+				}else{
+					this.receiptData = []
+					this.count = 0
+				}
+			},
+			async staycomplete(){
+				this.get = 2
+				this.count = 0
+				const resData2 = await querystay(1, 10)
+				if(resData2.data.code === '1111'){
+					this.receiptData = resData2.data.data.list
+					this.count = resData2.data.data.total
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
+                    	}
+				} else {
+					this.$message(resData2.data.message)
 					this.receiptData =""
 					this.count = 0
 				}
@@ -206,6 +248,9 @@
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
 					this.toggle= false
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
+                    	}
 				} else {
 					this.$message(resData.data.message)
 					this.receiptData =""
@@ -232,20 +277,23 @@
 				console.log(this.get)
 				this.currentPage = num
 				let cTime = this.creattime === '' ? '' : this.formatter(this.creattime)
-				const dataReceipt = this.get === 0 ? await getPurchaseOrderAll(this.currentPage) : await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
+				let dataReceipt = {}
 				if(this.get === 0){
-					const dataReceipt = await getPurchaseOrderAll(this.currentPage)
+					dataReceipt = await getPurchaseOrderAll(this.currentPage)
 				}else if(this.get === 1){
-					const dataReceipt = await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
-				}else{
-					const dataReceipt = await querystay(this.currentPage)
+					dataReceipt = await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
+				}else if(this.get === 2){
+					dataReceipt = await querystay(this.currentPage)
 				}
-				
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
+                    	}
 				}else {
 					this.receiptData = []
+					this.count = 0
 				}
 			}
 		}

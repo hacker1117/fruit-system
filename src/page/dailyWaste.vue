@@ -116,7 +116,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getTransportWasteAll, queryDailyLossList,addTransportWaste} from '@/api/getData'
+    import {getDailyLossList, queryDailyLossList,addTransportWaste} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -152,7 +152,7 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getTransportWasteAll()
+					const dataReceipt = await getDailyLossList()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
 						this.count = dataReceipt.data.data.total
@@ -200,7 +200,7 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
 				let sTime = this.timeofreport === '' ? '' : this.formatter(this.timeofreport)
-				const dataReceipt = this.get === 0 ? await getTransportWasteAll(this.currentPage) : await queryDailyLossList(this.productcode,this.pname,this.wasteproductcode,this.createhuman,sTime,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getDailyLossList(this.currentPage) : await queryDailyLossList(this.productcode,this.pname,this.wasteproductcode,this.createhuman,sTime,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					console.log(1111)
 					this.receiptData = dataReceipt.data.data.list
