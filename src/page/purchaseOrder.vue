@@ -170,7 +170,10 @@
 					if(dataReceipt.data.code === '1111'){
 						this.receiptData = dataReceipt.data.data.list
 						this.count = dataReceipt.data.data.total
-					}
+					} else {
+					    this.receiptData = []
+                        this.count = 0
+                    }
 					const suppliers = await getSupplierAll()
 					this.supplierList = suppliers.data.data.list
     			}catch(err){
@@ -240,7 +243,7 @@
 				}else{
 					const dataReceipt = await querystay(this.currentPage)
 				}
-				
+
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
