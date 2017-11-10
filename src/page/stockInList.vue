@@ -48,7 +48,6 @@
 			prop="prostandered" width="120px"
 			label="规格">
 			</el-table-column>
-			
 			<el-table-column
 			prop="goodsname" width="120px"
 			label="商品名称">
@@ -60,10 +59,6 @@
 			<el-table-column
 			prop="storagetype" width="120px"
 			label="商品分类名称">
-			</el-table-column>
-			<el-table-column
-			prop="prostandered" width="120px"
-			label="规格型号">
 			</el-table-column>
 			<el-table-column
 			prop="repositories" width="120px"

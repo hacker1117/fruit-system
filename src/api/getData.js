@@ -517,7 +517,7 @@ export const getGoodsAll = (pageNum = 1, pageSize = 10) => axio('/productmanager
  * 添加商品信息
  */
 
-export const addGoods = (proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice,createman) => axio('/productmanager/insertProduct',{proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice,createman});
+export const addGoods = (isStandard,proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice,createman) => axio('/productmanager/insertProduct',{isStandard,proid,pname,prostandered,commodityattribute,factories,brand,supplierid,referenceinprice,createman});
 
 /**
  * 修改商品信息

@@ -34,6 +34,12 @@
 		</el-row>
         <el-dialog title="新增货品" v-model="dialogFormVisible">
         <el-form :model="form">
+			<el-form-item label="标品" :label-width="formLabelWidth">
+            	<el-radio-group v-model="form.isStandard">
+					<el-radio :label="0">否</el-radio>
+					<el-radio :label="1">是</el-radio>
+				</el-radio-group>
+            </el-form-item>
 			<el-form-item label="商品编码" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.proid" auto-complete="off"></el-input>
             </el-form-item>
@@ -191,7 +197,8 @@
 				barcode: '',
 				placeoforigin: '',
 				form:{
-					appGoodsIndex:''
+					appGoodsIndex:'',
+    				isStandard: 0,
 				},
                 form2:{},
 				appBindId:'',
@@ -253,7 +260,7 @@
 			},
 			async confirmAdd(){
 				console.log(this.form)
-                const goodsAdd = await addGoods(this.form.proid,this.form.pname,this.form.prostandered,this.form.commodityattribute,this.form.factories,this.form.brand,this.form.supplierid,this.form.referenceinprice,this.form.createman)
+                const goodsAdd = await addGoods(this.form.isStandard,this.form.proid,this.form.pname,this.form.prostandered,this.form.commodityattribute,this.form.factories,this.form.brand,this.form.supplierid,this.form.referenceinprice,this.form.createman)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('添加货品成功!')
                     this.dialogFormVisible = false

@@ -130,12 +130,15 @@
 				}else {
 					this.$message(dataReceipt.data.message)
 					this.receiptData = []
+					this.count = 0
 				}
 			},
 			async addStockOut(){
 				const addInfo = await makeStockOut(this.form.respositysource)
 				if(addInfo.data.code === '1111'){
 					this.$message('出库成功')
+					this.receiptData = []
+					this.count = 0
 				}else {
 					this.$message(addInfo.data.message)
 				}
@@ -148,6 +151,7 @@
 					this.count = dataReceipt.data.data.length
 				}else {
 					this.receiptData = []
+					this.count = 0
 				}
 			}
  		}
