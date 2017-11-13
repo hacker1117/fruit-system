@@ -12,6 +12,12 @@
 				<el-form-item label="单据编号：" :label-width="formLabelWidth">
 	                <el-input style="width: 195px" v-model="form.storgeaid" auto-complete="off" :disabled="true"></el-input>
 	            </el-form-item>
+				<el-form-item label="入库商品：" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.storagename" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+				<el-form-item label="商品编码：" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.goodscode" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
 	            <el-form-item label="净重量：" :label-width="formLabelWidth">
 	                <el-input style="width: 195px" v-model="form.netweight" auto-complete="off" :disabled="true"></el-input>
 	            </el-form-item>
@@ -196,7 +202,8 @@
 				const resData = await addStockInaA(this.receiptData[this.ind].goodscode,this.receiptData[this.ind].storgeaid,this.receiptData[this.ind].storagename,this.receiptData[this.ind].visualreposity,this.receiptData[this.ind].netweight,this.receiptData[this.ind].prounite,this.receiptData[this.ind].perprice,this.receiptData[this.ind].totalmoney,this.receiptData[this.ind].prostandered,this.receiptData[this.ind].ordertime,this.receiptData[this.ind].storagetype,this.receiptData[this.ind].supplierid,this.receiptData[this.ind].remarkable,this.form.workwastecount)
 				if(resData.data.code === '1111'){
 					this.$message('成功')
-//					this.$message(resData.data.message)
+					this.form.workwastecount = ""
+					this.initData()
 				} else {
 					this.$message(resData.data.message)
 				}
@@ -235,6 +242,7 @@
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.receiptData = []
+					this.count = 0
 				}
 			}
 		}

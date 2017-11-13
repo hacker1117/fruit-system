@@ -36,10 +36,6 @@
 			<el-col :span="4"><el-input v-model="pname" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">损耗商品码：</el-col>
 			<el-col :span="4"><el-input v-model="wasteproductcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">制单员：</el-col>
-			<el-col :span="4"><el-input v-model="createhuman" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
             <el-col :span="2" style="text-align:right;">报损时间：</el-col>
 			<el-col :span="4">
 				<el-date-picker
@@ -119,7 +115,6 @@
 				procode: '',
 				pname: '',
 				wasteproductcode: '',
-				createhuman: '',
 				reporttime: '',
 				city: {},
 				receiptData: [],
@@ -165,7 +160,7 @@
 				this.get = 1
 				this.count = 0
 				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
-				const resData = await queryWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,times)
+				const resData = await queryWasteList(this.procode,this.pname,this.wasteproductcode,times)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -195,7 +190,7 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
 				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
-				const dataReceipt = this.get === 0 ? await getWasteAll(this.currentPage) : await queryWasteList(this.procode,this.pname,this.wasteproductcode,this.createhuman,times,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getWasteAll(this.currentPage) : await queryWasteList(this.procode,this.pname,this.wasteproductcode,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

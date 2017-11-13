@@ -7,22 +7,30 @@
 				<el-button @click="handleAdd" >新增虚拟库</el-button>
 			</el-col>
 		</el-row>
-            <el-table @row-click="handleChoose"
+            <el-table
                 :data="tableData"
                 highlight-current-row
                 style="width: 100%">
-                <el-table-column @click="handleChoose"
+                <el-table-column
                   property="repocode"
                   label="仓库编码">
                 </el-table-column>
-                <el-table-column @click="handleChoose"
+                <el-table-column
                   property="protype"
                   label="货品类别">
                 </el-table-column>
-                <el-table-column @click="handleChoose"
+                <el-table-column
                   property="reponame"
                   label="仓库名称">
                 </el-table-column>
+				<el-table-column
+				label="操作" width="120px">
+				<template scope="scope">
+					<el-button
+					size="small"
+					@click="deletehandle(scope.$index, scope.row)">删除</el-button>
+				</template>
+				</el-table-column>
             </el-table>
 			<div class="Pagination" style="text-align: left;margin-top: 10px;">
 				<el-pagination
@@ -54,7 +62,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getCategoryAll, getCategoryChild, deleteCategory, getVirtualRepoAll, insertVirtualRepo} from '@/api/getData'
+    import {deletevirtualLibrary_a, getCategoryChild, deleteCategory, getVirtualRepoAll, insertVirtualRepo} from '@/api/getData'
     export default {
         data(){
             return {
@@ -99,57 +107,49 @@
                     console.log('获取数据失败', err);
                 }
             },
-            async handleChoose(row) {
-                console.log('row------', row)
-                const classData = await getCategoryChild(row.categorycode)
-                if(classData.data.code === '1111'){
-                    this.childData = classData.data.data.list
-                }else {
-                    this.childData = []
-                }
-                this.currentClass = row.categoryname
-            },
             handleAdd() {
                 this.dialogFormVisible = true
             },
-            handleEdit() {
-
-            },
             async confirmAdd(reponame, protype) {
-                var _this = this
-                const res = insertVirtualRepo(reponame, protype)
-                if(res.data.code === '0000'){
-                    this.form.error = '添加订单失败，请重试'
-                }
-                else if(res.data.code === '1111') {
-                    this.form.error = '添加订单成功'
-                }else {
-                    this.form.error = '添加订单失败，请重试'
-                }
-                setTimeout(() => {
-                    _this.dialogFormVisible = false
-                }, 1000)
+                const res =await insertVirtualRepo(reponame, protype)
+                if(res.data.code === '1111'){
+					this.$message(res.data.message)
+					this.dialogFormVisible = false
+					this.initData()
+				}else {
+					this.$message(res.data.message)
+				}
             },
-            handleDelete() {
-
-            },
-            handleAddChild() {
-
-            },
-            handleEditChild() {
-
-            },
-            handleEditChild() {
-
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                this.currentPage = val;
-                this.offset = (val - 1)*this.limit;
-                this.getUsers()
-            },
+			deletehandle(index,row) {
+				console.log(index)
+				console.log(row)
+				this.$confirm('此操作将删除该品类, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.handleDelete(index,row)
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			async handleDelete(index,row) {
+				console.log(index)
+				console.log(row)
+				const isDeleted = await deletevirtualLibrary_a(row.repocode)
+				console.log(isDeleted.data)
+				if(isDeleted.data.code === '1111') {
+					this.initData()
+					this.currentPage = 1
+				}
+			},
             async getUsers(){
                 const Users = await getUserList({offset: this.offset, limit: this.limit});
                 this.tableData = [];
@@ -164,7 +164,13 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
 				const countData = await getVirtualRepoAll(this.currentPage)
-				this.countData = countData.data.data.list
+				if(countData.data.code === '1111'){
+					this.tableData = countData.data.data.list
+					this.count = countData.data.data.total
+				}else {
+					this.tableData = []
+					this.count = 0
+				}
 			}
         },
     }

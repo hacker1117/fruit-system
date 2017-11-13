@@ -263,6 +263,16 @@
                 const goodsAdd = await addGoods(this.form.isStandard,this.form.proid,this.form.pname,this.form.prostandered,this.form.commodityattribute,this.form.factories,this.form.brand,this.form.supplierid,this.form.referenceinprice,this.form.createman)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('添加货品成功!')
+                    this.form.isStandard = 0
+					this.form.proid = ""
+					this.form.pname = ""
+					this.form.prostandered = ""
+					this.form.commodityattribute = ""
+					this.form.factories = ""
+					this.form.brand = ""
+					this.form.supplierid = ""
+					this.form.referenceinprice = ""
+					this.form.createman = ""
                     this.dialogFormVisible = false
                     this.initData()
                 } else {
@@ -274,6 +284,11 @@
                 const goodsAdd = await updateGoods(this.form2.proid,this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.factories,this.form2.brand,this.form2.supplierid,this.form2.referenceinprice)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('修改货品成功!')
+                    this.form2.commodityattribute = ""
+					this.form2.factories = ""
+					this.form2.brand = ""
+					this.form2.supplierid = ""
+					this.form2.referenceinprice = ""
                     this.dialogFormVisible2 = false
                     this.initData()
                 } else {

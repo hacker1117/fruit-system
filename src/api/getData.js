@@ -457,7 +457,7 @@ export const addWasteAll = (pname, procode, wasteproductcode, unite, wastetype, 
  * 查询A库损耗管理
  */
 
-export const queryWasteList = (procode, pname, wasteproductcode, createhuman, reporttime, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, createhuman, reporttime, pageNum , pageSize});
+export const queryWasteList = (procode, pname, wasteproductcode, reporttime, pageNum = 1, pageSize = 10) => axio('/bTWastageordera/getCondition',{ procode, pname, wasteproductcode, reporttime, pageNum , pageSize});
 
 /**
  * 查询运输损耗清单
@@ -547,14 +547,14 @@ export const getStockBalanceaAll = (pageNum = 1, pageSize = 10) => axio('/abalan
  * 获取库存余额列表 -B库
  */
 
-export const getStockBalancebAll = (repository,repocode,mnemoniccode,proname,pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getStoragebAblance',{repository,repocode,mnemoniccode,proname,pageNum, pageSize,repositoryid});
+export const getStockBalancebAll = (repocode,proname,pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getStoragebAblance',{repocode,proname,pageNum, pageSize,repositoryid});
 
 
 /**
  * 查询库存余额列表 -B库
  */
 
-export const getqueryBalancebAll = (repository,repocode,mnemoniccode,proname,pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getStoragebAblance',{repository,repocode,mnemoniccode,proname,pageNum, pageSize,repositoryid});
+export const getqueryBalancebAll = (repocode,proname,pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getStoragebAblance',{repocode,proname,pageNum, pageSize,repositoryid});
 
 /**
  * 获取损耗列表
@@ -712,7 +712,7 @@ export const getRepoAll = () => axio('/user/findrepositorymanagerb');
  * 查询所有仓库
  */
 
-export const getVirtualRepoAll = (pageNum = 1, pageSize = 10) => axio('/virtualrepomanager/selectAllRepositoryInUse');
+export const getVirtualRepoAll = (pageNum = 1, pageSize = 10) => axio('/virtualrepomanager/selectAllRepositoryInUse',{pageNum,pageSize});
 
 /**
  * 添加父类组
@@ -777,7 +777,7 @@ export const deleteLibrary = (repocode, repositoryid = repoId) => axio('/reposit
  * B库-添加采购单
  */
 
-export const addPurchaseOrderB = (pname, productcode, buynumber, protype, pronuite, repositoryid = repoId, username = unames) => axio('/repositoryb/addSummaryordera',{pname, productcode, buynumber, protype, pronuite ,repositoryid,username});
+export const addPurchaseOrderB = (pname, productcode, buynumber, protype, pronuite, supplierid, repositoryid = repoId, username = unames) => axio('/repositoryb/addSummaryordera',{pname, productcode, buynumber, protype, pronuite, supplierid, repositoryid,username});
 
 /**
  * 货品分类-添加父分类
@@ -945,6 +945,12 @@ export const getinventoryadd_a = (pageNum = 1, pageSize = 10) => axio('/inspecta
  */
 
 export const queryInventoryAdded_a = (proname, goodstype, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/inspecta/selectInAbalance',{proname, goodstype, pageNum,pageSize,repositoryid});
+
+/**
+ * A库-删除虚拟库
+ */
+
+export const deletevirtualLibrary_a = (repcode) => axio('/virtualrepomanager/deleteRepository', {repcode});
 
 
 

@@ -11,6 +11,15 @@
 		</el-row>-->
         <el-dialog title="完善入库信息" v-model="dialogFormVisible">
         <el-form :model="form">
+            <el-form-item label="采购订单编号" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.ordercode" auto-complete="off"></el-input> 克/g
+            </el-form-item>
+            <el-form-item label="商品名称" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.storagename" auto-complete="off"></el-input> 克/g
+            </el-form-item>
+            <el-form-item label="商品编码" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.storagecode" auto-complete="off"></el-input> 克/g
+            </el-form-item>
             <el-form-item label="毛重" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.grossweight" auto-complete="off"></el-input> 克/g
             </el-form-item>
@@ -200,6 +209,9 @@
     		},
 			handleEdit(index,row) {
 				this.dialogFormVisible = true
+				this.form.ordercode=row.ordercode
+				this.form.storagename=row.storagename
+				this.form.storagecode=row.storagecode
 				this.ordernumber = row.ordercode
 				this.storagename = row.storagename
 				this.goodscode = row.storagecode
@@ -234,6 +246,10 @@
 				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid, this.receiptData[this.ind].prostandared)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善入库单成功')
+					this.form.grossweight = ""
+					this.form.tare = ""
+					this.form.perprice = ""
+					this.form.visualreposity = ""
 					this.dialogFormVisible = false
 					this.initData()
 				}else {

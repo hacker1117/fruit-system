@@ -35,10 +35,6 @@
 			label="商品位置">
 			</el-table-column>
 			<el-table-column
-			prop="ordercode"
-			label="B库采购需求单号">
-			</el-table-column>
-			<el-table-column
 			label="操作" >
 			<template scope="scope">
 				<el-button
@@ -75,7 +71,8 @@
 				currentPage: 1,
 				count: 0,
 				ordercode: '',
-				ordertime: ''
+				ordertime: '',
+				get: 0,
     		}
     	},
     	components: {
@@ -105,6 +102,8 @@
 				this.$router.push('/stockInDetails/'+ row.outputcode)
 			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
     		    this.currentPage = 1
 				let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
 				const resData = await queryStockIn(this.ordercode,sTime,this.currentPage)
@@ -126,13 +125,13 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
                 let sTime = this.ordertime === '' ? '' : this.formatter(this.ordertime)
-				const dataReceipt = await getStockInAllB('','','','',this.currentPage)
-//				this.receiptData = dataReceipt.data.data.list
+				const dataReceipt = this.get === 0 ? await getStockInAllB('','','','',this.currentPage) : await queryStockIn(this.ordercode,sTime,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.receiptData = []
+					this.count = 0
 				}
 			}
 		}

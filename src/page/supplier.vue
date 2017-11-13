@@ -191,6 +191,18 @@
                 const supplierAdd = await addSupplier(this.form.supplierid,this.form.sname,this.form.supplytype,this.form.cmpanyaddress,this.form.ranks,this.form.linkman,this.form.mantelephone,this.form.mobiletelephone,this.form.taxrate,this.form.createman,this.form.createtime,this.form.remarkable)
                 if(supplierAdd.data.code === '1111') {
                     this.$message('添加供应商成功!')
+					this.form.supplierid = ""
+					this.form.sname = ""
+					this.form.supplytype = ""
+					this.form.cmpanyaddress = ""
+					this.form.ranks = ""
+					this.form.linkman = ""
+					this.form.mantelephone = ""
+					this.form.mobiletelephone = ""
+					this.form.taxrate = ""
+					this.form.createman = ""
+					this.form.createtime = ""
+					this.form.remarkable = ""
                     this.dialogFormVisible = false
                     this.initData()
                 } else {

@@ -4,6 +4,12 @@
 		<div class="fruit-content">
         <el-dialog title="报损" v-model="dialogFormVisible">
         <el-form :model="form">
+            <el-form-item label="商品编码" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.procode" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="商品名称" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.proname" auto-complete="off"></el-input>
+            </el-form-item>
             <el-form-item label="数量" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.productcount" auto-complete="off">
                 	<template slot="append">{{this.prou}}</template>
@@ -36,6 +42,14 @@
 			label="商品分类">
 			</el-table-column>
 			<el-table-column
+			prop="procount" width="120px"
+			label="数量">
+			</el-table-column>
+			<el-table-column
+			prop="storenumber" width="120px"
+			label="报损数量">
+			</el-table-column>
+			<el-table-column
 			prop="prostandard" width="120px"
 			label="规格型号">
 			</el-table-column>
@@ -44,11 +58,7 @@
 			label="单位">
 			</el-table-column>
 			<el-table-column
-			prop="procount" width="120px"
-			label="数量">
-			</el-table-column>
-			<el-table-column
-			label="操作" width="120px">
+			label="操作" width="120px" fixed="right">
 			<template scope="scope">
 				<el-button
 				size="small"
@@ -120,6 +130,8 @@
 				this.dialogFormVisible = true
 				this.ind = index
 				this.prou = row.prounite
+				this.form.procode = row.procode
+				this.form.proname = row.proname
 				console.log(row.prounite)
 			},
 			async confirmAdd(){

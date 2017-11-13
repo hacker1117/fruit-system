@@ -3,12 +3,8 @@
         <head-top></head-top>
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">仓库：</el-col>
-			<el-col :span="4"><el-input v-model="repository" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">商品编码：</el-col>
 			<el-col :span="4"><el-input v-model="repocode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">助记码：</el-col>
-			<el-col :span="4"><el-input v-model="mnemoniccode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">商品名称：</el-col>
 			<el-col :span="4"><el-input v-model="proname" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
@@ -72,9 +68,7 @@
 				currentPage: 1,
 				count: 0,
 				get: 0,
-				repository: '',
 				repocode: '',
-				mnemoniccode: '',
 				proname: ''
     		}
     	},
@@ -91,7 +85,7 @@
     	methods: {
     		async initData(){
     			try{
-					const dataReceipt = await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname)
+					const dataReceipt = await getStockBalancebAll(this.repocode,this.proname)
 					console.log('re: ',dataReceipt.data.data)
 					if(dataReceipt.data.code === '1111'){
 						this.receiptData = dataReceipt.data.data.list
@@ -109,7 +103,7 @@
 			async handleSearch(){
 				this.get = 1
 				this.count = 0
-				const resData = await getqueryBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname)
+				const resData = await getqueryBalancebAll(this.repocode,this.proname)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -128,7 +122,7 @@
 			async handleCurrentChange(num){
 				this.currentPage = num
 				console.log(this.currentPage)
-				const dataReceipt = this.get === 0 ? await getStockBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,this.currentPage) : await getqueryBalancebAll(this.repository,this.repocode,this.mnemoniccode,this.proname,this.currentPage)
+				const dataReceipt = this.get === 0 ? await getStockBalancebAll(this.repocode,this.proname,this.currentPage) : await getqueryBalancebAll(this.repocode,this.proname,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

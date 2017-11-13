@@ -53,7 +53,7 @@
 		</el-row>
 		<el-row>
 			<el-col :span="24">
-                <el-button style="float: right;" @click="handleSearch" type="primary">清空</el-button>
+                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
                 <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
             </el-col>
 		</el-row>
@@ -128,7 +128,8 @@
 				form:{
 					goodsIndex: '',
 					reporttime: ''
-				}
+				},
+				get: 0,
     		}
     	},
     	components: {
@@ -159,7 +160,16 @@
 				this.$destroy()
 				this.$router.push('/transportWasteDetails/'+ row.orderid)
 			},
+			async empty(){
+				this.procode = ""
+				this.pname = ""
+				this.wasteproductcode = ""
+				this.reporttime = ""
+			},
 			async handleSearch(){
+				this.get = 1
+				this.count = 0
+    		    this.currentPage = 1
 				let times = this.reporttime === '' ? '' : this.formatter(this.reporttime)
 				const resData = await queryTransportWasteList(this.procode, this.pname, this.wasteproductcode, times)
 				console.log(resData.data)
@@ -194,8 +204,8 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = await getTransportWasteAll(this.currentPage)
-//				this.receiptData = dataReceipt.data.data.list
+				let times = this.form.reporttime === '' ? '' : this.formatter(this.form.reporttime)
+				const dataReceipt = this.get === 0 ? await getTransportWasteAll(this.currentPage) : await queryTransportWasteList(this.procode, this.pname, this.wasteproductcode, times,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

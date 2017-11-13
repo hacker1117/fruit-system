@@ -211,8 +211,9 @@
 				console.log(this.form.buynumber)
 				console.log(this.goodsList[this.confirmIndex].protype)
 				console.log(this.goodsList[this.confirmIndex].pronuite)
+				console.log(this.goodsList[this.confirmIndex].supplierid)
 				console.log(2)
-				const addInfo = await addPurchaseOrderB(this.form.goodsName, this.form.proid, this.form.buynumber, this.goodsList[this.confirmIndex].protype, this.goodsList[this.confirmIndex].pronuite)
+				const addInfo = await addPurchaseOrderB(this.form.goodsName, this.form.proid, this.form.buynumber, this.goodsList[this.confirmIndex].protype, this.goodsList[this.confirmIndex].pronuite,this.goodsList[this.confirmIndex].supplierid)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 					this.dialogFormVisible = false

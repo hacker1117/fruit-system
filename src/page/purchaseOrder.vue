@@ -4,6 +4,12 @@
 		<div class="fruit-content">
         <el-dialog title="完善采购信息" v-model="dialogFormVisible">
         <el-form :model="form">
+			<el-form-item label="单据号" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.ordercode" auto-complete="off" :disabled="true"></el-input>
+            </el-form-item>
+			<el-form-item label="商品名称" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.storagename" auto-complete="off" :disabled="true"></el-input>
+            </el-form-item>
 			<el-form-item label="供应商" :label-width="formLabelWidth">
                <el-select v-model="form.supplierid" placeholder="请选择供应商">
                     <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.sname" :value="supplier.supplierid"></el-option>
@@ -189,6 +195,8 @@
 				this.dialogFormVisible = true
 				this.ind = index
 				this.form.supplierid = row.supplierid
+				this.form.ordercode = row.ordercode
+				this.form.storagename = row.storagename
 			},
 			async warehousing(){
 				this.get = 1
@@ -267,6 +275,10 @@
 				const addInfo = await makePurchase(this.receiptData[this.ind].ordercode, this.form.supplierid, this.adminInfo.uname, this.form.buydepartment,this.form.buyfare, this.form.moneyamount, this.form.allowance)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善采购单信息成功')
+					this.form.supplierid = ""
+					this.form.buyfare = ""
+					this.form.moneyamount = ""
+					this.form.allowance = ""
 					this.dialogFormVisible = false
 					this.initData()
 				}else {
