@@ -952,9 +952,17 @@ export const queryInventoryAdded_a = (proname, goodstype, pageNum = 1,pageSize =
 
 export const deletevirtualLibrary_a = (repcode) => axio('/virtualrepomanager/deleteRepository', {repcode});
 
+/**
+ * A库供应商管理-禁用供应商
+ */
 
+export const transmitDisable = (supplierid) => axio('/supplierorder/deleteSupplierorder', {supplierid});
 
+/**
+ * A库供应商管理-启用供应商
+ */
 
+export const transmitEnable = (supplierid, isdelete = 0) => axio('/supplierorder/updateSupByid', {supplierid, isdelete});
 
 
 

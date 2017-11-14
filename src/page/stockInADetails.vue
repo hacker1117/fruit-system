@@ -12,13 +12,13 @@
         <el-dialog title="完善入库信息" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="采购订单编号" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.ordercode" auto-complete="off"></el-input> 克/g
+                <el-input style="width: 195px" v-model="form.ordercode" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="商品名称" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.storagename" auto-complete="off"></el-input> 克/g
+                <el-input style="width: 195px" v-model="form.storagename" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="商品编码" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.storagecode" auto-complete="off"></el-input> 克/g
+                <el-input style="width: 195px" v-model="form.storagecode" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="毛重" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.grossweight" auto-complete="off"></el-input> 克/g

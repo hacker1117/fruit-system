@@ -5,10 +5,10 @@
         <el-dialog title="报损" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="商品编码" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.procode" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.procode" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="商品名称" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.proname" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.proname" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="数量" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.productcount" auto-complete="off">

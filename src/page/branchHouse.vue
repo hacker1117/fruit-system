@@ -156,10 +156,10 @@
 					type: 'warning'
 				}).then(() => {
 					this.handleDelete(index,row)
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
+//					this.$message({
+//						type: 'success',
+//						message: '删除成功!'
+//					})
 				}).catch(() => {
 					this.$message({
 						type: 'info',
@@ -172,6 +172,10 @@
 				console.log(isDeleted.data)
 				if(isDeleted.data.code === '1111') {
 					this.initData()
+				}else {
+					this.$message(isDeleted.data.message)
+					this.receiptData = []
+					this.count = 0
 				}
 			},
             handleCurrentChange(val) {

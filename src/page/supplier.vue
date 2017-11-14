@@ -68,6 +68,10 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
+			prop="state" width="120px"
+			label="供应商状态">
+			</el-table-column>
+			<el-table-column
 			prop="supplierid" width="120px"
 			label="单位编码">
 			</el-table-column>
@@ -103,7 +107,20 @@
 			<el-table-column
 			prop="taxrate" width="120px"
 			label="税率">
-			</el-table-column>
+			</el-table-column><el-table-column
+			label="操作" fixed="right" width="120px">
+                <template scope="scope">
+                    <!--<el-button
+                    size="mini"
+                    @click="delete(scope.$index, scope.row)">删除</el-button>-->
+                    <el-button
+                    size="mini"
+                    @click="disable(scope.$index, scope.row)">禁用</el-button>
+                    <el-button
+                    size="mini"
+                    @click="enable(scope.$index, scope.row)">启用</el-button>
+                </template>
+                </el-table-column>
 		</el-table>
 		<div class="Pagination" style="text-align: left;margin-top: 10px;">
 			<el-pagination
@@ -120,7 +137,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getSupplierAll, querySupplierList, addSupplier} from '@/api/getData'
+    import {getSupplierAll, querySupplierList, addSupplier,transmitDisable,transmitEnable} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -158,6 +175,9 @@
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].state = this.receiptData[i].isDelete=== 0 ? "启用" : "禁用"
+                    	}
     			}catch(err){
     				console.log(err);
     			}
@@ -166,6 +186,32 @@
 				console.log(index,row)
 				this.$destroy()
 				this.$router.push('/supplierDetails/'+ row.supplierid)
+			},
+			async disable(index,row) {
+//				console.log(index,row)
+				console.log(row.supplierid)
+				const resData = await transmitDisable(row.supplierid)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
+			},
+			async enable(index,row) {
+//				console.log(index,row)
+				console.log(row.supplierid)
+				const resData = await transmitEnable(row.supplierid)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
 			},
 			async handleSearch(){
 				this.get = 1
