@@ -196,7 +196,7 @@
 					this.initData()
 				} else {
 					this.$message(resData.data.message)
-					this.receiptData =""
+					this.receiptData = []
 					this.count = 0
 				}
 			},
@@ -209,7 +209,7 @@
 					this.initData()
 				} else {
 					this.$message(resData.data.message)
-					this.receiptData =""
+					this.receiptData = []
 					this.count = 0
 				}
 			},
@@ -220,9 +220,12 @@
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].state = this.receiptData[i].isDelete=== 0 ? "启用" : "禁用"
+                    	}
 				} else {
 					this.$message(resData.data.message)
-					this.receiptData =""
+					this.receiptData = []
 					this.count = 0
 				}
 			},
@@ -261,8 +264,12 @@
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].state = this.receiptData[i].isDelete=== 0 ? "启用" : "禁用"
+                    	}
 				}else {
 					this.receiptData = []
+					this.count = ""
 				}
 			}
 		}

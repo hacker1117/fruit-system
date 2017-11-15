@@ -25,39 +25,48 @@
 		</el-row>
 		<el-row>
 			<el-col :span="24">
-                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
+                <el-button style="float: right; margin-left:10px;" @click="handleSearch" type="primary">查询</el-button>
                 <el-button style="float: right;" @click="dialogFormVisible = true" type="primary">新增</el-button>
             </el-col>
 		</el-row>
         <el-dialog title="新增日常损耗" v-model="dialogFormVisible">
         <el-form :model="form">
-			<el-form-item label="商品编号" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.productcode" auto-complete="off"></el-input>
+			<el-form-item label="商品名称" :label-width="formLabelWidth">
+            	<!--<el-input style="width: 195px" v-model="form.pname" auto-complete="off"></el-input>-->
+            	 <el-autocomplete
+				v-model="form.pname"
+				:fetch-suggestions="querySearchAsync"
+				placeholder="请输入名称模糊搜索"
+				@select="handleAddChild"
+				></el-autocomplete>
             </el-form-item>
-			<el-form-item label="数量" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.productnumber" auto-complete="off"></el-input>
+			<el-form-item label="商品编号" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.productcode" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="规格" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.procuctstanderd" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="商品名称" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.pname" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form.procuctstanderd" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="单位" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.productunite" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form.productunite" auto-complete="off" :disabled="true"></el-input>
            </el-form-item>
             <el-form-item label="损耗类别" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>
+                <!--<el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>-->
+                <el-select v-model="form.wastetype" placeholder="请选择虚拟库">
+                    <el-option v-for="repos in virtualRepoList" :key="repos.id" :label="repos.reponame" :value="repos.reponame"></el-option>
+                </el-select>
             </el-form-item>
-			<el-form-item label="制单员" :label-width="formLabelWidth">
+			<el-form-item label="备注" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="损耗数量" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.productnumber" auto-complete="off"><template slot="append">{{this.pronuite}}</template></el-input>
+          </el-form-item>
+			<!--<el-form-item label="制单员" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.createhuman" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="报损时间" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.timeofreport" auto-complete="off"></el-input>
-           </el-form-item>
-			<el-form-item label="备注" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
-            </el-form-item>
+           </el-form-item>-->
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -116,7 +125,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getDailyLossList, queryDailyLossList,addTransportWaste} from '@/api/getData'
+    import {getDailyLossList, queryDailyLossList,addTransportWaste, getProList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -137,6 +146,10 @@
 				currentPage: 1,
 				count: 0,
 				get: 0,
+				confirmIndex: '',
+				goodsList:[],
+				pronuite: '',
+				virtualRepoList: [],
     		}
     	},
     	components: {
@@ -182,14 +195,45 @@
 			},
 			async confirmAdd() {
 				console.log(this.form)
-                const supplierAdd = await addTransportWaste(this.form.productcode,this.form.productnumber,this.form.procuctstanderd,this.form.pname,this.form.productunite,this.form.createhuman,this.form.timeofreport,this.form.remarkable,this.form.wastetype)
+                const supplierAdd = await addTransportWaste(this.form.pname,this.form.productcode,this.form.procuctstanderd,this.form.productunite,this.form.wastetype,this.form.remarkable,this.form.productnumber)
                 if(supplierAdd.data.code === '1111') {
-                    this.$message('添加供应商成功!')
+                    this.$message('新增日常损耗成功!')
+                    this.form.pname = ""
+					this.form.wastetype = ""
+					this.form.remarkable = ""
+					this.form.productnumber = ""
                     this.dialogFormVisible = false
                     this.initData()
                 } else {
                     this.$message(supplierAdd.data.message)
                 }
+			},
+			handleAddChild(){
+				for(let i = 0; i<this.goodsList.length; i++){
+					if(this.form.pname == this.goodsList[i].pname) {
+						this.confirmIndex = i
+						this.form.productcode=this.goodsList[i].proid
+						this.form.procuctstanderd=this.goodsList[i].prostandered
+						this.form.productunite=this.goodsList[i].pronuite
+						this.pronuite=this.goodsList[i].pronuite
+					}
+				}
+			},
+			async querySearchAsync(queryString, cb) {
+				let results=[]
+				console.log(this.goodsList)
+				const result = await getProList(queryString)
+				if(result.data.code === '1111'){
+					results = result.data.data
+					this.goodsList = result.data.data
+					for(let i=0;i<results.length;i++){
+						results[i].value=results[i].pname
+					}
+				}
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					cb(results);
+				}, 3000 * Math.random());
 			},
 			formatter(date){
 				console.log(date.getMonth())

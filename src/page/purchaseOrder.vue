@@ -2,122 +2,144 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
-        <el-dialog title="完善采购信息" v-model="dialogFormVisible">
-        <el-form :model="form">
-			<el-form-item label="单据号" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.ordercode" auto-complete="off" :disabled="true"></el-input>
-            </el-form-item>
-			<el-form-item label="商品名称" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.storagename" auto-complete="off" :disabled="true"></el-input>
-            </el-form-item>
-			<el-form-item label="供应商" :label-width="formLabelWidth">
-               <el-select v-model="form.supplierid" placeholder="请选择供应商">
-                    <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.sname" :value="supplier.supplierid"></el-option>
-                </el-select>
-           </el-form-item>
-			<el-form-item label="采购员" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
-            </el-form-item>
-            <el-form-item label="采购部门" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.buydepartment" auto-complete="off" :disabled="true"></el-input>
-            </el-form-item>
-			<el-form-item label="采购费用" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.buyfare" auto-complete="off"></el-input> RMB/￥
-            </el-form-item>
-			<el-form-item label="采购金额" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.moneyamount" auto-complete="off"></el-input> RMB/￥
-            </el-form-item>
-			<el-form-item label="折让金额" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.allowance" auto-complete="off"></el-input> RMB/￥
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="confirmAdd">确 定</el-button>
-        </div>
-        </el-dialog>
-		<el-row style="margin-top: 20px;">
-            <el-col :span="3" style="text-align:right;">创建日期：</el-col>
-			<el-col :span="4">
-				<el-date-picker
-				v-model="creattime"
-				type="date"
-				format="yyyy-MM-dd"
-				placeholder="选择日期">
-				</el-date-picker>
-			</el-col>
-            <el-col :span="3" style="text-align:right;">单据号：</el-col>
-			<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="3" style="text-align:right;">供应商：</el-col>
-			<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-			<el-col :span="24">
-				<el-button style="float: left;" @click="nocomplete">未完成</el-button>
-				<el-button style="float: left;" @click="staycomplete">完成待入库</el-button>
-				<el-button style="float: left;" @click="warehousing">已入库</el-button>
-				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
-		</el-row>
-		<el-table
-			:data="receiptData"
-			stripe
-			style="width: 100%;text-align:left;">
-			<el-table-column
-			prop="ordercode" width="120px"
-			label="单据号">
-			</el-table-column>
-			<el-table-column
-			prop="storagename" width="120px"
-			label="商品名称">
-			</el-table-column>
-			<el-table-column
-			prop="advisenumber" width="120px"
-			label="建议采购量">
-			</el-table-column>
-			<el-table-column
-			prop="createtime" width="120px"
-			label="创建时间">
-			</el-table-column>
-			<el-table-column
-			prop="supplierid" width="120px"
-			label="供应商">
-			</el-table-column>
-			<el-table-column
-			prop="buydepartment" width="120px"
-			label="采购部门">
-			</el-table-column>
-			<el-table-column
-			prop="salesmanname" width="120px"
-			label="采购员">
-			</el-table-column>
-			<el-table-column
-			prop="buyfare" width="120px"
-			label="采购费用">
-			</el-table-column>
-			</el-table-column>
-			<el-table-column
-			prop="moneyamount" width="120px"
-			label="采购金额">
-			</el-table-column>
-			<el-table-column fixed="right"
-			label="操作" width="120px">
-			<template scope="scope">
-				<el-button
+	        <el-dialog title="完善采购信息" v-model="dialogFormVisible">
+	        <el-form :model="form">
+				<el-form-item label="单据号" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.ordercode" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+				<el-form-item label="商品名称" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.storagename" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+				<el-form-item label="采购员" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+	            <el-form-item label="采购部门" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.buydepartment" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+				<el-form-item label="供应商" :label-width="formLabelWidth">
+	               <el-select v-model="form.supplierid" placeholder="请选择供应商">
+	                    <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.sname" :value="supplier.supplierid"></el-option>
+	                </el-select>
+	           </el-form-item>
+				<el-form-item label="采购费用" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.buyfare" auto-complete="off"></el-input> RMB/￥
+	            </el-form-item>
+				<el-form-item label="采购金额" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.moneyamount" auto-complete="off"></el-input> RMB/￥
+	            </el-form-item>
+				<el-form-item label="折让金额" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.allowance" auto-complete="off"></el-input> RMB/￥
+	            </el-form-item>
+	        </el-form>
+	        <div slot="footer" class="dialog-footer">
+	            <el-button @click="dialogFormVisible = false">取 消</el-button>
+	            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+	        </div>
+	        </el-dialog>
+			<el-row style="margin-top: 20px;" v-if="toggle1">
+	            <el-col :span="3" style="text-align:right;">创建日期：</el-col>
+				<el-col :span="4">
+					<el-date-picker
+					v-model="creattime"
+					type="date"
+					format="yyyy-MM-dd"
+					placeholder="选择日期">
+					</el-date-picker>
+				</el-col>
+	            <el-col :span="3" style="text-align:right;">单据号：</el-col>
+				<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
+	            <el-col :span="3" style="text-align:right;">供应商：</el-col>
+				<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
+				<!--<el-col :span="24">-->
+					<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
+				<!--</el-col>-->
+			</el-row>
+			<el-row style="margin-top: 20px;">
+				<el-col :span="24">
+					<el-button style="float: left;" @click="nocomplete">未完成</el-button>
+					<el-button style="float: left;" @click="staycomplete">完成待入库</el-button>
+					<el-button style="float: left;" @click="warehousing">已入库</el-button>
+				</el-col>
+			</el-row>
+			<el-row style="margin-top: 20px;" v-if="toggle">
+	            <el-col :span="3" style="text-align:right;">商品名称：</el-col>
+				<el-col :span="4">
+					<el-autocomplete
+					v-model="storagename"
+					:fetch-suggestions="querySearchAsync"
+					placeholder="请输入名称模糊搜索"
+					></el-autocomplete>
+				</el-col>
+	            <el-col :span="3" style="text-align:right;">商品分类：</el-col>
+				<el-col :span="4">
+					<el-select v-model="storagetype" placeholder="请选择分类">
+		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.categoryname" :value="classif.categorycode"></el-option>
+		            </el-select>
+				</el-col>
+				<el-button style="float: left;margin-left: 20px;" @click="querycommodity" type="primary">查询</el-button></el-col>
+				<el-button style="float: left;margin-left: 20px;" @click="empty" type="primary">清空</el-button></el-col>
+				<el-button style="float: right;" @click="exportEXCEL" type="primary">导出EXCEL</el-button></el-col>
+			</el-row>
+			<el-table
+				:data="receiptData"
+				stripe
+				style="width: 100%;text-align:left;">
+				<el-table-column
+				prop="ordercode" width="120px"
+				label="单据号">
+				</el-table-column>
+				<el-table-column
+				prop="storagename" width="120px"
+				label="商品名称">
+				</el-table-column>
+				<el-table-column
+				prop="advisenumber" width="120px"
+				label="建议采购量">
+				</el-table-column>
+				<el-table-column
+				prop="createtime" width="120px"
+				label="创建时间">
+				</el-table-column>
+				<el-table-column
+				prop="supplierid" width="120px"
+				label="供应商">
+				</el-table-column>
+				<el-table-column
+				prop="buydepartment" width="120px"
+				label="采购部门">
+				</el-table-column>
+				<el-table-column
+				prop="salesmanname" width="120px"
+				label="采购员">
+				</el-table-column>
+				<el-table-column
+				prop="buyfare" width="120px"
+				label="采购费用">
+				</el-table-column>
+				</el-table-column>
+				<el-table-column
+				prop="moneyamount" width="120px"
+				label="采购金额">
+				</el-table-column>
+				<el-table-column fixed="right"
 				v-if="toggle"
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">完善采购单信息</el-button>
-			</template>
-			</el-table-column>
-		</el-table>
-		<div class="Pagination" style="text-align: left;margin-top: 10px;">
-			<el-pagination
-				@current-change="handleCurrentChange"
-				:current-page="currentPage"
-				:page-size="10"
-				layout="total, prev, pager, next"
-				:total="count">
-			</el-pagination>
-		</div>
+				label="操作" width="120px">
+				<template scope="scope">
+					<el-button
+					size="small"
+					@click="handleEdit(scope.$index, scope.row)">完善采购单信息</el-button>
+				</template>
+				</el-table-column>
+			</el-table>
+			<div class="Pagination" style="text-align: left;margin-top: 10px;">
+				<el-pagination
+					@current-change="handleCurrentChange"
+					:current-page="currentPage"
+					:page-size="10"
+					layout="total, prev, pager, next"
+					:total="count">
+				</el-pagination>
+			</div>
 		</div>
     </div>
 </template>
@@ -125,7 +147,7 @@
 <script>
     import headTop from '@/components/headTop'
     import {mapActions, mapState} from 'vuex'
-    import {getPurchaseOrderAll, querystay, queryPurchaseOrderList, getSupplierAll, makePurchase} from '@/api/getData'
+    import {getPurchaseOrderAll, querystay, queryPurchaseOrderList, getSupplierAll, makePurchase,getclassification,getProList, getcommodity, getexport} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -134,6 +156,7 @@
 				value2: '',
 				input: '',
 				toggle: true,
+				toggle1: false,
 				city: {},
 				receiptData: [],
 				salesmanname: '',
@@ -147,14 +170,22 @@
 					moneyamount: '',
 					allowance: ''
 				},
+				form1:{
+					pname: '',
+				},
 				supplierid: '',
 				dialogFormVisible: false,
+				dialogFormVisible1: false,
 				formLabelWidth: '120px',
-				supplierList:[],
+				supplierList: [],
+				classification: [],
 				currentPage: 1,
 				count: 0,
 				get: 0,
-				ind:"",
+				ind: "",
+				goodsName: '',
+				storagename: '',
+				storagetype: '',
     		}
     	},
     	components: {
@@ -185,8 +216,14 @@
 						this.receiptData = []
 						this.count = 0
 					}
+					const result = await getProList('')
+					if(result.data.code === '1111'){
+						this.goodsList = result.data.data
+					}
 					const suppliers = await getSupplierAll()
 					this.supplierList = suppliers.data.data.list
+					const classi = await getclassification()
+					this.classification = classi.data.data.list
     			}catch(err){
     				console.log(err)
     			}
@@ -198,6 +235,31 @@
 				this.form.ordercode = row.ordercode
 				this.form.storagename = row.storagename
 			},
+			async querycommodity(){
+				this.get = 3
+				this.count = 0
+				const resData = await getcommodity(this.storagename,this.storagetype)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
+			},
+			async empty(){
+				this.storagename = ""
+				this.storagetype = ""
+			},
+			async exportEXCEL(){
+				const resData = await getexport(this.storagename,this.storagetype)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+				} else {
+					this.$message(resData.data.message)
+				}
+			},
 			async warehousing(){
 				this.get = 1
 				this.count = 0
@@ -206,6 +268,7 @@
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
 					this.toggle= false
+					this.toggle1= true
 					for(let i = 0;i<this.receiptData.length;i++){
                        	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
                     	}
@@ -223,6 +286,7 @@
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
 					this.toggle= true
+					this.toggle1= false
 					for(let i = 0;i<this.receiptData.length;i++){
                        	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
                     	}
@@ -238,6 +302,8 @@
 				if(resData2.data.code === '1111'){
 					this.receiptData = resData2.data.data.list
 					this.count = resData2.data.data.total
+					this.toggle= false
+					this.toggle1= false
 					for(let i = 0;i<this.receiptData.length;i++){
                        	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
                     	}
@@ -285,6 +351,22 @@
 					this.$message(addInfo.data.message)
 				}
 			},
+			async querySearchAsync(queryString, cb) {
+				let results=[]
+//				console.log(this.goodsList)
+				const result = await getProList(queryString)
+				if(result.data.code === '1111'){
+					results = result.data.data
+//					this.goodsList = result.data.data
+					for(let i=0;i<results.length;i++){
+						results[i].value=results[i].pname
+					}
+				}
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					cb(results);
+				}, 3000 * Math.random());
+			},
 			async handleCurrentChange(num) {
 				console.log(this.get)
 				this.currentPage = num
@@ -296,6 +378,8 @@
 					dataReceipt = await queryPurchaseOrderList(this.salesmanname, cTime, this.ordercode, this.supplierid,this.currentPage)
 				}else if(this.get === 2){
 					dataReceipt = await querystay(this.currentPage)
+				}else if(this.get === 3){
+					dataReceipt = await getcommodity(this.storagename,this.storagetype,this.currentPage)
 				}
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list

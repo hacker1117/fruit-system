@@ -6,22 +6,37 @@
         <el-dialog title="新增损耗" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="商品名称" :label-width="formLabelWidth">
-                 <el-input style="width: 195px" v-model="form.pname" auto-complete="off"></el-input>
+                 <!--<el-input style="width: 195px" v-model="form.pname" auto-complete="off"></el-input>-->
+                 <el-autocomplete
+				v-model="form.pname"
+				:fetch-suggestions="querySearchAsync"
+				placeholder="请输入名称模糊搜索"
+				@select="handleAddChild"
+				></el-autocomplete>
             </el-form-item>
             <el-form-item label="商品编码" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.procode" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.procode" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="损耗商品编码" :label-width="formLabelWidth">
+            <!--<el-form-item label="损耗商品编码" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.wasteproductcode" auto-complete="off"></el-input>
+            </el-form-item>-->
+			<el-form-item label="规格" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.prostandered" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="单位" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.unite" auto-complete="off"></el-input>
+                <el-input style="width: 195px" v-model="form.unite" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="损耗类型" :label-width="formLabelWidth">
-                <el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>
+                <!--<el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>-->
+                <el-select v-model="form.wastetype" placeholder="请选择虚拟库">
+                    <el-option v-for="repos in virtualRepoList" :key="repos.id" :label="repos.reponame" :value="repos.reponame"></el-option>
+                </el-select>
            </el-form-item>
-			<el-form-item label="损耗数量" :label-width="formLabelWidth">
+			<el-form-item label="备注" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.productcount" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="损耗数量" :label-width="formLabelWidth">
+                <el-input style="width: 195px" v-model="form.productcount" auto-complete="off"><template slot="append">{{this.pronuite}}</template></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -105,7 +120,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getWasteAll, queryWasteList,addWasteAll} from '@/api/getData'
+    import {getWasteAll, queryWasteList,addWasteAll, getProList} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -125,9 +140,14 @@
 				dialogFormVisible: false,
 				goodsList:[],
 				form:{
+					pname: '',
 					goodsIndex: '',
 					reporttime: ''
-				}
+				},
+				confirmIndex: '',
+				goodsList:[],
+				pronuite: '',
+				virtualRepoList: [],
     		}
     	},
     	components: {
@@ -144,9 +164,14 @@
     		async initData(){
     			try{
 					const dataReceipt = await getWasteAll(1, 10)
-					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+					const result = await getProList('')
+					if(result.data.code === '1111'){
+						this.goodsList = result.data.data
+					}
+//					const vRepos = await getVirtualRepoAll()
+//					this.virtualRepoList = vRepos.data.data.list
     			}catch(err){
     				console.log(err);
     			}
@@ -177,7 +202,8 @@
 				return res
 			},
 			async confirmAdd(){
-				const addInfo = await addWasteAll(this.form.pname, this.form.procode, this.form.wasteproductcode, this.form.procode, this.form.wastetype, this.form.productcount)
+//				const addInfo = await addWasteAll(this.form.pname, this.form.procode, this.form.wasteproductcode, this.form.procode, this.form.wastetype, this.form.productcount)
+				const addInfo = await addWasteAll(this.form.pname,this.form.procode,this.form.prostandered,this.form.unite,this.form.wastetype,this.form.remarkable,this.form.productcount)
 				console.log(addInfo.data)
 				if(addInfo.data.code === '1111'){
 					this.$message('添加运输损耗成功')
@@ -186,6 +212,33 @@
 				}else {
 					this.$message(addInfo.data.message)
 				}
+			},
+			handleAddChild(){
+				for(let i = 0; i<this.goodsList.length; i++){
+					if(this.form.pname == this.goodsList[i].pname) {
+						this.confirmIndex = i
+						this.form.procode=this.goodsList[i].proid
+						this.form.prostandered=this.goodsList[i].prostandered
+						this.form.unite=this.goodsList[i].pronuite
+						this.pronuite=this.goodsList[i].pronuite
+					}
+				}
+			},
+			async querySearchAsync(queryString, cb) {
+				let results=[]
+				console.log(this.goodsList)
+				const result = await getProList(queryString)
+				if(result.data.code === '1111'){
+					results = result.data.data
+					this.goodsList = result.data.data
+					for(let i=0;i<results.length;i++){
+						results[i].value=results[i].pname
+					}
+				}
+				clearTimeout(this.timeout)
+				this.timeout = setTimeout(() => {
+					cb(results);
+				}, 3000 * Math.random());
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num

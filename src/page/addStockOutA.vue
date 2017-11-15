@@ -4,7 +4,7 @@
 		<div class="fruit-content">
 		<el-row style="margin-top: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 			<el-col :span="24">
-				<el-button @click="addStockOut">确认出库</el-button>
+				<el-button :disabled="toggle" @click="addStockOut">确认出库</el-button>
 			</el-col>
 		</el-row>
 		<el-row style="margin-top: 20px;">
@@ -14,6 +14,7 @@
                     <el-option v-for="repo in repoList" :key="repo.id" :label="repo.reponame" :value="repo.reponame"></el-option>
                 </el-select>
             </el-col>
+            <el-button style="float: right;" @click="unable" type="primary">无法出库商品</el-button></el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
@@ -47,23 +48,19 @@
 			prop="buynumber"
 			label="数量">
 			</el-table-column>
+            <el-table-column
+			prop="infactbuynumber"
+			label="当前库存量">
+			</el-table-column>
 		</el-table>
-		<div class="Pagination" style="text-align: left;margin-top: 10px;">
-			<el-pagination
-				@current-change="handleCurrentChange"
-				:current-page="currentPage"
-				:page-size="10"
-				layout="total, prev, pager, next"
-				:total="count">
-			</el-pagination>
-		</div>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;">共 {{count}} 条</div>
 		</div>
     </div>
 </template>
 
 <script>
     import headTop from '@/components/headTop'
-    import {getAddPurchase, queryStockInList, getRepoAll, makeStockOut} from '@/api/getData'
+    import {getAddPurchase, queryStockInList, getRepoAll, makeStockOut, getunable} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -79,6 +76,7 @@
                 },
 				currentPage: 1,
 				count: 0,
+				toggle: true,
     		}
     	},
     	components: {
@@ -96,7 +94,7 @@
     			try{
 					const repos = await getRepoAll()
 					this.repoList = repos.data.data
-					this.count = repos.data.data.length
+//					this.count = repos.data.data.length
     			}catch(err){
     				console.log(err);
     			}
@@ -106,15 +104,18 @@
 				this.$destroy()
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
-			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+			async unable(){
+				this.toggle= true
+				console.log(this.form.respositysource)
+				const dataReceipt = await getunable(this.form.respositysource)
+				if(dataReceipt.data.code === '1111'){
+					this.receiptData = dataReceipt.data.data
+					this.count = dataReceipt.data.data.length
+				}else {
+					this.$message(dataReceipt.data.message)
+					this.receiptData = []
+					this.count = 0
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())
@@ -126,12 +127,14 @@
 				const dataReceipt = await getAddPurchase(this.form.respositysource)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data
+					this.count = dataReceipt.data.data.length
 					this.$message('查询未生单信息成功')
 				}else {
 					this.$message(dataReceipt.data.message)
 					this.receiptData = []
 					this.count = 0
 				}
+				this.toggle= false
 			},
 			async addStockOut(){
 				const addInfo = await makeStockOut(this.form.respositysource)
@@ -145,7 +148,7 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt =await getRepoAll(this.currentPage)
+				const dataReceipt =await getAddPurchase(this.form.respositysource,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data
 					this.count = dataReceipt.data.data.length

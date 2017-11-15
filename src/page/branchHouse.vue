@@ -15,7 +15,10 @@
             	<el-input style="width: 195px" v-model="form.reponame" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="所属区域id" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.id" auto-complete="off"></el-input>
+            	<!--<el-input style="width: 195px" v-model="form.id" auto-complete="off"></el-input>-->
+            	<el-select v-model="form.id" placeholder="请选择所属区域id">
+                    <el-option v-for="repo in repoList" :key="repo" :label="repo" :value="repo"></el-option>
+                </el-select>
            </el-form-item>
            <el-form-item label="是否默认仓库" :label-width="formLabelWidth">
             	<el-radio-group v-model="form.isDefault">
@@ -25,14 +28,8 @@
            </el-form-item>
            <el-form-item label="状态" :label-width="formLabelWidth">
             	<el-radio-group v-model="form.repostate">
-					<el-radio :label="0">正常</el-radio>
-					<el-radio :label="1">异常</el-radio>
-				</el-radio-group>
-           </el-form-item>
-           <el-form-item label="是否删除" :label-width="formLabelWidth">
-            	<el-radio-group v-model="form.isDelete">
-					<el-radio :label="0">未删除</el-radio>
-					<el-radio :label="1">已删除</el-radio>
+					<el-radio :label="0">启用</el-radio>
+					<el-radio :label="1">禁用</el-radio>
 				</el-radio-group>
            </el-form-item>
         </el-form>
@@ -79,7 +76,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getRepoBranch, getCategoryChild, deleteCategory, IncreasePool,deleteLibrary} from '@/api/getData'
+    import {getRepoBranch, getCategoryChild, deleteCategory, IncreasePool,deleteLibrary, getregion} from '@/api/getData'
     export default {
         data(){
             return {
@@ -101,8 +98,8 @@
 					id: '',
 					isDefault: '',
 					repostate: '',
-					isDelete: '',
 				},
+				repoList: [],
             }
         },
     	components: {
@@ -125,12 +122,14 @@
                     for(let i = 0;i<this.tableData.length;i++){
                         this.tableData[i].isDefault = this.tableData[i].isDefault == 0 ? '否' : '是'
                     }
+                    const repos = await getregion()
+					this.repoList = repos.data.data
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
             },
 			async confirmAdd(){
-				const addInfo = await IncreasePool(this.form.repocode, this.form.reponame, this.form.id, this.form.isDefault, this.form.repostate, this.form.isDelete)
+				const addInfo = await IncreasePool(this.form.repocode, this.form.reponame, this.form.id, this.form.isDefault, this.form.repostate)
 				if(addInfo.data.code === '1111'){
 					this.$message('新增分库成功')
 					this.dialogFormVisible = false

@@ -415,7 +415,7 @@ export const getStockInAllB = (bpid = '',ordertime = '', inrepotype = '', handle
  * 获取入库单详情
  */
 
-export const getStockInDetails = (outputcode, repositoryid = repoId) => axio('/repositoryb/selectTinstoragebByCondition' , {outputcode, repositoryid});
+export const getStockInDetails = (outputcode, repositoryid = repoId) => axio('/repositoryb/queryInstoragebDetail' , {outputcode, repositoryid});
 
 /**
  * 获取入库清单列表
@@ -451,7 +451,8 @@ export const addTransportWasteAll = (productcount, ordercode, proname, procode, 
  * A库新增损耗管理
  */
 
-export const addWasteAll = (pname, procode, wasteproductcode, unite, wastetype, productcount, pageNum = '1', pageSize = '10') => axio('/wastageordera/insertWastage', {pname, procode, wasteproductcode, unite, wastetype, productcount, pageNum , pageSize} );
+//export const addWasteAll = (pname, procode, wasteproductcode, unite, wastetype, productcount, pageNum = '1', pageSize = '10') => axio('/wastageordera/insertWastage', {pname, procode, wasteproductcode, unite, wastetype, productcount, pageNum , pageSize} );
+export const addWasteAll = (pname, procode, prostandered, unite, wastetype, remarkable, productcount, pageNum = '1', pageSize = '10') => axio('/wastageordera/insertWastage', {pname, procode, prostandered, unite, wastetype, remarkable, productcount, pageNum , pageSize} );
 
 /**
  * 查询A库损耗管理
@@ -481,7 +482,7 @@ export const queryDailyLossList = (productcode, pname, wasteproductcode, createh
  * 新增B库日常损耗管理
  */
 
-export const addTransportWaste = (productcode,productnumber,procuctstanderd,pname,productunite,createhuman,timeofreport,remarkable, wastetype, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/addDailyWaste',{productcode,productnumber,procuctstanderd,pname,productunite,createhuman,timeofreport,remarkable,wastetype, pageNum , pageSize, repositoryid});
+export const addTransportWaste = (pname,productcode,procuctstanderd,productunite,wastetype,remarkable,productnumber, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/addDailyWaste',{pname,productcode,procuctstanderd,productunite,wastetype,remarkable,productnumber, pageNum , pageSize, repositoryid});
 
 /**
  * 获取采购单（A库）列表
@@ -765,7 +766,7 @@ export const getRepoBranch = (pageNum = 1,pageSize = 10, repositoryid = repoId) 
 /**
  * B库-新增分库
  */
-export const IncreasePool = (repocode, reponame, id, isDefault, repostate, isDelete, repositoryid = repoId) => axio('/repositoryb/addBranRepo',{repocode, reponame, id, isDefault, repostate, isDelete ,repositoryid});
+export const IncreasePool = (repocode, reponame, id, isDefault, repostate, repositoryid = repoId) => axio('/repositoryb/addBranRepo',{repocode, reponame, id, isDefault, repostate ,repositoryid});
 
 /**
  * 删除B库-分库
@@ -956,14 +957,37 @@ export const deletevirtualLibrary_a = (repcode) => axio('/virtualrepomanager/del
  * A库供应商管理-禁用供应商
  */
 
-export const transmitDisable = (supplierid) => axio('/supplierorder/deleteSupplierorder', {supplierid});
+export const transmitDisable = (Supplierid) => axio('/supplierorder/deleteSupplierorder', {Supplierid});
 
 /**
  * A库供应商管理-启用供应商
  */
 
-export const transmitEnable = (supplierid, isdelete = 0) => axio('/supplierorder/updateSupByid', {supplierid, isdelete});
+export const transmitEnable = (Supplierid, isDelete = 0) => axio('/supplierorder/updateSupById', {Supplierid, isDelete});
 
+/**
+ * A库出库单-无法出库商品
+ */
+
+export const getunable = (respositysource, pageNum = 1,pageSize = 10) => axio('/outputordera/summarycannotout', {respositysource, pageNum,pageSize});
+
+/**
+ * A库采购单 获取商品分类
+ */
+
+export const getclassification = () => axio('/productCategory/findAll');
+
+/**
+ * A库采购单-查询未完成
+ */
+
+export const getcommodity = (storagename, storagetype, pageNum = 1,pageSize = 10) => axio('/purchaseordera/selectnotcreatebyexamples', {storagename, storagetype, pageNum,pageSize});
+
+/**
+ * A库采购单-导出EXCEL
+ */
+
+export const getexport = (storagename, storagetype) => axio('/purchaseordera/exportExcel', {storagename, storagetype});
 
 
 
@@ -1002,3 +1026,9 @@ export const numberdeduction_b = (packid,packCount,useCount, repositoryid = repo
  */
 
 export const numberadd_b = (packid,packcount,addcount, repositoryid = repoId) => axio('/package/addPackage',{packid,packcount,addcount, repositoryid});
+
+/**
+ * B库-分库管理 查询所有所属区域id
+ */
+
+export const getregion = () => axio('/repositoryb/getAllFieldName');
