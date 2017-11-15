@@ -73,7 +73,7 @@
 	            <el-col :span="3" style="text-align:right;">商品分类：</el-col>
 				<el-col :span="4">
 					<el-select v-model="storagetype" placeholder="请选择分类">
-		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.categoryname" :value="classif.categorycode"></el-option>
+		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.categoryname" :value="classif.categoryname"></el-option>
 		            </el-select>
 				</el-col>
 				<el-button style="float: left;margin-left: 20px;" @click="querycommodity" type="primary">查询</el-button></el-col>
@@ -223,7 +223,7 @@
 					const suppliers = await getSupplierAll()
 					this.supplierList = suppliers.data.data.list
 					const classi = await getclassification()
-					this.classification = classi.data.data.list
+					this.classification = classi.data.data
     			}catch(err){
     				console.log(err)
     			}
