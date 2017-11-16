@@ -38,6 +38,29 @@
             <el-button type="primary" @click="confirmAdd">确 定</el-button>
         </div>
         </el-dialog>
+        <el-dialog title="修改采购数量" v-model="dialogFormVisible1">
+	        <el-form :model="form1">
+				<el-form-item label="订单编号" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form1.orderno" auto-complete="off" :disabled="true"></el-input>
+	          </el-form-item>
+				<el-form-item label="商品编码" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form1.productcode" auto-complete="off" :disabled="true"></el-input>
+	          </el-form-item>
+				<el-form-item label="商品名称" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form1.pname" auto-complete="off" :disabled="true"></el-input>
+	          </el-form-item>
+				<el-form-item label="最大采购量" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form1.advisebuynumber" auto-complete="off" :disabled="true"></el-input>
+	          </el-form-item>
+				<el-form-item label="修改后数量" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form1.buynumber" auto-complete="off"></el-input>
+	          </el-form-item>
+	        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+            <el-button type="primary" @click="modifyPurchasing">确 定</el-button>
+        </div>
+        </el-dialog>
 		<el-row style="margin-top: 20px;">
             <el-col :span="3" style="text-align:right;">订单编号：</el-col>
 			<el-col :span="4"><el-input v-model="orderno" siez="mini" placeholder="请输入内容"></el-input></el-col>
@@ -58,7 +81,11 @@
 			<el-col :span="4"><el-input v-model="respositysource" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
-			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+			<el-col :span="24">
+				<el-button style="float: left;" @click="defaultPurchase ">默认采购单</el-button>
+				<el-button style="float: left;" @click="examination">待修改采购单</el-button>
+				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
+			</el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
@@ -81,8 +108,13 @@
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="buynumber"
+			prop="infactbuynumber"
 			label="采购量">
+			</el-table-column>
+			<el-table-column
+			v-if="toggle"
+			prop="advisebuynumber"
+			label="最大采购量">
 			</el-table-column>
 			<el-table-column
 			prop="buydepartmentid"
@@ -95,6 +127,15 @@
 			<el-table-column
 			prop="createtime"
 			label="创建时间">
+			</el-table-column>
+			<el-table-column fixed="right"
+				v-if="toggle"
+				label="操作" width="120px">
+				<template scope="scope">
+					<el-button
+					size="small"
+					@click="handleEdit(scope.$index, scope.row)">修改采购量</el-button>
+				</template>
 			</el-table-column>
 		</el-table>
 		<div class="Pagination" style="text-align: left;margin-top: 10px;">
@@ -113,7 +154,7 @@
 <script>
     import headTop from '@/components/headTop'
     import {mapActions, mapState} from 'vuex'
-    import {getPuschaseOrderB, queryStockInList, addPurchaseOrderB, getProList, getRepoAll} from '@/api/getData'
+    import {getPuschaseOrderB, queryStockInList, addPurchaseOrderB, getProList, getRepoAll, getPendingModification, getmodifyPurchasing_b} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -130,7 +171,14 @@
 					pronuite: '',
 					buynumber: '',
 				},
+				form1: {
+					productcode: '',
+					pname: '',
+					advisebuynumber: '',
+					buynumber: '',
+				},
 				dialogFormVisible: false,
+				dialogFormVisible1: false,
 				formLabelWidth: '120px',
 				goodsList:[],
 				repoList:[],
@@ -143,6 +191,7 @@
 				respositysource: '',
 				buydepartmentid: '',
 				pronuite: '',
+				toggle: false,
     		}
     	},
     	components: {
@@ -179,14 +228,45 @@
     				console.log(err);
     			}
     		},
+    		async defaultPurchase(){
+    			this.get = 0
+    			this.toggle = false
+    			this.initData()
+    		},
+    		async examination(){
+    			this.get = 2
+    			this.toggle = true
+    			const resData = await getPendingModification()
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData = []
+					this.count = 0
+				}
+    		},
+    		async modifyPurchasing(){
+    			const resData = await getmodifyPurchasing_b(this.form1.orderno, this.form1.productcode, this.form1.buynumber)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.dialogFormVisible1 = false
+					this.examination()
+				} else {
+					this.$message(resData.data.message)
+				}
+    		},
 			handleEdit(index,row) {
-				console.log(index,row)
-				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
+//				console.log(index,row)
+				this.dialogFormVisible1 = true
+				this.form1.orderno = row.orderno
+				this.form1.productcode = row.productcode
+				this.form1.pname = row.pname
+				this.form1.advisebuynumber = row.advisebuynumber
+				this.form1.buynumber = row.advisebuynumber
 			},
 			async handleSearch(){
 				this.get = 1
-				this.count = 0
 				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
 				const resData = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource)
 				if(resData.data.code === '1111'){
@@ -194,7 +274,7 @@
 					this.count = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
-					this.receiptData =""
+					this.receiptData = []
 					this.count = 0
 				}
 			},
@@ -252,16 +332,24 @@
 				}
 			},
 			async handleCurrentChange(num){
-//				this.currentPage = num
 				let sTime =this.createtime === '' ? '' : this.formatter(this.createtime)
 				this.currentPage = num
 				console.log(this.currentPage)
-				const dataReceipt = this.get === 0 ? await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage) : await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+//				const dataReceipt = this.get === 0 ? await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage) : await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+				let dataReceipt = {}
+				if(get === 0){
+					dataReceipt = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+				}else if(get === 1){
+					dataReceipt = await getPuschaseOrderB(this.orderno,sTime,this.buydepartmentid,this.respositysource,this.currentPage)
+				}else if(get === 2){
+					dataReceipt = await getPendingModification(this.currentPage)
+				}
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
 				}else {
-					this.bomList = []
+					this.receiptData = []
+					this.count = 0
 				}
 			}
 		}

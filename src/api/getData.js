@@ -1032,3 +1032,27 @@ export const numberadd_b = (packid,packcount,addcount, repositoryid = repoId) =>
  */
 
 export const getregion = () => axio('/repositoryb/getAllFieldName');
+
+
+/**
+ * B库采购单管理 待修改采购单
+ */
+
+export const getPendingModification = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryAllExamine',{pageNum,pageSize, repositoryid});
+
+/**
+ * B库采购单管理 修改采购数量
+ */
+
+export const getmodifyPurchasing_b = (orderno, productcode, buynumber, repositoryid = repoId) => axio('/repositoryb/examineb',{orderno, productcode, buynumber, repositoryid});
+
+
+/**
+ * A库出库单 审批修改
+ */
+
+export const gethandleEdit = (orderno, productcode, repositoryid = repoId) => axio('/repositoryb/examine',{orderno, productcode, repositoryid});
+
+
+
+

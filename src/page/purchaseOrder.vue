@@ -36,6 +36,13 @@
 	            <el-button type="primary" @click="confirmAdd">确 定</el-button>
 	        </div>
 	        </el-dialog>
+			<el-row style="margin-top: 20px;">
+				<el-col :span="24">
+					<el-button style="float: left;" @click="nocomplete">未完成</el-button>
+					<el-button style="float: left;" @click="staycomplete">完成待入库</el-button>
+					<el-button style="float: left;" @click="warehousing">已入库</el-button>
+				</el-col>
+			</el-row>
 			<el-row style="margin-top: 20px;" v-if="toggle1">
 	            <el-col :span="3" style="text-align:right;">创建日期：</el-col>
 				<el-col :span="4">
@@ -50,16 +57,7 @@
 				<el-col :span="4"><el-input v-model="ordercode" siez="mini" placeholder="请输入内容"></el-input></el-col>
 	            <el-col :span="3" style="text-align:right;">供应商：</el-col>
 				<el-col :span="4"><el-input v-model="supplierid" siez="mini" placeholder="请输入内容"></el-input></el-col>
-				<!--<el-col :span="24">-->
 					<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
-				<!--</el-col>-->
-			</el-row>
-			<el-row style="margin-top: 20px;">
-				<el-col :span="24">
-					<el-button style="float: left;" @click="nocomplete">未完成</el-button>
-					<el-button style="float: left;" @click="staycomplete">完成待入库</el-button>
-					<el-button style="float: left;" @click="warehousing">已入库</el-button>
-				</el-col>
 			</el-row>
 			<el-row style="margin-top: 20px;" v-if="toggle">
 	            <el-col :span="3" style="text-align:right;">商品名称：</el-col>
@@ -186,6 +184,7 @@
 				goodsName: '',
 				storagename: '',
 				storagetype: '',
+				wind: 0,
     		}
     	},
     	components: {
@@ -253,22 +252,28 @@
 				this.storagetype = ""
 			},
 			async exportEXCEL(){
+//				 window.open('http://47.95.12.49:8084/echuxianshengshop1/purchaseordera/exportExcel')
 				const resData = await getexport(this.storagename,this.storagetype)
 				if(resData.data.code === '1111'){
 					this.$message(resData.data.message)
+					this.wind = 1
+//					console.log(this.wind)
 				} else {
 					this.$message(resData.data.message)
 				}
+//				if(wind === 1){
+					window.open('http://47.95.12.49:8084/echuxianshengshop1/purchaseordera/exportExcel')
+//				}
 			},
 			async warehousing(){
 				this.get = 1
 				this.count = 0
+				this.toggle= false
+				this.toggle1= true
 				const resData = await queryPurchaseOrderList()
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
-					this.toggle= false
-					this.toggle1= true
 					for(let i = 0;i<this.receiptData.length;i++){
                        	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
                     	}
@@ -280,13 +285,13 @@
 			},
 			async nocomplete(){
 				this.get = 0
+				this.toggle= true
+				this.toggle1= false
 				const dataReceipt = await getPurchaseOrderAll(1, 10)
 				console.log('re: ',dataReceipt.data.data)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
-					this.toggle= true
-					this.toggle1= false
 					for(let i = 0;i<this.receiptData.length;i++){
                        	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
                     	}
@@ -298,12 +303,12 @@
 			async staycomplete(){
 				this.get = 2
 				this.count = 0
+				this.toggle= false
+				this.toggle1= false
 				const resData2 = await querystay(1, 10)
 				if(resData2.data.code === '1111'){
 					this.receiptData = resData2.data.data.list
 					this.count = resData2.data.data.total
-					this.toggle= false
-					this.toggle1= false
 					for(let i = 0;i<this.receiptData.length;i++){
                        	 this.receiptData[i].advisenumber = this.receiptData[i].advisenumber+this.receiptData[i].prounite
                     	}

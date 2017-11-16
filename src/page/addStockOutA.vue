@@ -52,15 +52,24 @@
 			prop="infactbuynumber"
 			label="当前库存量">
 			</el-table-column>
+			<el-table-column fixed="right"
+				v-if="toggle1"
+				label="操作" width="120px">
+				<template scope="scope">
+					<el-button
+					size="small"
+					@click="handleEdit(scope.$index, scope.row)">审批修改</el-button>
+				</template>
+			</el-table-column>
 		</el-table>
-		<div class="Pagination" style="text-align: left;margin-top: 10px;">共 {{count}} 条</div>
+		<div class="Pagination" style="text-align: left;margin-top: 10px;font-size: 14px;">共 {{count}} 条</div>
 		</div>
     </div>
 </template>
 
 <script>
     import headTop from '@/components/headTop'
-    import {getAddPurchase, queryStockInList, getRepoAll, makeStockOut, getunable} from '@/api/getData'
+    import {getAddPurchase, queryStockInList, getRepoAll, makeStockOut, getunable, gethandleEdit} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -77,6 +86,7 @@
 				currentPage: 1,
 				count: 0,
 				toggle: true,
+				toggle1: false,
     		}
     	},
     	components: {
@@ -99,18 +109,28 @@
     				console.log(err);
     			}
     		},
-			handleEdit(index,row) {
+			async handleEdit(index,row) {
 				console.log(index,row)
-				this.$destroy()
-				this.$router.push('/stockInListDetails/'+ row.orderid)
+//				console.log(row.orderno)
+//				console.log(row.productcode)
+				const dataReceipt = await gethandleEdit(row.orderno,row.productcode)
+				if(dataReceipt.data.code === '1111'){
+					this.$message(dataReceipt.data.message)
+				}else {
+					this.$message(dataReceipt.data.message)
+				}
 			},
 			async unable(){
 				this.toggle= true
+				this.toggle1 = true
 				console.log(this.form.respositysource)
 				const dataReceipt = await getunable(this.form.respositysource)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data
 					this.count = dataReceipt.data.data.length
+					for(let i = 0;i<this.receiptData.length;i++){
+						this.receiptData[i].state = "未发起审批"
+					}
 				}else {
 					this.$message(dataReceipt.data.message)
 					this.receiptData = []
@@ -129,12 +149,12 @@
 					this.receiptData = dataReceipt.data.data
 					this.count = dataReceipt.data.data.length
 					this.$message('查询未生单信息成功')
+					this.toggle= false
 				}else {
 					this.$message(dataReceipt.data.message)
 					this.receiptData = []
 					this.count = 0
 				}
-				this.toggle= false
 			},
 			async addStockOut(){
 				const addInfo = await makeStockOut(this.form.respositysource)

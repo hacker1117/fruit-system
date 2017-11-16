@@ -5,7 +5,7 @@
 		<el-row style="margin-top: 20px;">
             <el-col :span="2" style="text-align:right;">商品名称：</el-col>
 			<el-col :span="4">
-				<el-select v-model="form.productindex" placeholder="请选择分类">
+				<el-select v-model="form.productindex" placeholder="请选择商品名称">
                     <el-option v-for="(goods,index) in goodsList" :key="goods.id" :label="goods.pname" :value="index"></el-option>
                 </el-select>
 			</el-col>
