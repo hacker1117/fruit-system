@@ -253,15 +253,15 @@
 			},
 			async exportEXCEL(){
 //				 window.open('http://47.95.12.49:8084/echuxianshengshop1/purchaseordera/exportExcel')
-				this.wind = "http://47.95.12.49:8084/echuxianshengshop1/purchaseordera/exportExcel?storagename="+this.storagename+"&storagetype="+this.storagetype
-				console.log(this.wind)
+//				this.wind = "http://47.95.12.49:8084/echuxianshengshop1/purchaseordera/exportExcel?storagename="+this.storagename+"&storagetype="+this.storagetype
+//				console.log(this.wind)
 				const resData = await getexport(this.storagename,this.storagetype)
-				if(resData.data.code === '1111'){
-					this.$message(resData.data.message)
-				} else {
-					this.$message(resData.data.message)
-				}
-				window.open(this.wind)
+//				if(resData.data.code === '1111'){
+//					this.$message(resData.data.message)
+//				} else {
+//					this.$message(resData.data.message)
+//				}
+				window.open("http://47.95.12.49:8084/echuxianshengshop1/purchaseordera/exportExcel?storagename="+this.storagename+"&storagetype="+this.storagetype)
 			},
 			async warehousing(){
 				this.get = 1
