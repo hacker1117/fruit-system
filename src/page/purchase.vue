@@ -108,7 +108,7 @@
 			label="商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="infactbuynumber"
+			prop="buynumber"
 			label="采购量">
 			</el-table-column>
 			<el-table-column

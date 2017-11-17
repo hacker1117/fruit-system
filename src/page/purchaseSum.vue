@@ -158,7 +158,7 @@
 			async handleEdit() {
 				let row = this.receiptData[this.receiptData.length-1]
 				console.log(row.producttype)
-				const makeInfo = await makePurchaseOrder(this.goodsList[this.form.productindex].pname, row.productcode, row.buynumber, row.aexistamount, row.advisebuynumber, row.producttype)
+				const makeInfo = await makePurchaseOrder(this.goodsList[this.form.productindex].pname, row.productcode, row.supplierid, row.aexistamount, row.advisebuynumber, row.producttype)
 				if(makeInfo.data.code === '1111'){
 					this.$message('生成采购单成功')
 					this.isDisabled = true

@@ -51,7 +51,7 @@
            </el-form-item>
             <el-form-item label="损耗类别" :label-width="formLabelWidth">
                 <!--<el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>-->
-                <el-select v-model="form.wastetype" placeholder="请选择虚拟库">
+                <el-select v-model="form.wastetype" placeholder="请选择损耗类别">
                     <el-option v-for="repos in virtualRepoList" :key="repos.id" :label="repos.reponame" :value="repos.reponame"></el-option>
                 </el-select>
             </el-form-item>
@@ -78,11 +78,11 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
-			prop="orderid"
+			prop="ordernumber"
 			label="订单号">
 			</el-table-column>
 			<el-table-column
-			prop="procode"
+			prop="productcode"
 			label="商品编号">
 			</el-table-column>
 			<el-table-column

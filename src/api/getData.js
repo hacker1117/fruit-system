@@ -628,7 +628,7 @@ export const getPurchaseSumGoods = () => axio('/purchasesummaryordera/findAllPro
  * 自动生成采购单
  */
 
-export const makePurchaseOrder = (pname, productcode, buynumber, aexistamount, advisebuynumber) => axio('/purchasesummaryordera/updateIsCreatre',{pname, productcode, buynumber, aexistamount, advisebuynumber});
+export const makePurchaseOrder = (pname, productcode, supplierid, aexistamount, advisebuynumber) => axio('/purchasesummaryordera/updateIsCreatre',{pname, productcode, supplierid, aexistamount, advisebuynumber});
 
 /**
  * 获取未生单的商品列表
