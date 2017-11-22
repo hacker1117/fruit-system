@@ -129,7 +129,9 @@
                     	console.log(this.tableData[i].losscount)
                     	console.log(this.tableData[i].overagecount)
                         this.tableData[i].state = this.tableData[i].losscount === 0||this.tableData[i].overagecount === 0 ? '有盈亏' : '无盈亏'
-                        this.tableData[i].sta = this.tableData[i].state === ""? "未盘点" : "已盘点"
+                        this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
+                        console.log("i"+this.tableData[i].losscount)
+                        console.log("i"+this.tableData[i].overagecount)
                     }
                 }catch(err){
                     console.log('获取数据失败', err);

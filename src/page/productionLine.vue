@@ -10,32 +10,70 @@
 	        <el-dialog title="新增生产线" v-model="dialogFormVisible">
 		        <el-form :model="form">
 					<el-form-item label="仓库编码" :label-width="formLabelWidth">
-		            	<el-input style="width: 195px" v-model="form.packid" auto-complete="off"></el-input>
+		            	<el-select v-model="form.repcode" placeholder="请选择仓库">
+		                    <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.repocode" :value="supplier.repocode"></el-option>
+		                </el-select>
 		            </el-form-item>
 					<el-form-item label="生产线名称" :label-width="formLabelWidth">
-		            	<el-input style="width: 195px" v-model="form.packagename" auto-complete="off"></el-input>
+		            	<el-input style="width: 195px" v-model="form.pipeline" auto-complete="off"></el-input>
 		            </el-form-item>
 					<el-form-item label="坑位数量" :label-width="formLabelWidth">
-		            	<el-input-number style="width: 195px" v-model="form.prostandard" :step="2" :min="0" :max="100"></el-input-number>
+		            	<el-input-number style="width: 195px" v-model="form.holenum" :step="2" :min="0" :max="100"></el-input-number>
 		           </el-form-item>
 					<el-form-item label="优先级（1-10）" :label-width="formLabelWidth">
-		            	<el-select v-model="pack" placeholder="请选择商品分类">
+		            	<el-select v-model="form.prioritylevel" placeholder="请选择商品分类">
 							<el-option v-for="(item,index) in 10" :key="item" :label="item" :value="item"></el-option>
 						</el-select>
 		            </el-form-item>
 					<el-form-item label="是否可用" :label-width="formLabelWidth">
-		            	<el-select v-model="goodstype" placeholder="请选择商品分类">
-							<el-option value="可用">可用</el-option>
-							<el-option value="不可用">不可用</el-option>
+		            	<el-select v-model="form.isenable" placeholder="请选择商品分类">
+							<el-option :value="1">可用</el-option>
+							<el-option :value="0">不可用</el-option>
 						</el-select>
 		           </el-form-item>
 					<el-form-item label="最大承载订单数" :label-width="formLabelWidth">
-		            	<el-input-number style="width: 195px" v-model="form.prosta" :step="100" :min="0" :max="10000"></el-input-number>
+		            	<el-input-number style="width: 195px" v-model="form.maxnum" :step="100" :min="0" :max="10000"></el-input-number>
 		           </el-form-item>
 		        </el-form>
 		        <div slot="footer" class="dialog-footer">
 		            <el-button @click="dialogFormVisible = false">取 消</el-button>
-		            <el-button type="primary" @click="categoryAdd">确 定</el-button>
+		            <el-button type="primary" @click="productionAdd">确 定</el-button>
+		        </div>
+       		</el-dialog>
+	        <el-dialog title="修改生产线" v-model="dialogFormVisible1">
+		        <el-form :model="form1">
+					<el-form-item label="生产线ID" :label-width="formLabelWidth">
+		            	<el-input style="width: 195px" v-model="form1.id" auto-complete="off" :disabled="true"></el-input>
+		            </el-form-item>
+					<el-form-item label="仓库编码" :label-width="formLabelWidth">
+		            	<el-select v-model="form1.repcode" placeholder="请选择仓库">
+		                    <el-option v-for="supplier in supplierList" :key="supplier.id" :label="supplier.repocode" :value="supplier.repocode"></el-option>
+		                </el-select>
+		            </el-form-item>
+					<el-form-item label="生产线名称" :label-width="formLabelWidth">
+		            	<el-input style="width: 195px" v-model="form1.pipeline" auto-complete="off"></el-input>
+		            </el-form-item>
+					<el-form-item label="坑位数量" :label-width="formLabelWidth">
+		            	<el-input-number style="width: 195px" v-model="form1.holenum" :step="2" :min="0" :max="100"></el-input-number>
+		           </el-form-item>
+					<el-form-item label="优先级（1-10）" :label-width="formLabelWidth">
+		            	<el-select v-model="form1.prioritylevel" placeholder="请选择商品分类">
+							<el-option v-for="(item,index) in 10" :key="item" :label="item" :value="item"></el-option>
+						</el-select>
+		            </el-form-item>
+					<el-form-item label="是否可用" :label-width="formLabelWidth">
+		            	<el-select v-model="form1.isenable" placeholder="请选择商品分类">
+							<el-option :value="1">可用</el-option>
+							<el-option :value="0">不可用</el-option>
+						</el-select>
+		           </el-form-item>
+					<el-form-item label="最大承载订单数" :label-width="formLabelWidth">
+		            	<el-input-number style="width: 195px" v-model="form1.maxnum" :step="100" :min="0" :max="10000"></el-input-number>
+		           </el-form-item>
+		        </el-form>
+		        <div slot="footer" class="dialog-footer">
+		            <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+		            <el-button type="primary" @click="modify">确 定</el-button>
 		        </div>
        		</el-dialog>
 	        <div class="table_container">
@@ -46,68 +84,68 @@
 	                style="width: 100%">
 	                <el-table-column
 	                  width="180"
-	                  property="packid"
+	                  property="id"
 	                  label="生产线ID">
 	                </el-table-column>
 	               <el-table-column
 	                  width="180"
-	                  property="packagename"
+	                  property="repcode"
 	                  label="所属仓库">
 	                </el-table-column>
 	               <el-table-column
 	                  width="120"
-	                  property="prostandard"
+	                  property="pipeline"
 	                  label="生产线名称">
 	               </el-table-column>
 	               <el-table-column
 	                  width="180"
-	                  property="packcount"
+	                  property="holenum"
 	                  label="坑位数">
 	               </el-table-column>
 	               <el-table-column
 	                  width="120"
-	                  property="prounite"
+	                  property="prioritylevel"
 	                  label="优先级别">
 	               </el-table-column>
 	               <el-table-column
 	                  width="120"
-	                  property="prounite"
+	                  property="isenable"
 	                  label="是否可用">
 	               </el-table-column>
 	               <el-table-column
 	                  width="120"
-	                  property="prounite"
+	                  property="maxnum"
 	                  label="最大承载订单数">
 	               </el-table-column>
 	               <el-table-column
 	                  width="120"
-	                  property="prounite"
+	                  property="operatedate"
 	                  label="最后操作日期">
 	               </el-table-column>
 	               <el-table-column
 	                  width="120"
-	                  property="prounite"
+	                  property="streamcount"
 	                  label="当前坑位号">
 	               </el-table-column>
 	               <el-table-column
 	                  width="120"
-	                  property="prounite"
+	                  property="batch"
 	                  label="当前批次号">
 	               </el-table-column>
 	               <el-table-column
 	                  width="120"
-	                  property="prounite"
+	                  property="ordercount"
 	                  label="当前承载订单数">
 	               </el-table-column>
-	                <el-table-column
+	                <el-table-column fixed="right" width="120"
 					label="操作">
 						<template scope="scope">
 						<el-button
 						size="mini"
-						@click="category(scope.row)">修改</el-button>
+						@click="category(scope.$index, scope.row)">修改</el-button>
 						<el-button
 						size="mini"
-						@click="categoryDelete(scope.$index, scope.row)">删除</el-button>
+						@click="ProductionDelete(scope.$index, scope.row)">删除</el-button>
 						</template>
 					</el-table-column>
 	            </el-table>
@@ -127,7 +165,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getPacking_b,addcategory_b,deleteCategory_b,modifycategory_b,numberdeduction_b,numberadd_b} from '@/api/getData'
+    import {getProduction,addProduction,modifyProduction,DeleteProduction,getWarehouse} from '@/api/getData'
     export default {
         data(){
             return {
@@ -145,16 +183,27 @@
                 count: 0,
                 currentPage: 1,
 				dialogFormVisible: false,
+				dialogFormVisible1: false,
 				formLabelWidth: '120px',
-				form: {
-					prosta: '',
-					packid: '',
-					packagename: '',
-					prostandard: '',
-					packcount: '',
-					prounite: '',
+				form:{
+					repcode: '',
+					pipeline: '',
+					holenum: '',
+					prioritylevel: '',
+					isenable: '',
+					maxnum: '',
+				},
+				form1:{
+					id: '',
+					repcode: '',
+					pipeline: '',
+					holenum: '',
+					prioritylevel: '',
+					isenable: '',
+					maxnum: '',
 				},
 				checkdate: '',
+				supplierList: [],
             }
         },
     	components: {
@@ -170,20 +219,82 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getPacking_b(1,10);
+                    const countData = await getProduction(1,10);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
+					const classi = await getWarehouse()
+					this.supplierList = classi.data.data
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
             },
-			async categoryAdd(){
+			async productionAdd(){
 				console.log(this.form)
-                const goodsAdd = await addcategory_b(this.form.packid,this.form.packagename,this.form.prostandard,this.form.packcount,this.form.prounite)
+				console.log(this.form.repcode)
+                const goodsAdd = await addProduction(this.form.repcode,this.form.pipeline,this.form.holenum,this.form.prioritylevel,this.form.isenable,this.form.maxnum)
                 if(goodsAdd.data.code === '1111') {
-                    this.$message('添加生产线成功!')
+                    this.$message(goodsAdd.data.message)
+					this.form.repcode = ""
+					this.form.pipeline = ""
+					this.form.holenum = ""
+					this.form.prioritylevel = ""
+					this.form.isenable = ""
+					this.form.maxnum = ""
                     this.dialogFormVisible = false
+                    this.initData()
+                } else {
+                    this.$message(goodsAdd.data.message)
+                }
+			},
+			async modify(){
+				console.log(this.form)
+				console.log(this.form.repcode)
+                const goodsAdd = await modifyProduction(this.form1.id,this.form1.repcode,this.form1.pipeline,this.form1.holenum,this.form1.prioritylevel,this.form1.isenable,this.form1.maxnum)
+                if(goodsAdd.data.code === '1111') {
+                    this.$message(goodsAdd.data.message)
+                    this.dialogFormVisible1 = false
+                    this.initData()
+                } else {
+                    this.$message(goodsAdd.data.message)
+                }
+			},
+			async category(index,row){
+				this.dialogFormVisible1 = true
+				console.log(index)
+				console.log(row)
+				this.form1 = row
+//this.form1.id = row.id
+//this.form1.repcode = row.repcode
+//this.form1.pipeline = row.pipeline
+//this.form1.holenum = row.holenum
+//this.form1.prioritylevel = row.prioritylevel
+//this.form1.isenable = row.isenable
+//this.form1.maxnum = row.maxnum
+			},
+			async ProductionDelete(index,row) {
+				this.$confirm('此操作将删除该生产线, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.categoryDelete(index,row)
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			async categoryDelete(index,row){
+				console.log(row.id)
+                const goodsAdd = await DeleteProduction(row.id)
+                if(goodsAdd.data.code === '1111') {
+                    this.$message(goodsAdd.data.message)
                     this.initData()
                 } else {
                     this.$message(goodsAdd.data.message)

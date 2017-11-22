@@ -46,7 +46,7 @@
 			label="数量">
 			</el-table-column>
 			<el-table-column
-			prop="storenumber" width="120px"
+			prop="netweight" width="120px"
 			label="报损数量">
 			</el-table-column>
 			<el-table-column

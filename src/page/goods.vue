@@ -33,39 +33,44 @@
 			</el-col>
 		</el-row>
         <el-dialog title="新增货品" v-model="dialogFormVisible">
-        <el-form :model="form">
+        <el-form :model="form1">
 			<el-form-item label="标品" :label-width="formLabelWidth">
-            	<el-radio-group v-model="form.isStandard">
+            	<el-radio-group v-model="form1.isStandard">
 					<el-radio :label="0">否</el-radio>
 					<el-radio :label="1">是</el-radio>
 				</el-radio-group>
             </el-form-item>
 			<el-form-item label="商品编码" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.proid" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.proid" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="商品名称" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.pname" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.pname" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="规格" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.prostandered" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.prostandered" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="商品属性" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.commodityattribute" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.commodityattribute" auto-complete="off"></el-input>
+            </el-form-item>
+			<el-form-item label="商品分类" :label-width="formLabelWidth">
+            	<el-select v-model="form1.storagetype" placeholder="请选择分类">
+		            <el-option v-for="classif in classification" :key="classif.id" :label="classif.categoryname" :value="classif.categorycode"></el-option>
+		        </el-select>
             </el-form-item>
 			<el-form-item label="厂家" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.factories" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.factories" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="品牌" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.brand" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.brand" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="供应商编码" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.supplierid" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.supplierid" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="参考进价" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.referenceinprice" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.referenceinprice" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="创建人" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.createman" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form1.createman" auto-complete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -74,7 +79,7 @@
         </div>
         </el-dialog>
             <el-dialog title="编辑货品" v-model="dialogFormVisible2">
-                <el-form :model="form">
+                <el-form :model="form2">
                     <el-form-item label="商品名称" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.pname" auto-complete="off"></el-input>
                     </el-form-item>
@@ -84,6 +89,11 @@
                     <el-form-item label="商品属性" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.commodityattribute" auto-complete="off"></el-input>
                     </el-form-item>
+					<el-form-item label="商品分类" :label-width="formLabelWidth">
+		            	<el-select v-model="form2.storagetype" placeholder="请选择分类">
+				            <el-option v-for="classif2 in classification" :key="classif2.id" :label="classif2.categoryname" :value="classif2.categoryname"></el-option>
+				        </el-select>
+		            </el-form-item>
                     <el-form-item label="厂家" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.factories" auto-complete="off"></el-input>
                     </el-form-item>
@@ -98,7 +108,7 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button @click="dialogFormVisible2 = false">取 消</el-button>
                     <el-button type="primary" @click="confirmEditOld">确 定</el-button>
                 </div>
             </el-dialog>
@@ -174,7 +184,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getGoodsAll, queryGoodsList, addGoods, appGoodsList, bindAppGoods, updateGoods} from '@/api/getData'
+    import {getGoodsAll, queryGoodsList, addGoods, appGoodsList, bindAppGoods, updateGoods, getclassification} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -194,13 +204,32 @@
 				commodityattribute: '',
 				factories: '',
 				brand: '',
-				barcode: '',
-				placeoforigin: '',
 				form:{
 					appGoodsIndex:'',
-    				isStandard: 0,
 				},
-                form2:{},
+				form1:{
+					isStandard: "",
+					proid: "",
+					pname: "",
+					prostandered: "",
+					commodityattribute: "",
+					storagetype: "",
+					factories: "",
+					brand: "",
+					supplierid: "",
+					referenceinprice: "",
+					createman: "",
+				},
+				form2:{
+					pname: "",
+					prostandered: "",
+					commodityattribute: "",
+					storagetype: "",
+					factories: "",
+					brand: "",
+					supplierid: "",
+					referenceinprice: "",
+				},
 				appBindId:'',
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
@@ -208,7 +237,8 @@
                 dialogFormVisible2: false,
 				appGoodsList:[],
 				confirmIndex: '',
-				currentPage: 1
+				currentPage: 1,
+				classification: [],
     		}
     	},
     	components: {
@@ -228,6 +258,8 @@
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+					const classi = await getclassification()
+					this.classification = classi.data.data
 					const appGoodsInfo = await appGoodsList(1)
 					this.appGoodsList = appGoodsInfo.data.resultData.productList
 					console.log(this.appGoodsList)
@@ -260,19 +292,20 @@
 			},
 			async confirmAdd(){
 				console.log(this.form)
-                const goodsAdd = await addGoods(this.form.isStandard,this.form.proid,this.form.pname,this.form.prostandered,this.form.commodityattribute,this.form.factories,this.form.brand,this.form.supplierid,this.form.referenceinprice,this.form.createman)
+                const goodsAdd = await addGoods(this.form1.isStandard,this.form1.proid,this.form1.pname,this.form1.prostandered,this.form1.commodityattribute,this.form1.storagetype,this.form1.factories,this.form1.brand,this.form1.supplierid,this.form1.referenceinprice,this.form1.createman)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('添加货品成功!')
-                    this.form.isStandard = 0
-					this.form.proid = ""
-					this.form.pname = ""
-					this.form.prostandered = ""
-					this.form.commodityattribute = ""
-					this.form.factories = ""
-					this.form.brand = ""
-					this.form.supplierid = ""
-					this.form.referenceinprice = ""
-					this.form.createman = ""
+                    this.form1.isStandard = 0
+					this.form1.proid = ""
+					this.form1.pname = ""
+					this.form1.prostandered = ""
+					this.form1.commodityattribute = ""
+					this.form1.storagetype = ""
+					this.form1.factories = ""
+					this.form1.brand = ""
+					this.form1.supplierid = ""
+					this.form1.referenceinprice = ""
+					this.form1.createman = ""
                     this.dialogFormVisible = false
                     this.initData()
                 } else {
@@ -281,10 +314,11 @@
 			},
             async confirmEditOld(){
                 console.log(this.form)
-                const goodsAdd = await updateGoods(this.form2.proid,this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.factories,this.form2.brand,this.form2.supplierid,this.form2.referenceinprice)
+                const goodsAdd = await updateGoods(this.form2.proid,this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.storagetype,this.form2.factories,this.form2.brand,this.form2.supplierid,this.form2.referenceinprice)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('修改货品成功!')
                     this.form2.commodityattribute = ""
+                    this.form2.storagetype = ""
 					this.form2.factories = ""
 					this.form2.brand = ""
 					this.form2.supplierid = ""
@@ -297,7 +331,15 @@
             },
             handleEditOld(index, row) {
                 this.dialogFormVisible2 = true
-                this.form2 = row
+//              this.form2 = row
+                this.form2.pname = row.pname
+				this.form2.prostandered = row.prostandered
+				this.form2.commodityattribute = row.commodityattribute
+				this.form2.storagetype = row.storagetype
+				this.form2.factories = row.factories
+				this.form2.brand = row.brand
+				this.form2.supplierid = row.supplierid
+				this.form2.referenceinprice = row.referenceinprice
             },
 			async confirmBind(){
 				console.log(this.appGoodsList)

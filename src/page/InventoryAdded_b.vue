@@ -2,17 +2,6 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
-        <el-dialog title="修改实际数量" v-model="dialogFormVisible">
-	        <el-form :model="form">
-				<el-form-item label="实际数量" :label-width="formLabelWidth">
-	                <el-input style="width: 195px" v-model="form.infactcount" auto-complete="off"></el-input>
-	            </el-form-item>
-	        </el-form>
-	        <div slot="footer" class="dialog-footer">
-	            <el-button @click="dialogFormVisible = false">取 消</el-button>
-	            <el-button type="primary" @click="confirmAdd">确 定</el-button>
-	        </div>
-        </el-dialog>
         <el-dialog title="添加" v-model="dialogFormVisible1">
 	        <el-row>
 	            <el-col :span="4" style="text-align:right;">商品名称：</el-col>
@@ -207,7 +196,7 @@
 				console.log(this.tableData1.length)
 				console.log(this.tableData1[0])
 				for(let i = 0; i<this.tableData1.length; i++){
-					const resData = await getinventoryPreservation_b(this.tableData1[i].accountcount,this.tableData1[i].categorycode,this.tableData1[i].categoryname,this.tableData1[i].checkdate,this.tableData1[i].checkdtailid,this.tableData1[i].checkid,this.tableData1[i].infactcount,this.tableData1[i].losscount,this.tableData1[i].overagecount,this.tableData1[i].pname,this.tableData1[i].proid,this.tableData1[i].prostandard,this.tableData1[i].prounite,this.tableData1[i].repocode,this.tableData1[i].reponame,this.tableData1[i].username)
+					const resData = await getinventoryPreservation_b(this.tableData1[i].pname, this.tableData1[i].proid, this.tableData1[i].prounite, this.tableData1[i].accountCount, this.tableData1[i].infactcount, this.tableData1[i].losscount, this.tableData1[i].overagecount)
 					if(resData.data.code === '1111'){
 						console.log("this.tableData1"+[i]+"成功")
 						this.Success+=1
@@ -221,15 +210,6 @@
 				}else {
 					this.$message('盘点失败!')
 				}
-			},
-			handleEdit(index,row) {
-				this.dialogFormVisible = true
-				this.form.infactcount =row.infactcount
-				this.ind=index
-			},
-			async confirmAdd(){
-				this.tableData[this.ind].infactcount=this.form.infactcount
-				this.dialogFormVisible = false
 			}
         },
     }

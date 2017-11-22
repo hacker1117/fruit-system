@@ -9,7 +9,11 @@
 			<el-col :span="4"><el-input v-model="proname" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
-			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+			<el-col :span="24">
+				<el-button style="float: left;" @click="whole">全部库存</el-button>
+				<el-button style="float: left;" @click="greater">库存大于零</el-button>
+				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
+			</el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
@@ -38,7 +42,6 @@
 		</el-table>
 		<div class="Pagination" style="text-align: left;margin-top: 10px;">
 			<el-pagination
-				@size-change="handleSizeChange"
 				@current-change="handleCurrentChange"
 				:current-page="currentPage"
 				:page-size="10"
@@ -52,7 +55,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockBalanceaAll, queryStockInList, queryBalanceB} from '@/api/getData'
+    import {getStockBalanceaAll, queryStockInList, queryBalanceB,queryGreater_a} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -97,6 +100,34 @@
 				this.$destroy()
 				this.$router.push('/stockInListDetails/'+ row.orderid)
 			},
+			async whole(){
+				this.get = 1
+				this.count = 0
+				const resData = await queryBalanceB()
+				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
+			},
+			async greater(){
+				this.get = 2
+				this.count = 0
+				const resData = await queryGreater_a()
+				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
+			},
 			async handleSearch(){
 				this.get = 1
 				this.count = 0
@@ -119,16 +150,22 @@
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num
-				const dataReceipt = this.get = 0 ? await getStockBalanceaAll(this.currentPage) : await queryBalanceB(this.repocode,this.proname,this.currentPage)
+				let dataReceipt = {}
+				if(this.get === 0){
+					dataReceipt = await getStockBalanceaAll(this.currentPage)
+				}else if(this.get === 1){
+					dataReceipt = await queryBalanceB(this.repocode,this.proname,this.currentPage)
+				}else if(this.get === 2){
+					dataReceipt = await queryGreater_a(this.currentPage)
+				}
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.receiptData = []
+					this.receiptData =""
+					this.count = 0
 				}
-			},
-			handleSizeChange(){
-
 			}
 		}
     }

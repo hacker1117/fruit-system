@@ -9,7 +9,11 @@
 			<el-col :span="4"><el-input v-model="proname" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
 		<el-row>
-			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
+			<el-col :span="24">
+				<el-button style="float: left;" @click="whole">全部库存</el-button>
+				<el-button style="float: left;" @click="greater">库存大于零</el-button>
+				<el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button>
+			</el-col>
 		</el-row>
 		<el-table
 			:data="receiptData"
@@ -55,7 +59,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getStockBalancebAll, queryStockInList,getqueryBalancebAll} from '@/api/getData'
+    import {getStockBalancebAll, queryStockInList,getqueryBalancebAll,queryGreater_b} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -99,6 +103,34 @@
 				console.log(index,row)
 				this.$destroy()
 				this.$router.push('/stockInListDetails/'+ row.orderid)
+			},
+			async whole(){
+				this.get = 1
+				this.count = 0
+				const resData = await getqueryBalancebAll()
+				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
+			},
+			async greater(){
+				this.get = 2
+				this.count = 0
+				const resData = await queryGreater_b()
+				console.log(resData.data)
+				if(resData.data.code === '1111'){
+					this.receiptData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData =""
+					this.count = 0
+				}
 			},
 			async handleSearch(){
 				this.get = 1

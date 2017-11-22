@@ -49,9 +49,6 @@
                     @click="handleAdd(scope.$index, scope.row)">增加</el-button>
                     <el-button
                     size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-                    <el-button
-                    size="mini"
                     @click="confirmDelete(scope.$index, scope.row)">删除</el-button>
                     <el-button
                     size="mini"
@@ -97,9 +94,6 @@
                 <el-table-column
                 label="操作">
                 <template scope="scope">
-                    <el-button
-                    size="mini"
-                    @click="handleEditChild(scope.$index, scope.row)">修改</el-button>
                     <el-button
                     size="mini"
                     @click="confirmDelete(scope.$index, scope.row)">删除</el-button>

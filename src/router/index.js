@@ -65,6 +65,9 @@ const InventoryDetails_a = r => require.ensure([], () => r(require('@/page/Inven
 const InventoryAdded_a = r => require.ensure([], () => r(require('@/page/InventoryAdded_a')), 'Inventory_a');
 const securityThresholdManagement_a = r => require.ensure([], () => r(require('@/page/securityThresholdManagement_a')), 'securityThresholdManagement_a');
 const productionLine = r => require.ensure([], () => r(require('@/page/productionLine')), 'productionLine');
+const allotmentSheet_b = r => require.ensure([], () => r(require('@/page/allotmentSheet_b')), 'allotmentSheet_b');
+const allotmentSheetDetails_b = r => require.ensure([], () => r(require('@/page/allotmentSheetDetails_b')), 'allotmentSheet_b');
+const allotmentSheetAdded_b = r => require.ensure([], () => r(require('@/page/allotmentSheetAdded_b')), 'allotmentSheet_b');
 
 const routes = [
 	{
@@ -279,6 +282,18 @@ const routes = [
 			path: '/productionLine',
 			component: productionLine,
 			meta: ['生产执行管理', '资源分配管理', '生产线管理'],
+		},{
+			path: '/allotmentSheet_b',
+			component: allotmentSheet_b,
+			meta: ['B库进销存管理', '库存管理', '调拨单'],
+		},{
+			path: '/allotmentSheetDetails_b/:id',
+			component: allotmentSheetDetails_b,
+			meta: ['B库进销存管理', '库存管理', '调拨单'],
+		},{
+			path: '/allotmentSheetAdded_b',
+			component: allotmentSheetAdded_b,
+			meta: ['B库进销存管理', '库存管理', '调拨单'],
 		}]
 	}
 ]
