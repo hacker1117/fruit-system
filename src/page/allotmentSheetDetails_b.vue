@@ -34,11 +34,11 @@
 	                  label="规格型号">
 	               </el-table-column>
 	               <el-table-column
-	                  property="switchtype "
+	                  property="switchtype"
 	                  label="调拨类型">
 	               </el-table-column>
 	               <el-table-column
-	                  property="inreponame "
+	                  property="inreponame"
 	                  label="调入仓库">
 	               </el-table-column>
 	            </el-table>
@@ -98,6 +98,16 @@
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                    	this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
+                    	if(this.tableData[i].switchtype === 1){
+                    		this.tableData[i].switchtype = "缺货调拨"
+                    	}else if(this.tableData[i].switchtype === 2){
+                    		this.tableData[i].switchtype = "促销调拨"
+                    	}else if(this.tableData[i].switchtype === 3){
+                    		this.tableData[i].switchtype = "转大宗出库"
+                    	}
+                    }
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -113,6 +123,16 @@
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                    	this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
+                    	if(this.tableData[i].switchtype === 1){
+                    		this.tableData[i].switchtype = "缺货调拨"
+                    	}else if(this.tableData[i].switchtype === 2){
+                    		this.tableData[i].switchtype = "促销调拨"
+                    	}else if(this.tableData[i].switchtype === 3){
+                    		this.tableData[i].switchtype = "转大宗出库"
+                    	}
+                    }
 				}else {
 					this.tableData = []
 					this.count = 0

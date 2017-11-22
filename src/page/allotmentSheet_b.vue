@@ -14,7 +14,7 @@
 				<el-col :span="24">
 	                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
 	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-	                <el-button style="float: left;" @click="handleAdd" type="primary">新增调拨单</el-button>
+	                <el-button style="float: left;" @click="handleAdd">新增调拨单</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -32,11 +32,11 @@
 	                  label="调拨单号">
 	               </el-table-column>
 	               <el-table-column
-	                  property="outstate "
+	                  property="outstate"
 	                  label="出库状态">
 	               </el-table-column>
 	               <el-table-column
-	                  property="outreponame"
+	                  property="inreponame"
 	                  label="调入仓库">
 	               </el-table-column>
 	               <el-table-column
@@ -111,15 +111,16 @@
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
 //                  console.log(this.tableData)
-//                  for(let i = 0;i<this.tableData.length;i++){
-//                  	console.log(i)
-//                  	console.log(this.tableData[i].losscount)
-//                  	console.log(this.tableData[i].overagecount)
-//                      this.tableData[i].state = this.tableData[i].losscount === 0||this.tableData[i].overagecount === 0 ? '有盈亏' : '无盈亏'
-//                      this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
-//                      console.log("i"+this.tableData[i].losscount)
-//                      console.log("i"+this.tableData[i].overagecount)
-//                  }
+                    for(let i = 0;i<this.tableData.length;i++){
+                    	this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
+                    	if(this.tableData[i].switchtype === 1){
+                    		this.tableData[i].switchtype = "缺货调拨"
+                    	}else if(this.tableData[i].switchtype === 2){
+                    		this.tableData[i].switchtype = "促销调拨"
+                    	}else if(this.tableData[i].switchtype === 3){
+                    		this.tableData[i].switchtype = "转大宗出库"
+                    	}
+                    }
 					//调入仓库
 					const classi = await getWarehouse_b()
 					this.classification = classi.data.data
@@ -137,6 +138,16 @@
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                    	this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
+                    	if(this.tableData[i].switchtype === 1){
+                    		this.tableData[i].switchtype = "缺货调拨"
+                    	}else if(this.tableData[i].switchtype === 2){
+                    		this.tableData[i].switchtype = "促销调拨"
+                    	}else if(this.tableData[i].switchtype === 3){
+                    		this.tableData[i].switchtype = "转大宗出库"
+                    	}
+                    }
 				} else {
 					this.$message(resData.data.message)
 					this.tableData =""
@@ -171,8 +182,19 @@
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                    	this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
+                    	if(this.tableData[i].switchtype === 1){
+                    		this.tableData[i].switchtype = "缺货调拨"
+                    	}else if(this.tableData[i].switchtype === 2){
+                    		this.tableData[i].switchtype = "促销调拨"
+                    	}else if(this.tableData[i].switchtype === 3){
+                    		this.tableData[i].switchtype = "转大宗出库"
+                    	}
+                    }
 				}else {
 					this.tableData = []
+					this.count = 0
 				}
 			}
         },
