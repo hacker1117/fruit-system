@@ -838,36 +838,48 @@ export const getInventory_b = (pageNum = 1,pageSize = 10, repositoryid = repoId)
  * B库-条件查询盘点
  */
 
-export const getInventoryChild_b = (startTime, endTime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/tinspect/getByCondition',{startTime, endTime, pageNum, pageSize, repositoryid});
+export const getInventoryChild_b = (startTime, endTime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryTInspectByParam',{startTime, endTime, pageNum, pageSize, repositoryid});
 
 /**
  * B库-查询盘点详情列表
  */
 
-export const getInventoryDetails_b = (checkid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/queryTInspectbyCheckid',{checkid,pageNum,pageSize,repositoryid});
+export const getInventoryDetails_b = (checkid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryTInspectbyCheckid',{checkid,pageNum,pageSize,repositoryid});
 
 /**
  * B库-查询新增盘点列表
  */
 
-export const getinventoryadd_b = (pageNum = 1,pageSize = 10, repositoryid = repoId, username = unames) => axio('/tinspect/getTInspectByTStoragetableb',{pageNum,pageSize,repositoryid,username});
+export const getinventoryadd_b = (pageNum = 1,pageSize = 10, repositoryid = repoId, username = unames) => axio('/tinspect/find',{pageNum,pageSize,repositoryid,username});
 
 /**
  * B库-查询新增盘点--商品分类
  */
-export const getclassification_b = () => axio('tinspect/getAllCategoryname');
+export const getclassification_b = () => axio('/tinspect/getAllCategoryname');
 
 /**
  * B库-条件查询盘点新增
  */
 
-export const queryInventoryAdded_b = (proname, goodstype, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/findProductByname',{proname, goodstype, pageNum,pageSize,repositoryid});
+export const queryInventoryAdded_b = (proname, goodstype, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryStoragetableb',{proname, goodstype, pageNum,pageSize,repositoryid});
 
 /**
  * B库-盘点新增--待盘点
  */
 
-export const getinventoryPreservation_b = (pname, proid, prounite, accountCount, infactcount, losscount, overagecount, repositoryid = repoId) => axio('/tinspect/addInspects',{pname, proid, prounite, accountCount, infactcount, losscount, overagecount,repositoryid});
+export const getinventoryPreservation_b = (bpid, repositoryid = repoId, username = unames) => axio('/tinspect/addInspects',{bpid,repositoryid, username});
+
+/**
+ * B库-盘点详情--确认盘点
+ */
+
+export const getconfirmationInventory_b = (checkid, repositoryid = repoId, username = unames) => axio('/tinspect/createTInspect',{checkid,repositoryid, username});
+
+/**
+ * B库-盘点详情--修改实际数量
+ */
+
+export const getupdateTInspect_b = (checkdtailid, losscount, overagecount, accountcount, infactCount, repositoryid = repoId, username = unames) => axio('/tinspect/updateTInspect',{checkdtailid, losscount, overagecount, accountcount, infactCount,repositoryid, username});
 
 /**
  * B库-调拨单 获取调拨单
@@ -880,6 +892,23 @@ export const getallocation_b = (pageNum = 1,pageSize = 10, repositoryid = repoId
  */
 
 export const getallotmentSheetDetails_b = (allocateid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/getDetail',{allocateid,pageNum,pageSize,repositoryid});
+
+/**
+ * B库-调拨单 新增调拨单
+ */
+
+export const getaddAllocate_b = (pname, proid, prostandard, ponunite, inrepocde, switchtype, allocatecount, inreponame, repositoryid = repoId, username = unames) => axio('/switch/insertOne',{pname, proid, prostandard, ponunite, inrepocde, switchtype, allocatecount, inreponame, repositoryid, username});
+
+/**
+ * B库 查询仓库
+ */
+export const getWarehouse_b = () => axio('/switch/getAllRepoName');
+
+/**
+ * B库 获取新增调拨单商品
+ */
+
+export const queryWarehouse_b = (pageNum = 1,pageSize = 10, repositoryid = repoId, username = unames) => axio('/switch/queryDaiSee',{pageNum,pageSize, repositoryid, username});
 
 
 

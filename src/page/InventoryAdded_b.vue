@@ -35,11 +35,11 @@
 	                  label="序号">
 	                </el-table-column>
 	               <el-table-column
-	                  property="pname"
+	                  property="proname"
 	                  label="商品名称">
 	                </el-table-column>
 	               <el-table-column
-	                  property="proid"
+	                  property="repocode"
 	                  label="商品编码">
 	               </el-table-column>
 	               <el-table-column
@@ -47,6 +47,15 @@
 	                  label="单位">
 	               </el-table-column>
 				</el-table>
+	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
+	                <el-pagination
+	                  @current-change="handleCurrentChange"
+	                  :current-page="currentPage"
+	                  :page-size="10"
+	                  layout="total, prev, pager, next"
+	                  :total="count1">
+	                </el-pagination>
+	            </div>
 	        <div slot="footer" class="dialog-footer">
 	            <el-button @click="dialogFormVisible = false">取 消</el-button>
 	            <el-button type="primary" @click="handle">确 定</el-button>
@@ -70,11 +79,11 @@
 	                  label="序号">
 	                </el-table-column>
 	               <el-table-column
-	                  property="pname"
+	                  property="proname"
 	                  label="商品名称">
 	                </el-table-column>
 	               <el-table-column
-	                  property="proid"
+	                  property="repocode"
 	                  label="商品编码">
 	               </el-table-column>
 	               <el-table-column
@@ -82,10 +91,10 @@
 	                  label="单位">
 	               </el-table-column>
 	               <el-table-column
-	                  property="accountcount"
+	                  property="existamount"
 	                  label="系统数量">
 	               </el-table-column>
-	               <el-table-column
+	               <!--<el-table-column
 	                  property="infactcount"
 	                  label="实际数量">
 	               </el-table-column>
@@ -96,7 +105,7 @@
 	               <el-table-column
 	                  property="overagecount"
 	                  label="盘盈数量">
-	               </el-table-column>
+	               </el-table-column>-->
 	            </el-table>
 	            <div class="Pagination" style="text-align: left;margin-top: 10px;"> 共 {{this.count}} 条</div>
 	        </div>
@@ -116,6 +125,7 @@
                 offset: 0,
                 limit: 5,
                 count: 0,
+                count1: 0,
                 currentPage: 1,
                 childData:[],
                 currentClass: '',
@@ -135,6 +145,8 @@
 				ind: '',
 				Success: 0,
                 multipleSelection: [],
+                bpids: '',
+                get: 0,
             }
         },
     	components: {
@@ -152,7 +164,8 @@
                 try{
                     const countData = await getinventoryadd_b();
                     console.log(countData.data)
-                    this.tableData = countData.data.data
+                    this.tableData = countData.data.data.list
+                    this.count1 = countData.data.data.total
                     //获取分类
 					const dataBatch = await getclassification_b()
 					if(dataBatch.data.code === '1111'){
@@ -175,16 +188,17 @@
                 this.count =this.tableData1.length
             },
 			async handleSearch(){
+				this.get = 1
 				this.count = 0
 				const resData = await queryInventoryAdded_b(this.proname, this.goodstype)
 				console.log(resData.data)
 				if(resData.data.code === '1111'){
-					this.tableData = resData.data.data
-					this.count = resData.data.data.length
+					this.tableData = resData.data.data.list
+					this.count1 = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
 					this.tableData =""
-					this.count = 0
+					this.count1 = 0
 				}
 			},
 			async empty(){
@@ -193,10 +207,12 @@
 			},
 			async Inventory(){
 				console.log(this.tableData1)
-				console.log(this.tableData1.length)
-				console.log(this.tableData1[0])
+//				console.log(this.tableData1.length)
+//				console.log(this.tableData1[0])
 				for(let i = 0; i<this.tableData1.length; i++){
-					const resData = await getinventoryPreservation_b(this.tableData1[i].pname, this.tableData1[i].proid, this.tableData1[i].prounite, this.tableData1[i].accountCount, this.tableData1[i].infactcount, this.tableData1[i].losscount, this.tableData1[i].overagecount)
+					this.bpids += this.tableData1[i].bpid+","
+					console.log(this.bpids)
+					const resData = await getinventoryPreservation_b(this.bpids)
 					if(resData.data.code === '1111'){
 						console.log("this.tableData1"+[i]+"成功")
 						this.Success+=1
@@ -207,8 +223,21 @@
 				if(this.Success = this.multipleSelection.length){
 					this.$message('盘点成功!')
 					this.Success = 0
+					this.tableData =""
 				}else {
 					this.$message('盘点失败!')
+				}
+			},
+			async handleCurrentChange(num){
+				console.log(this.get)
+				this.currentPage = num
+				const dataReceipt = this.get === 0 ? await getinventoryadd_b(this.currentPage) : await queryInventoryAdded_b(this.proname, this.goodstype, this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.tableData = dataReceipt.data.data.list
+					this.count1 = dataReceipt.data.data.total
+				}else {
+					this.tableData = []
+					this.count1 = 0
 				}
 			}
         },

@@ -2,7 +2,7 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
-	        <el-dialog title="新增采购单" v-model="dialogFormVisible">
+	        <el-dialog title="修改实际数量" v-model="dialogFormVisible">
 		        <el-form :model="form">
 					<el-form-item label="实际数量" :label-width="formLabelWidth">
 		                <el-input style="width: 195px" v-model="form.infactcount" auto-complete="off"></el-input>
@@ -21,7 +21,7 @@
 	    	<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>
-					<el-button style="float: left;" @click="" type="primary">确认盘点</el-button>
+					<el-button style="float: left;" @click="confirmationInventory" type="primary">确认盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -88,7 +88,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventoryDetails_b} from '@/api/getData'
+    import {getInventoryDetails_b,getconfirmationInventory_b,getupdateTInspect_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -146,8 +146,24 @@
 				this.form.infactcount =row.infactcount
 				this.ind=index
 			},
+			async confirmationInventory(){
+				console.log(this.id)
+				const resData = await getconfirmationInventory_b(this.id)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+				} else {
+					this.$message(resData.data.message)
+				}
+			},
 			async confirmAdd(){
-				this.tableData[this.ind].infactcount=this.form.infactcount
+//				this.tableData[this.ind].infactcount=this.form.infactcount
+				console.log(this.tableData[this.ind].checkdtailid)
+				const resData = await getupdateTInspect_b(this.tableData[this.ind].checkdtailid,this.tableData[this.ind].losscount,this.tableData[this.ind].overagecount,this.tableData[this.ind].accountcount,this.form.infactcount)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+				} else {
+					this.$message(resData.data.message)
+				}
 				this.dialogFormVisible = false
 			},
             handleAdd() {

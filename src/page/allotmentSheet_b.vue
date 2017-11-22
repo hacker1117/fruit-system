@@ -3,28 +3,18 @@
 	    <head-top></head-top>
 	    <div class="fruit-content">
 			<el-row style="margin-top: 20px;">
-	            <el-col :span="3" style="text-align:right;">开始时间：</el-col>
+	            <el-col :span="3" style="text-align:right;">调入仓库：</el-col>
 				<el-col :span="4">
-					<el-date-picker
-				      v-model="startTime"
-				      type="datetime"
-				      placeholder="选择日期时间">
-				    </el-date-picker>
-				</el-col>
-				<el-col :span="3" style="text-align:right;">结束时间：</el-col>
-				<el-col :span="4">
-					<el-date-picker
-				      v-model="endTime"
-				      type="datetime"
-				      placeholder="选择日期时间">
-				    </el-date-picker>
+	                <el-select v-model="form.inrepocde" placeholder="请选择调入仓库">
+		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.repocode" :value="classif.repocode"></el-option>
+		            </el-select>
 				</el-col>
 			</el-row>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 	                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
 	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-	                <el-button style="float: left;" @click="handleAdd" type="primary">新增</el-button>
+	                <el-button style="float: left;" @click="handleAdd" type="primary">新增调拨单</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -33,33 +23,32 @@
 	                stripe
 	                highlight-current-row
 	                style="width: 100%">
-	                <el-table-column
-	                  type="index"
-	                  width="80"
-	                  label="序号">
+	               <el-table-column
+	                  property="time"
+	                  label="调拨日期">
 	                </el-table-column>
 	               <el-table-column
-	                  property="checkid"
-	                  label="单据编号">
-	                </el-table-column>
-	               <el-table-column
-	                  property="checkdate"
-	                  label="盘点日期">
+	                  property="allocateid"
+	                  label="调拨单号">
 	               </el-table-column>
 	               <el-table-column
-	                  property="sta"
-	                  label="盘点状态">
+	                  property="outstate "
+	                  label="出库状态">
 	               </el-table-column>
 	               <el-table-column
-	                  property="result"
-	                  label="盘点结果">
+	                  property="outreponame"
+	                  label="调入仓库">
+	               </el-table-column>
+	               <el-table-column
+	                  property="switchtype"
+	                  label="调拨类型">
 	               </el-table-column>
 	                <el-table-column
 					label="操作">
 						<template scope="scope">
 						<el-button
 						size="mini"
-						@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+						@click="handleEdit(scope.$index, scope.row)">调拨单详情</el-button>
 						</template>
 					</el-table-column>
 	            </el-table>
@@ -79,18 +68,13 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventory_b, getInventoryChild_b} from '@/api/getData'
+    import {getallocation_b, getInventoryChild_b} from '@/api/getData'
     export default {
         data(){
             return {
                 tableData: [],
-                currentRow: null,
-                offset: 0,
-                limit: 5,
                 count: 0,
                 currentPage: 1,
-                childData:[],
-                currentClass: '',
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
 				form: {
@@ -104,6 +88,8 @@
 				startTime:'',
 				endTime:'',
 				get: 0,
+				ordercode:'',
+				classification: [],
             }
         },
     	components: {
@@ -119,12 +105,23 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getInventory_b(1,10);
+                    const countData = await getallocation_b(1,10);
+                    console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
-                    for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
-                    }
+//                  console.log(this.tableData)
+//                  for(let i = 0;i<this.tableData.length;i++){
+//                  	console.log(i)
+//                  	console.log(this.tableData[i].losscount)
+//                  	console.log(this.tableData[i].overagecount)
+//                      this.tableData[i].state = this.tableData[i].losscount === 0||this.tableData[i].overagecount === 0 ? '有盈亏' : '无盈亏'
+//                      this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
+//                      console.log("i"+this.tableData[i].losscount)
+//                      console.log("i"+this.tableData[i].overagecount)
+//                  }
+					//调入仓库
+					const classi = await getWarehouse_b()
+					this.classification = classi.data.data
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -135,12 +132,10 @@
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
 				const resData = await getInventoryChild_b(times1,times2)
+				console.log(resData.data)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
-					for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
-                    }
 				} else {
 					this.$message(resData.data.message)
 					this.tableData =""
@@ -154,11 +149,11 @@
 			handleEdit(index,row) {
 				console.log(index, row)
 				this.$destroy()
-				this.$router.push('/InventoryDetails_b/'+ row.checkid)
+				this.$router.push('/allotmentSheetDetails_b/'+ row.allocateid)
 			},
             handleAdd() {
 				this.$destroy()
-				this.$router.push('/InventoryAdded_b')
+				this.$router.push('/allotmentSheetAdded_b')
             },
 			formatter(date){
 				console.log(date.getMonth())
@@ -175,9 +170,6 @@
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
-					for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
-                    }
 				}else {
 					this.tableData = []
 				}
