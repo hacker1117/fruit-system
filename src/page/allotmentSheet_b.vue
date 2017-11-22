@@ -5,7 +5,7 @@
 			<el-row style="margin-top: 20px;">
 	            <el-col :span="3" style="text-align:right;">调入仓库：</el-col>
 				<el-col :span="4">
-	                <el-select v-model="form.inrepocde" placeholder="请选择调入仓库">
+	                <el-select v-model="inrepocde" placeholder="请选择调入仓库">
 		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.repocode" :value="classif.repocode"></el-option>
 		            </el-select>
 				</el-col>
@@ -68,7 +68,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getallocation_b, getInventoryChild_b} from '@/api/getData'
+    import {getallocation_b, getInventoryChild_b,getWarehouse_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -89,6 +89,7 @@
 				endTime:'',
 				get: 0,
 				ordercode:'',
+				inrepocde:'',
 				classification: [],
             }
         },

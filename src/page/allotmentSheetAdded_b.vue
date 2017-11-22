@@ -46,8 +46,8 @@
 	        </el-dialog>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
-	                <el-button style="float: right;" @click="Preservation" type="primary">保存</el-button>
-	                <el-button style="float: left;" @click="dialogFormVisible = true" type="primary">新增调拨单</el-button>
+	                <el-button style="float: right;" @click="Preservation" type="primary">生成调拨单</el-button>
+	                <el-button style="float: left;" @click="dialogFormVisible = true">新增调拨单</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -183,32 +183,7 @@
 				}
         	},
 			async Preservation(){
-//				console.log(this.tableData)
-//				console.log(this.tableData[0].pname)
-				for(let i = 0; i<this.tableData.length; i++){
-//					console.log(i)
-//					console.log(this.tableData[i].pname)
-					this.list[i]=this.list.concat(this.pname = this.tableData[i].pname)
-					console.log(this.list[i])
-					
-					
-					
-//					this.tableData1.list[i].pname = this.tableData[i].pname
-//					this.tableData1.list[i].proid = this.tableData[i].proid
-//					this.tableData1.list[i].prostandard = this.tableData[i].prostandard
-//					this.tableData1.list[i].ponunite = this.tableData[i].ponunite
-//					this.tableData1.list[i].inreponame = this.tableData[i].inreponame
-//					this.tableData1.list[i].switchtype = this.tableData[i].switchtype
-//					this.tableData1.list[i].allocatecount = this.tableData[i].allocatecount
-//					this.tableData1.list[i].inreponame = this.tableData[i].inreponame	
-				}
-//				console.log(this.list)
-//				const resData = await getPreservation_b()
-//				if(resData.data.code === '1111'){
-//					this.$message(resData.data.message)
-//				} else {
-//					this.$message(resData.data.message)
-//				}
+
 			},
 			async handleSearch(){
 				const resData = await getInventoryChild_b(times1,times2)
