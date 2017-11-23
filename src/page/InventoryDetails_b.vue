@@ -4,6 +4,15 @@
 	    <div class="fruit-content">
 	        <el-dialog title="修改实际数量" v-model="dialogFormVisible">
 		        <el-form :model="form">
+					<el-form-item label="商品名称" :label-width="formLabelWidth">
+		                <el-input style="width: 195px" v-model="form.pname" auto-complete="off" :disabled="true"></el-input>
+		            </el-form-item>
+					<el-form-item label="商品编码" :label-width="formLabelWidth">
+		                <el-input style="width: 195px" v-model="form.proid" auto-complete="off" :disabled="true"></el-input>
+		            </el-form-item>
+					<el-form-item label="账面数量" :label-width="formLabelWidth">
+		                <el-input style="width: 195px" v-model="form.accountcount" auto-complete="off" :disabled="true"></el-input>
+		            </el-form-item>
 					<el-form-item label="实际数量" :label-width="formLabelWidth">
 		                <el-input style="width: 195px" v-model="form.infactcount" auto-complete="off"></el-input>
 		            </el-form-item>
@@ -15,7 +24,7 @@
 	        </el-dialog>
 			<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 				<el-col :span="24">
-					<el-button @click="" >导出EXCEL</el-button>
+					<el-button @click="exportEXCEL" >导出EXCEL</el-button>
 				</el-col>
 			</el-row>
 	    	<el-row style="margin-top: 20px;">
@@ -88,7 +97,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventoryDetails_b,getconfirmationInventory_b,getupdateTInspect_b} from '@/api/getData'
+    import {getInventoryDetails_b,getconfirmationInventory_b,getupdateTInspect_b,getExcleByTInspect} from '@/api/getData'
     export default {
         data(){
             return {
@@ -143,7 +152,8 @@
             },
 			handleEdit(index,row) {
 				this.dialogFormVisible = true
-				this.form.infactcount =row.infactcount
+//				this.form.infactcount =row.infactcount
+				this.form =row
 				this.ind=index
 			},
 			async confirmationInventory(){
@@ -156,15 +166,20 @@
 				}
 			},
 			async confirmAdd(){
-//				this.tableData[this.ind].infactcount=this.form.infactcount
+//				this.tableData[this.ind].infactcount=this.form.infactcount 
 				console.log(this.tableData[this.ind].checkdtailid)
 				const resData = await getupdateTInspect_b(this.tableData[this.ind].checkdtailid,this.tableData[this.ind].losscount,this.tableData[this.ind].overagecount,this.tableData[this.ind].accountcount,this.form.infactcount)
 				if(resData.data.code === '1111'){
 					this.$message(resData.data.message)
+					this.initData()
 				} else {
 					this.$message(resData.data.message)
 				}
 				this.dialogFormVisible = false
+			},
+			async exportEXCEL(){
+				const resData = await getExcleByTInspect(this.id)
+				window.open("http://47.95.12.49:8084/echuxianshengshop1/tinspect/ExcleByTInspect?checkid="+this.id)
 			},
             handleAdd() {
 				this.$destroy()

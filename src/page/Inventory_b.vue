@@ -124,6 +124,7 @@
                     this.count = countData.data.data.total
                     for(let i = 0;i<this.tableData.length;i++){
                         this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+                        this.tableData[i].result = this.tableData[i].losscount === 0 && this.tableData[i].overagecount === 0 ? "无盈亏" : "有盈亏"
                     }
                 }catch(err){
                     console.log('获取数据失败', err);
@@ -138,8 +139,9 @@
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
-					for(let i = 0;i<this.tableData.length;i++){
+                    for(let i = 0;i<this.tableData.length;i++){
                         this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+                        this.tableData[i].result = this.tableData[i].losscount === 0 && this.tableData[i].overagecount === 0 ? "无盈亏" : "有盈亏"
                     }
 				} else {
 					this.$message(resData.data.message)
@@ -175,8 +177,9 @@
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
-					for(let i = 0;i<this.tableData.length;i++){
+                    for(let i = 0;i<this.tableData.length;i++){
                         this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+                        this.tableData[i].result = this.tableData[i].losscount === 0 && this.tableData[i].overagecount === 0 ? "无盈亏" : "有盈亏"
                     }
 				}else {
 					this.tableData = []

@@ -30,7 +30,7 @@
 	                  label="单位">
 	               </el-table-column>
 	               <el-table-column
-	                  property="prostandard "
+	                  property="prostandard"
 	                  label="规格型号">
 	               </el-table-column>
 	               <el-table-column

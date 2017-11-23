@@ -5,8 +5,8 @@
 			<el-row style="margin-top: 20px;">
 	            <el-col :span="3" style="text-align:right;">调入仓库：</el-col>
 				<el-col :span="4">
-	                <el-select v-model="inrepocde" placeholder="请选择调入仓库">
-		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.repocode" :value="classif.repocode"></el-option>
+	                <el-select v-model="pname" placeholder="请选择调入仓库">
+		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.reponame" :value="classif.reponame"></el-option>
 		            </el-select>
 				</el-col>
 			</el-row>
@@ -68,7 +68,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getallocation_b, getInventoryChild_b,getWarehouse_b} from '@/api/getData'
+    import {getallocation_b, getByPname_b,getWarehouse_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -89,7 +89,7 @@
 				endTime:'',
 				get: 0,
 				ordercode:'',
-				inrepocde:'',
+				pname:'',
 				classification: [],
             }
         },
@@ -131,9 +131,7 @@
 			async handleSearch(){
 				this.get = 1
 				this.count = 0
-				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
-				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const resData = await getInventoryChild_b(times1,times2)
+				const resData = await getByPname_b(this.pname)
 				console.log(resData.data)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
@@ -155,8 +153,7 @@
 				}
 			},
 			async empty(){
-				this.startTime=""
-				this.endTime=""
+				this.pname=""
 			},
 			handleEdit(index,row) {
 				console.log(index, row)
@@ -178,7 +175,7 @@
 				this.currentPage = num
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const dataReceipt = this.get === 0 ? await getInventory_b(this.currentPage) : await getInventoryChild_b(times1,times2, this.currentPage)
+				const dataReceipt = this.get === 0 ? await getInventory_b(this.currentPage) : await getByPname_b(this.pname, this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

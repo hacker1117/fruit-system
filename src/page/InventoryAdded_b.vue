@@ -57,7 +57,7 @@
 	                </el-pagination>
 	            </div>
 	        <div slot="footer" class="dialog-footer">
-	            <el-button @click="dialogFormVisible = false">取 消</el-button>
+	            <el-button @click="dialogFormVisible1 = false">取 消</el-button>
 	            <el-button type="primary" @click="handle">确 定</el-button>
 	        </div>
        </el-dialog>

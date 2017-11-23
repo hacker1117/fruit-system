@@ -45,6 +45,7 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('46')" index="/Inventory_b">盘点</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('49')" index="/packagingManagement_b">包装管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('52')" index="/allotmentSheet_b">调拨单</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('53')" index="/shelfLifeReminder_b">保质期提醒</el-menu-item>
 						</el-submenu>
 					</el-submenu>
 					<el-submenu style="background-color: #009a76;" index="4" v-if="getRole('28')">

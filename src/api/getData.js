@@ -888,6 +888,12 @@ export const getupdateTInspect_b = (checkdtailid, losscount, overagecount, accou
 export const getallocation_b = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/getAllSwitch',{pageNum,pageSize,repositoryid});
 
 /**
+ * B库-调拨单 按条件查询调拨单
+ */
+
+export const getByPname_b = (pname, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/switch/getByPname',{pname, pageNum, pageSize,repositoryid});
+
+/**
  * B库-调拨单 查询调拨单详情
  */
 
@@ -910,9 +916,11 @@ export const getWarehouse_b = () => axio('/switch/getAllRepoName');
 
 export const queryWarehouse_b = (pageNum = 1,pageSize = 10, repositoryid = repoId, username = unames) => axio('/switch/queryDaiSee',{pageNum,pageSize, repositoryid, username});
 
+/**
+ * B库 新增调拨单 生成调拨单
+ */
 
-
-
+export const getupdateTswitch_b = (list, repositoryid = repoId, username = unames) => axio('/switch/updateTswitch',{list, repositoryid, username},'POST');
 
 /**
  * A库-查询包装管理列表
@@ -1034,6 +1042,12 @@ export const getcommodity = (storagename, storagetype, pageNum = 1,pageSize = 10
 export const getexport = (storagename, storagetype) => axio('/purchaseordera/exportExcel', {storagename, storagetype});
 
 
+/**
+ * B库 盘点-导出EXCEL
+ */
+
+export const getExcleByTInspect = (checkid) => axio('/tinspect/ExcleByTInspect', {checkid});
+
 
 /**
  * B库-包装管理加载列表
@@ -1096,10 +1110,6 @@ export const getmodifyPurchasing_b = (orderno, productcode, buynumber, repositor
 
 export const queryGreater_b = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getGeratThenZero',{pageNum,pageSize, repositoryid});
 
-
-
-
-
 /**
  * A库出库单 审批修改
  */
@@ -1111,9 +1121,6 @@ export const gethandleEdit = (orderno, productcode, repositoryid = repoId) => ax
  */
 
 export const queryGreater_a = (pageNum = 1,pageSize = 10) => axio('/abalancerepository/selectcurrentexistnotnull',{pageNum,pageSize});
-
-
-
 
 /**
  * 生产执行/生产线管理 获取生产线

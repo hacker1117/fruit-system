@@ -68,6 +68,7 @@ const productionLine = r => require.ensure([], () => r(require('@/page/productio
 const allotmentSheet_b = r => require.ensure([], () => r(require('@/page/allotmentSheet_b')), 'allotmentSheet_b');
 const allotmentSheetDetails_b = r => require.ensure([], () => r(require('@/page/allotmentSheetDetails_b')), 'allotmentSheet_b');
 const allotmentSheetAdded_b = r => require.ensure([], () => r(require('@/page/allotmentSheetAdded_b')), 'allotmentSheet_b');
+const shelfLifeReminder_b = r => require.ensure([], () => r(require('@/page/shelfLifeReminder_b')), 'shelfLifeReminder_b');
 
 const routes = [
 	{
@@ -294,6 +295,10 @@ const routes = [
 			path: '/allotmentSheetAdded_b',
 			component: allotmentSheetAdded_b,
 			meta: ['B库进销存管理', '库存管理', '调拨单'],
+		},{
+			path: '/shelfLifeReminder_b',
+			component: shelfLifeReminder_b,
+			meta: ['B库进销存管理', '库存管理', '保质期提醒'],
 		}]
 	}
 ]

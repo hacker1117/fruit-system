@@ -23,7 +23,7 @@
 	           </el-form-item>
 				<el-form-item label="调入仓库" :label-width="formLabelWidth">
 	                <el-select v-model="form.inrepocde" placeholder="请选择调入仓库">
-		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.repocode" :value="classif.repocode"></el-option>
+		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.reponame" :value="classif.repocode"></el-option>
 		            </el-select>
 	           </el-form-item>
 				<el-form-item label="调拨类型" :label-width="formLabelWidth">
@@ -92,7 +92,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getaddAllocate_b, getWarehouse_b, queryWarehouse_b, getProList, getInventoryChild_b} from '@/api/getData'
+    import {getaddAllocate_b, getWarehouse_b, queryWarehouse_b, getProList, getInventoryChild_b,getupdateTswitch_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -130,6 +130,7 @@
 		        inreponame: '',
 		        Warehouse: [],
 		        list: [],
+		        lists: '',
             }
         },
     	components: {
@@ -145,17 +146,26 @@
         methods: {
             async initData(){
                 try{
-                	const countData = await queryWarehouse_b()
-                	console.log(countData.data.data)
-					this.tableData = countData.data.data.list
-					this.count = countData.data.data.total
                     //调入仓库
 					const classi = await getWarehouse_b()
 					this.classification = classi.data.data
 					this.Warehouse = classi.data.data
 					console.log(this.Warehouse)
+                	const countData = await queryWarehouse_b()
+                	if(countData.data.code === '1111'){
+						console.log(countData.data.data)
+						this.tableData = countData.data.data
+						this.count = countData.data.data.length
+					} else {
+						this.$message(resData.data.message)
+						this.tableData = []
+						this.count = 0
+					}
+                	
                 }catch(err){
                     console.log('获取数据失败', err);
+                    this.tableData = []
+					this.count = 0
                 }
            },
         	async addAllocate(){
@@ -174,6 +184,7 @@
 					this.form.ponunite = ""
 					this.form.inreponame = ""
 					this.form.switchtype = ""
+					this.form.inrepocde = ""
 					this.form.allocatecount = ""
 					this.form.inreponame = ""
 					this.dialogFormVisible = false
@@ -182,15 +193,28 @@
 					this.$message(resData.data.message)
 				}
         	},
-			async Preservation(){
-
+			async Preservation(){//post
+				console.log(this.tableData)
+				for(let i=0;i<this.tableData.length;i++){
+//					this.lists += "list["+[i]+"].proid="+this.tableData[i].proid+"&"+"list["+[i]+"].pname="+this.tableData[i].pname+"&"+"list["+[i]+"].allocatecount="+this.tableData[i].allocatecount+"&"+"list["+[i]+"].ponunite="+this.tableData[i].ponunite+"&"+"list["+[i]+"].prostandard="+this.tableData[i].prostandard+"&"+"list["+[i]+"].inreponame="+this.tableData[i].inreponame+"&"
+					this.lists += this.tableData[i].allocatedetailid+","
+					console.log(this.lists)
+				}
+				console.log(this.tableData1)
+				const resData = await getupdateTswitch_b(this.lists)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
 			async handleSearch(){
 				const resData = await getInventoryChild_b(times1,times2)
 				console.log(resData.data)
 				if(resData.data.code === '1111'){
-					this.tableData = resData.data.data.list
-					this.count = resData.data.data.total
+					this.tableData = resData.data.data
+					this.count = resData.data.data.length
 				} else {
 					this.$message(resData.data.message)
 					this.tableData =""
