@@ -838,7 +838,7 @@ export const getInventory_b = (pageNum = 1,pageSize = 10, repositoryid = repoId)
  * B库-条件查询盘点
  */
 
-export const getInventoryChild_b = (startTime, endTime, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryTInspectByParam',{startTime, endTime, pageNum, pageSize, repositoryid});
+export const getInventoryChild_b = (startTime, endTime, state, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryTInspectByParam',{startTime, endTime, state, pageNum, pageSize, repositoryid});
 
 /**
  * B库-查询盘点详情列表
@@ -897,7 +897,7 @@ export const getByPname_b = (pname, pageNum = 1, pageSize = 10, repositoryid = r
  * B库-调拨单 查询调拨单详情
  */
 
-export const getallotmentSheetDetails_b = (allocateid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/getDetail',{allocateid,pageNum,pageSize,repositoryid});
+export const getallotmentSheetDetails_b = (allocateid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/getInDetail',{allocateid,pageNum,pageSize,repositoryid});
 
 /**
  * B库-调拨单 新增调拨单
@@ -921,6 +921,37 @@ export const queryWarehouse_b = (pageNum = 1,pageSize = 10, repositoryid = repoI
  */
 
 export const getupdateTswitch_b = (list, repositoryid = repoId, username = unames) => axio('/switch/updateTswitch',{list, repositoryid, username},'POST');
+
+/**
+ * B库-调入调拨单 获取调入调拨单
+ */
+
+export const getransferBill_b = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/toThisRepo',{pageNum,pageSize,repositoryid});
+
+/**
+ * B库-调入调拨单 按条件查询调拨单
+ */
+
+export const getByOutPname_b = (pname, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/switch/getByOutPname',{pname, pageNum, pageSize,repositoryid});
+
+/**
+ * B库-调入调拨单 查询仓库
+ */
+export const getoutWarehouse_b = (repositoryid = repoId) => axio('/switch/getByOutPname',{repositoryid});
+
+/**
+ * B库 调入调拨单详情 报损
+ */
+export const addloss_b = (allocatedetailid, wastecount, repositoryid = repoId) => axio('/switch/commitWaste',{allocatedetailid, wastecount, repositoryid},'POST');
+
+/**
+ * B库 调入调拨单详情 确认调拨单
+ */
+
+export const getconfirmationSlip_b = (list, repositoryid = repoId, username = unames) => axio('/switch/confirmSwitch',{list, repositoryid, username},'POST');
+
+
+
 
 /**
  * A库-查询包装管理列表
@@ -968,7 +999,36 @@ export const addStockInaA = (goodscode,storgeaid,storagename,visualreposity,netw
  * A库-查询盘点列表
  */
 
-export const getInventory_a = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/inspecta/querycheckHand',{pageNum,pageSize,repositoryid});
+export const getInventory_a = (pageNum = 1,pageSize = 10, repositoryposition = repoId) => axio('/inspecta/querycheckHand',{pageNum,pageSize,repositoryposition});
+
+/**
+ * A库-条件查询盘点
+ */
+
+export const getInventoryChild_a = (starttime, endtime, state, pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('/inspecta/selectbetweenstarttimeandendtime',{starttime, endtime, state, pageNum, pageSize, repositoryposition});
+
+/**
+ * A库-查询新增盘点--仓库
+ */
+export const getclassification_a = () => axio('/inspecta/getAllCategoryname');
+
+/**
+ * A库-查询新增盘点列表
+ */
+
+export const getinventoryadd_a = (pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('/inspecta/find',{pageNum, pageSize, repositoryposition});
+
+/**
+ * A库-条件查询盘点新增
+ */
+
+export const queryInventoryAdded_a = (proname, goodstype, pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('/inspecta/queryAbalancerepositoryByParam',{proname, goodstype, pageNum, pageSize, repositoryposition});
+
+/**
+ * A库-盘点新增--待盘点
+ */
+
+export const getinventoryPreservation_a = (repocode, repositoryposition = repoId, username = unames) => axio('/tinspect/addInspects',{repocode,repositoryposition, username});
 
 /**
  * A库-查询盘点详情列表
@@ -977,27 +1037,22 @@ export const getInventory_a = (pageNum = 1,pageSize = 10, repositoryid = repoId)
 export const getInventoryDetails_a = (checkid, pageNum = 1,pageSize = 10) => axio('/inspecta/checkdetailsBycheckid',{checkid,pageNum,pageSize});
 
 /**
- * A库-查询新增盘点--仓库
+ * A库-盘点详情--确认盘点
  */
-export const getclassification_a = () => axio('/repositoryb/getBranREpob');
+
+export const getconfirmationInventory_a = (checkid) => axio('/inspecta/createTInspect',{checkid});
 
 /**
- * A库-条件查询盘点
+ * A库-盘点详情--修改实际数量
  */
 
-export const getInventoryChild_a = (startTime, endTime, repcode, pageNum = 1, pageSize = 10) => axio('/inspecta/selectByExamples',{startTime, endTime, repcode, pageNum, pageSize});
+export const getupdateTInspect_a = (checkdtailid, losscount, overagecount, accountcount, infactCount, repositoryposition = repoId, username = unames) => axio('/inspecta/updateTInspect',{checkdtailid, losscount, overagecount, accountcount, infactCount,repositoryposition, username});
 
 /**
- * A库-查询新增盘点列表
+ * A库 盘点-导出EXCEL
  */
 
-export const getinventoryadd_a = (pageNum = 1, pageSize = 10) => axio('/inspecta/selectInAbalance',{pageNum, pageSize});
-
-/**
- * A库-条件查询盘点新增
- */
-
-export const queryInventoryAdded_a = (proname, goodstype, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/inspecta/selectInAbalance',{proname, goodstype, pageNum,pageSize,repositoryid});
+export const getExcleByTInspect_a = (checkid) => axio('/inspecta/ExcleByTInspect', {checkid});
 
 /**
  * A库-删除虚拟库

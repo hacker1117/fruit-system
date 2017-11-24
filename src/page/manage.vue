@@ -44,7 +44,8 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('24')" index="/stockBalance">库存余额表</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('46')" index="/Inventory_b">盘点</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('49')" index="/packagingManagement_b">包装管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('52')" index="/allotmentSheet_b">调拨单</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('52')" index="/allotmentSheet_b">调出调拨单</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('54')" index="/transferBill_b">调入调拨单</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('53')" index="/shelfLifeReminder_b">保质期提醒</el-menu-item>
 						</el-submenu>
 					</el-submenu>

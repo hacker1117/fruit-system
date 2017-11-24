@@ -19,18 +19,13 @@
 				      placeholder="选择日期时间">
 				    </el-date-picker>
 				</el-col>
-				<el-col :span="3" style="text-align:right;">仓库：</el-col>
-				<el-col :span="4">
-					<el-select v-model="repocode" placeholder="请选择仓库">
-						<el-option v-for="item in batchData" :key="item.id" :label="item.reponame" :value="item.repocode"></el-option>
-					</el-select>
-				</el-col>
 			</el-row>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 	                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
 	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-	                <el-button style="float: left;" @click="handleAdd" type="primary">新增</el-button>
+	                <el-button style="float: left;" @click="handleAdd">新增</el-button>
+	                <el-button style="float: left;" @click="noInventory">未盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -51,6 +46,14 @@
 	               <el-table-column
 	                  property="checkdate"
 	                  label="盘点日期">
+	               </el-table-column>
+	               <el-table-column
+	                  property="sta"
+	                  label="盘点状态">
+	               </el-table-column>
+	               <el-table-column
+	                  property="result"
+	                  label="盘点结果">
 	               </el-table-column>
 	                <el-table-column
 					label="操作">
@@ -77,8 +80,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {mapActions, mapState} from 'vuex'
-    import {getInventory_a, getInventoryChild_a,getclassification_a} from '@/api/getData'
+    import {getInventory_a, getInventoryChild_a} from '@/api/getData'
     export default {
         data(){
             return {
@@ -92,12 +94,18 @@
                 currentClass: '',
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
+				form: {
+					repocode: '',
+					reponame: '',
+					id: '',
+					isDefault: '',
+					repostate: '',
+					isDelete: '',
+				},
 				startTime:'',
 				endTime:'',
 				get: 0,
-				goodstype:'',
-				batchData:[],
-				repocode:'',
+				state:'未盘点',
             }
         },
     	components: {
@@ -110,48 +118,59 @@
             this.$destroy()
             next()
         },
-    	computed: {
-    		...mapState(['adminInfo']),
-    	},
         methods: {
             async initData(){
                 try{
                     const countData = await getInventory_a(1,10);
-                    console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
-//                  //获取仓库
-					this.repocode = this.adminInfo.repositoryid//默认仓库
-					const dataBatch = await getclassification_a()
-					if(dataBatch.data.code === '1111'){
-						this.batchData = dataBatch.data.data.list
-					}else {
-						console.log('获取商品分类出错')
-					}
+                    for(let i = 0;i<this.tableData.length;i++){
+                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+                        this.tableData[i].result = this.tableData[i].losscount === 0 && this.tableData[i].overagecount === 0 ? "无盈亏" : "有盈亏"
+                    }
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
+            },
+            async noInventory(){
+				this.get = 2
+				this.count = 0
+            	const resData = await getInventoryChild_a(0,0,this.state)
+				if(resData.data.code === '1111'){
+					this.tableData = resData.data.data.list
+					this.count = resData.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+                        this.tableData[i].result = this.tableData[i].losscount === 0 && this.tableData[i].overagecount === 0 ? "无盈亏" : "有盈亏"
+                    }
+				} else {
+					this.$message(resData.data.message)
+					this.tableData = []
+					this.count = 0
+				}
             },
 			async handleSearch(){
 				this.get = 1
 				this.count = 0
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const resData = await getInventoryChild_a(times1,times2,this.repocode)
-				console.log(resData.data)
+				const resData = await getInventoryChild_a(times1,times2)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+                        this.tableData[i].result = this.tableData[i].losscount === 0 && this.tableData[i].overagecount === 0 ? "无盈亏" : "有盈亏"
+                    }
 				} else {
 					this.$message(resData.data.message)
-					this.tableData =""
+					this.tableData = []
 					this.count = 0
 				}
 			},
 			async empty(){
 				this.startTime=""
 				this.endTime=""
-				this.repocode = this.adminInfo.repositoryid
 			},
 			handleEdit(index,row) {
 				console.log(index, row)
@@ -173,12 +192,24 @@
 				this.currentPage = num
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const dataReceipt = this.get === 0 ? await getInventory_a(this.currentPage) : await getInventoryChild_a(times1,times2, this.repocode, this.currentPage)
+				let dataReceipt = {}
+				if(this.get === 0){
+					dataReceipt = await getInventory_a(this.currentPage)
+				}else if(this.get === 1){
+					dataReceipt = await getInventoryChild_a(times1,times2, this.currentPage)
+				}else if(this.get === 2){
+					dataReceipt = await getInventoryChild_a(0,0,this.state,this.currentPage)
+				}
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+                        this.tableData[i].result = this.tableData[i].losscount === 0 && this.tableData[i].overagecount === 0 ? "无盈亏" : "有盈亏"
+                    }
 				}else {
 					this.tableData = []
+					this.count = 0
 				}
 			}
         },

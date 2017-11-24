@@ -99,7 +99,6 @@
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
                     for(let i = 0;i<this.tableData.length;i++){
-                    	this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
                     	if(this.tableData[i].switchtype === 1){
                     		this.tableData[i].switchtype = "缺货调拨"
                     	}else if(this.tableData[i].switchtype === 2){
@@ -124,7 +123,6 @@
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
                     for(let i = 0;i<this.tableData.length;i++){
-                    	this.tableData[i].sta = this.tableData[i].checkdate === null? "未盘点" : "已盘点"
                     	if(this.tableData[i].switchtype === 1){
                     		this.tableData[i].switchtype = "缺货调拨"
                     	}else if(this.tableData[i].switchtype === 2){

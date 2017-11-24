@@ -25,6 +25,7 @@
 	                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
 	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
 	                <el-button style="float: left;" @click="handleAdd" type="primary">新增</el-button>
+	                <el-button style="float: left;" @click="noInventory">未盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -104,6 +105,7 @@
 				startTime:'',
 				endTime:'',
 				get: 0,
+				state:'未盘点',
             }
         },
     	components: {
@@ -145,10 +147,27 @@
                     }
 				} else {
 					this.$message(resData.data.message)
-					this.tableData =""
+					this.tableData = []
 					this.count = 0
 				}
 			},
+            async noInventory(){
+				this.get = 2
+				this.count = 0
+            	const resData = await getInventoryChild_b("2017-10-20+11:38:35","2017-10-20+11:38:35",this.state)
+				if(resData.data.code === '1111'){
+					this.tableData = resData.data.data.list
+					this.count = resData.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+                        this.tableData[i].result = this.tableData[i].losscount === 0 && this.tableData[i].overagecount === 0 ? "无盈亏" : "有盈亏"
+                    }
+				} else {
+					this.$message(resData.data.message)
+					this.tableData = []
+					this.count = 0
+				}
+            },
 			async empty(){
 				this.startTime=""
 				this.endTime=""
@@ -173,7 +192,14 @@
 				this.currentPage = num
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
-				const dataReceipt = this.get === 0 ? await getInventory_b(this.currentPage) : await getInventoryChild_b(times1,times2, this.currentPage)
+				let dataReceipt = {}
+				if(this.get === 0){
+					dataReceipt = await getInventory_b(this.currentPage)
+				}else if(this.get === 1){
+					dataReceipt = await getInventoryChild_b(times1,times2, this.currentPage)
+				}else if(this.get === 2){
+					dataReceipt = await getInventoryChild_b(0,0,this.state,this.currentPage)
+				}
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
@@ -183,6 +209,7 @@
                     }
 				}else {
 					this.tableData = []
+					this.count = 0
 				}
 			}
         },

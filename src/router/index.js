@@ -69,6 +69,8 @@ const allotmentSheet_b = r => require.ensure([], () => r(require('@/page/allotme
 const allotmentSheetDetails_b = r => require.ensure([], () => r(require('@/page/allotmentSheetDetails_b')), 'allotmentSheet_b');
 const allotmentSheetAdded_b = r => require.ensure([], () => r(require('@/page/allotmentSheetAdded_b')), 'allotmentSheet_b');
 const shelfLifeReminder_b = r => require.ensure([], () => r(require('@/page/shelfLifeReminder_b')), 'shelfLifeReminder_b');
+const transferBill_b = r => require.ensure([], () => r(require('@/page/transferBill_b')), 'transferBill_b');
+const transferBillDetails_b = r => require.ensure([], () => r(require('@/page/transferBillDetails_b')), 'transferBill_b');
 
 const routes = [
 	{
@@ -286,19 +288,27 @@ const routes = [
 		},{
 			path: '/allotmentSheet_b',
 			component: allotmentSheet_b,
-			meta: ['B库进销存管理', '库存管理', '调拨单'],
+			meta: ['B库进销存管理', '库存管理', '调出调拨单'],
 		},{
 			path: '/allotmentSheetDetails_b/:id',
 			component: allotmentSheetDetails_b,
-			meta: ['B库进销存管理', '库存管理', '调拨单'],
+			meta: ['B库进销存管理', '库存管理', '调出调拨单'],
 		},{
 			path: '/allotmentSheetAdded_b',
 			component: allotmentSheetAdded_b,
-			meta: ['B库进销存管理', '库存管理', '调拨单'],
+			meta: ['B库进销存管理', '库存管理', '调出调拨单'],
 		},{
 			path: '/shelfLifeReminder_b',
 			component: shelfLifeReminder_b,
 			meta: ['B库进销存管理', '库存管理', '保质期提醒'],
+		},{
+			path: '/transferBill_b',
+			component: transferBill_b,
+			meta: ['B库进销存管理', '库存管理', '调入调拨单'],
+		},{
+			path: '/transferBillDetails_b/:id',
+			component: transferBillDetails_b,
+			meta: ['B库进销存管理', '库存管理', '调入调拨单'],
 		}]
 	}
 ]

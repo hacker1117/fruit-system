@@ -194,6 +194,7 @@
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.tableData = []
+					this.count = 0
 				}
 			}
         },

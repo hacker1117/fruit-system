@@ -3,19 +3,14 @@
 	    <head-top></head-top>
 	    <div class="fruit-content">
 			<el-row style="margin-top: 20px;">
-	            <el-col :span="3" style="text-align:right;">调入仓库：</el-col>
+	            <el-col :span="3" style="text-align:right;">调出仓库：</el-col>
 				<el-col :span="4">
-	                <el-select v-model="pname" placeholder="请选择调入仓库">
+	                <el-select v-model="pname" placeholder="请选择调出仓库">
 		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.reponame" :value="classif.reponame"></el-option>
 		            </el-select>
 				</el-col>
-			</el-row>
-			<el-row style="margin-top: 20px;">
-				<el-col :span="24">
-	                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
-	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-	                <el-button style="float: left;" @click="handleAdd">新增调拨单</el-button>
-	            </el-col>
+	            <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
+	            <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
 			</el-row>
 	        <div class="table_container">
 	            <el-table
@@ -31,13 +26,13 @@
 	                  property="allocateid"
 	                  label="调拨单号">
 	               </el-table-column>
-	               <el-table-column
+	               <!--<el-table-column
 	                  property="outstate"
 	                  label="出库状态">
-	               </el-table-column>
+	               </el-table-column>-->
 	               <el-table-column
-	                  property="inreponame"
-	                  label="调入仓库">
+	                  property="outreponame"
+	                  label="调出仓库">
 	               </el-table-column>
 	               <el-table-column
 	                  property="switchtype"
@@ -68,7 +63,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getallocation_b, getByPname_b,getWarehouse_b} from '@/api/getData'
+    import {getransferBill_b, getByOutPname_b,getWarehouse_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -106,7 +101,7 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getallocation_b(1,10);
+                    const countData = await getransferBill_b(1,10);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
@@ -120,7 +115,7 @@
                     		this.tableData[i].switchtype = "转大宗出库"
                     	}
                     }
-					//调入仓库
+					//调出仓库
 					const classi = await getWarehouse_b()
 					this.classification = classi.data.data
                 }catch(err){
@@ -130,7 +125,7 @@
 			async handleSearch(){
 				this.get = 1
 				this.count = 0
-				const resData = await getByPname_b(this.pname)
+				const resData = await getByOutPname_b(this.pname)
 				console.log(resData.data)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
@@ -156,12 +151,8 @@
 			handleEdit(index,row) {
 				console.log(index, row)
 				this.$destroy()
-				this.$router.push('/allotmentSheetDetails_b/'+ row.allocateid)
+				this.$router.push('/transferBillDetails_b/'+ row.allocateid)
 			},
-            handleAdd() {
-				this.$destroy()
-				this.$router.push('/allotmentSheetAdded_b')
-            },
 			formatter(date){
 				console.log(date.getMonth())
 				let res = ''
@@ -171,7 +162,7 @@
 			async handleCurrentChange(num){
 				console.log(this.get)
 				this.currentPage = num
-				const dataReceipt = this.get === 0 ? await getallocation_b(this.currentPage) : await getByPname_b(this.pname, this.currentPage)
+				const dataReceipt = this.get === 0 ? await getransferBill_b(this.currentPage) : await getByOutPname_b(this.pname, this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total

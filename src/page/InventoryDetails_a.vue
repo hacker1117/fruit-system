@@ -2,14 +2,35 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
+	        <el-dialog title="修改实际数量" v-model="dialogFormVisible">
+		        <el-form :model="form">
+					<el-form-item label="商品名称" :label-width="formLabelWidth">
+		                <el-input style="width: 195px" v-model="form.pname" auto-complete="off" :disabled="true"></el-input>
+		            </el-form-item>
+					<el-form-item label="商品编码" :label-width="formLabelWidth">
+		                <el-input style="width: 195px" v-model="form.proid" auto-complete="off" :disabled="true"></el-input>
+		            </el-form-item>
+					<el-form-item label="账面数量" :label-width="formLabelWidth">
+		                <el-input style="width: 195px" v-model="form.accountcount" auto-complete="off" :disabled="true"></el-input>
+		            </el-form-item>
+					<el-form-item label="实际数量" :label-width="formLabelWidth">
+		                <el-input style="width: 195px" v-model="form.infactcount" auto-complete="off"></el-input>
+		            </el-form-item>
+		        </el-form>
+		        <div slot="footer" class="dialog-footer">
+		            <el-button @click="dialogFormVisible = false">取 消</el-button>
+		            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+		        </div>
+	        </el-dialog>
 			<el-row style="margin: 20px; border-bottom:1px solid #EFF2F7; padding-bottom:5px;">
 				<el-col :span="24">
-					<el-button @click="" >导出EXCEL</el-button>
+					<el-button @click="exportEXCEL" >导出EXCEL</el-button>
 				</el-col>
 			</el-row>
 	    	<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>
+					<el-button style="float: left;" @click="confirmationInventory" type="primary">确认盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -51,6 +72,14 @@
 	                  property="overagecount"
 	                  label="盘盈数量">
 	               </el-table-column>
+	                <el-table-column
+					label="操作">
+						<template scope="scope">
+						<el-button
+						size="mini"
+						@click="handleEdit(scope.$index, scope.row)">修改实际数量</el-button>
+						</template>
+					</el-table-column>
 	            </el-table>
 	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
 	                <el-pagination
@@ -68,7 +97,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventoryDetails_a} from '@/api/getData'
+    import {getInventoryDetails_a,getconfirmationInventory_a,getupdateTInspect_a,getExcleByTInspect_a} from '@/api/getData'
     export default {
         data(){
             return {
@@ -93,6 +122,7 @@
 					overageCount: '',
 				},
 				procode: '',
+				ind: '',
             }
         },
     	components: {
@@ -120,9 +150,40 @@
                     console.log('获取数据失败', err);
                 }
             },
+			handleEdit(index,row) {
+				this.dialogFormVisible = true
+//				this.form.infactcount =row.infactcount
+				this.form =row
+				this.ind=index
+			},
+			async confirmationInventory(){
+				console.log(this.id)
+				const resData = await getconfirmationInventory_a(this.id)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+				} else {
+					this.$message(resData.data.message)
+				}
+			},
+			async confirmAdd(){
+//				this.tableData[this.ind].infactcount=this.form.infactcount 
+				console.log(this.tableData[this.ind].checkdtailid)
+				const resData = await getupdateTInspect_a(this.tableData[this.ind].checkdtailid,this.tableData[this.ind].losscount,this.tableData[this.ind].overagecount,this.tableData[this.ind].accountcount,this.form.infactcount)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+				}
+				this.dialogFormVisible = false
+			},
+			async exportEXCEL(){
+				const resData = await getExcleByTInspect_a(this.id)
+				window.open("http://47.95.12.49:8084/echuxianshengshop1/inspecta/ExcleByTInspect?checkid="+this.id)
+			},
             handleAdd() {
 				this.$destroy()
-				this.$router.push('/Inventory_a')
+				this.$router.push('/Inventory_b')
             },
 			async handleCurrentChange(num){
 				console.log(this.get)
@@ -133,6 +194,7 @@
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.tableData = []
+					this.count = 0
 				}
 			}
         },

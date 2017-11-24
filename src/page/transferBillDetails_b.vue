@@ -2,19 +2,29 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
-			<el-row style="margin-top: 20px;">
-	            <el-col :span="3" style="text-align:right;">调入仓库：</el-col>
-				<el-col :span="4">
-	                <el-select v-model="pname" placeholder="请选择调入仓库">
-		                <el-option v-for="classif in classification" :key="classif.id" :label="classif.reponame" :value="classif.reponame"></el-option>
-		            </el-select>
-				</el-col>
-			</el-row>
+        <el-dialog title="报损" v-model="dialogFormVisible">
+	        <el-form :model="form">
+	            <el-form-item label="商品编码" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.procode" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+	            <el-form-item label="商品名称" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.proname" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+	            <el-form-item label="报损数量" :label-width="formLabelWidth">
+	                <el-input style="width: 195px" v-model="form.wastecount" auto-complete="off">
+	                	<template slot="append">{{this.prou}}</template>
+	                </el-input>
+	            </el-form-item>
+	        </el-form>
+	        <div slot="footer" class="dialog-footer">
+	            <el-button @click="dialogFormVisible = false">取 消</el-button>
+	            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+	        </div>
+		</el-dialog>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
-	                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
-	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-	                <el-button style="float: left;" @click="handleAdd">新增调拨单</el-button>
+	                <el-button style="float: left;" @click="confirmationSlip" type="primary">确认调拨单</el-button>
+	                <el-button style="float: right;" @click="Return" type="primary">返回</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -24,31 +34,43 @@
 	                highlight-current-row
 	                style="width: 100%">
 	               <el-table-column
-	                  property="time"
-	                  label="调拨日期">
+	                  property="proid"
+	                  label="商品编码">
+	               </el-table-column>
+	               <el-table-column
+	                  property="pname"
+	                  label="商品名称">
 	                </el-table-column>
 	               <el-table-column
-	                  property="allocateid"
-	                  label="调拨单号">
+	                  property="allocatecount"
+	                  label="数量">
 	               </el-table-column>
 	               <el-table-column
-	                  property="outstate"
-	                  label="出库状态">
+	                  property="wastecount"
+	                  label="报损数量">
 	               </el-table-column>
 	               <el-table-column
-	                  property="inreponame"
-	                  label="调入仓库">
+	                  property="ponunite"
+	                  label="单位">
+	               </el-table-column>
+	               <el-table-column
+	                  property="prostandard"
+	                  label="规格型号">
 	               </el-table-column>
 	               <el-table-column
 	                  property="switchtype"
 	                  label="调拨类型">
 	               </el-table-column>
-	                <el-table-column
+	               <el-table-column
+	                  property="inreponame"
+	                  label="调出仓库">
+	               </el-table-column>
+	                <el-table-column v-if="toggle"
 					label="操作">
 						<template scope="scope">
 						<el-button
 						size="mini"
-						@click="handleEdit(scope.$index, scope.row)">调拨单详情</el-button>
+						@click="handleEdit(scope.$index, scope.row)">报损</el-button>
 						</template>
 					</el-table-column>
 	            </el-table>
@@ -65,16 +87,16 @@
 	    </div>
 	</div>
 </template>
-
 <script>
     import headTop from '../components/headTop'
-    import {getallocation_b, getByPname_b,getWarehouse_b} from '@/api/getData'
+    import {getallotmentSheetDetails_b,addloss_b,getconfirmationSlip_b} from '@/api/getData'
     export default {
         data(){
             return {
                 tableData: [],
                 count: 0,
                 currentPage: 1,
+                id: this.$route.params.id,
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
 				form: {
@@ -89,8 +111,10 @@
 				endTime:'',
 				get: 0,
 				ordercode:'',
-				pname:'',
-				classification: [],
+				ind: '',
+				prou: '',
+				lists: '',
+				toggle: true,
             }
         },
     	components: {
@@ -106,11 +130,12 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getallocation_b(1,10);
+                    const countData = await getallotmentSheetDetails_b(this.id);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
-//                  console.log(this.tableData)
+                    this.toggle = this.tableData[0].isReportWaste === 1? false : true
+                    console.log(this.toggle)
                     for(let i = 0;i<this.tableData.length;i++){
                     	if(this.tableData[i].switchtype === 1){
                     		this.tableData[i].switchtype = "缺货调拨"
@@ -120,61 +145,53 @@
                     		this.tableData[i].switchtype = "转大宗出库"
                     	}
                     }
-					//调入仓库
-					const classi = await getWarehouse_b()
-					this.classification = classi.data.data
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
             },
-			async handleSearch(){
-				this.get = 1
-				this.count = 0
-				const resData = await getByPname_b(this.pname)
-				console.log(resData.data)
-				if(resData.data.code === '1111'){
-					this.tableData = resData.data.data.list
-					this.count = resData.data.data.total
-                    for(let i = 0;i<this.tableData.length;i++){
-                    	if(this.tableData[i].switchtype === 1){
-                    		this.tableData[i].switchtype = "缺货调拨"
-                    	}else if(this.tableData[i].switchtype === 2){
-                    		this.tableData[i].switchtype = "促销调拨"
-                    	}else if(this.tableData[i].switchtype === 3){
-                    		this.tableData[i].switchtype = "转大宗出库"
-                    	}
-                    }
-				} else {
-					this.$message(resData.data.message)
-					this.tableData = []
-					this.count = 0
+			handleEdit(index,row) {
+				this.dialogFormVisible = true
+				this.ind = index
+				this.prou = row.ponunite
+				this.form.procode = row.proid
+				this.form.proname = row.pname
+			},
+			async confirmAdd(){
+				const addInfo = await addloss_b(this.tableData[this.ind].allocatedetailid,this.form.wastecount)
+				if(addInfo.data.code === '1111'){
+					this.$message('添加损耗成功')
+					this.form.wastecount = ""
+					this.dialogFormVisible = false
+					this.initData()
+				}else {
+					this.$message(addInfo.data.message)
 				}
 			},
-			async empty(){
-				this.pname=""
-			},
-			handleEdit(index,row) {
-				console.log(index, row)
+            async Return() {
 				this.$destroy()
-				this.$router.push('/allotmentSheetDetails_b/'+ row.allocateid)
-			},
-            handleAdd() {
-				this.$destroy()
-				this.$router.push('/allotmentSheetAdded_b')
+				this.$router.push('/transferBill_b')
             },
-			formatter(date){
-				console.log(date.getMonth())
-				let res = ''
-				res += date.getFullYear()+ '-' + (date.getMonth() + 1) + '-' +date.getDate() +' '+date.getHours() + ':' +date.getMinutes() + ':' +date.getSeconds()
-				return res
+			async confirmationSlip(){//post
+				for(let i=0;i<this.tableData.length;i++){
+					this.lists += this.tableData[i].allocatedetailid+","
+				}
+				console.log(this.tableData1)
+				const resData = await getconfirmationSlip_b(this.lists)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
 			async handleCurrentChange(num){
 				console.log(this.get)
 				this.currentPage = num
-				const dataReceipt = this.get === 0 ? await getallocation_b(this.currentPage) : await getByPname_b(this.pname, this.currentPage)
+				const dataReceipt = await getallotmentSheetDetails_b(this.id,this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+                    this.toggle = this.tableData[0].isReportWaste === 1? false : true
                     for(let i = 0;i<this.tableData.length;i++){
                     	if(this.tableData[i].switchtype === 1){
                     		this.tableData[i].switchtype = "缺货调拨"

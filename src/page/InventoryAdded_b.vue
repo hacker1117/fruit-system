@@ -197,7 +197,7 @@
 					this.count1 = resData.data.data.total
 				} else {
 					this.$message(resData.data.message)
-					this.tableData =""
+					this.tableData = []
 					this.count1 = 0
 				}
 			},
@@ -223,7 +223,7 @@
 				if(this.Success = this.multipleSelection.length){
 					this.$message('盘点成功!')
 					this.Success = 0
-					this.tableData =""
+					this.tableData = []
 				}else {
 					this.$message('盘点失败!')
 				}
