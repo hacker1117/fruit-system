@@ -24,7 +24,7 @@
 				<el-col :span="24">
 	                <el-button style="float: right;" @click="empty" type="primary">清空</el-button>
 	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-	                <el-button style="float: left;" @click="handleAdd">新增</el-button>
+	                <el-button style="float: left;" @click="handleAdd" type="primary">新增</el-button>
 	                <el-button style="float: left;" @click="noInventory">未盘点</el-button>
 	            </el-col>
 			</el-row>
@@ -80,7 +80,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventory_a, getInventoryChild_a} from '@/api/getData'
+    import {getInventory_a, getInventoryChild_a, getselectbetweenstart_a} from '@/api/getData'
     export default {
         data(){
             return {
@@ -135,7 +135,7 @@
             async noInventory(){
 				this.get = 2
 				this.count = 0
-            	const resData = await getInventoryChild_a(0,0,this.state)
+            	const resData = await getselectbetweenstart_a(this.state)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -198,7 +198,7 @@
 				}else if(this.get === 1){
 					dataReceipt = await getInventoryChild_a(times1,times2, this.currentPage)
 				}else if(this.get === 2){
-					dataReceipt = await getInventoryChild_a(0,0,this.state,this.currentPage)
+					dataReceipt = await getselectbetweenstart_a(this.state,this.currentPage)
 				}
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list

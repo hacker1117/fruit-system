@@ -143,7 +143,6 @@
 				endTime:'',
 				pname:'',
 				ind: '',
-				Success: 0,
                 multipleSelection: [],
                 repocode: '',
                 get: 0,
@@ -207,25 +206,17 @@
 			},
 			async Inventory(){
 				console.log(this.tableData1)
-//				console.log(this.tableData1.length)
-//				console.log(this.tableData1[0])
 				for(let i = 0; i<this.tableData1.length; i++){
-					this.repocode += this.tableData1[i].bpid+","
-					console.log(this.repocode)
-					const resData = await getinventoryPreservation_a(this.repocode)
-					if(resData.data.code === '1111'){
-						console.log("this.tableData1"+[i]+"成功")
-						this.Success+=1
-					}else {
-						console.log("this.tableData1"+[i]+"失败")
-					}
+					this.repocode += this.tableData1[i].repocode+","
 				}
-				if(this.Success = this.multipleSelection.length){
-					this.$message('盘点成功!')
-					this.Success = 0
-					this.tableData = []
+				const resData = await getinventoryPreservation_a(this.repocode)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.tableData1 = []
+					this.count = 0
+					this.initData()
 				}else {
-					this.$message('盘点失败!')
+					this.$message(resData.data.message)
 				}
 			},
 			async handleCurrentChange(num){

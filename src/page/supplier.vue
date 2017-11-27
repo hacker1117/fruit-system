@@ -40,20 +40,17 @@
             	<el-input style="width: 195px" v-model="form.linkman" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="联系人电话" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.mantelephone" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form.mantelephone" auto-complete="off" placeholder="请输入数字"></el-input>
             </el-form-item>
 			<el-form-item label="联系人手机号" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.mobiletelephone" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form.mobiletelephone" auto-complete="off" placeholder="请输入数字"></el-input>
             </el-form-item>
 			<el-form-item label="税率" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.taxrate" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="form.taxrate" auto-complete="off" placeholder="请输入数字"></el-input>
             </el-form-item>
 			<el-form-item label="创建人" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.createman" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="创建时间" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.createtime" auto-complete="off"></el-input>
-            </el-form-item>
+           </el-form-item>
 			<el-form-item label="备注" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
             </el-form-item>

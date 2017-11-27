@@ -80,7 +80,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventory_b, getInventoryChild_b} from '@/api/getData'
+    import {getInventory_b, getInventoryChild_b, queryTInspectByParam_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -154,7 +154,7 @@
             async noInventory(){
 				this.get = 2
 				this.count = 0
-            	const resData = await getInventoryChild_b("2017-10-20+11:38:35","2017-10-20+11:38:35",this.state)
+            	const resData = await queryTInspectByParam_b(this.state)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
@@ -198,7 +198,7 @@
 				}else if(this.get === 1){
 					dataReceipt = await getInventoryChild_b(times1,times2, this.currentPage)
 				}else if(this.get === 2){
-					dataReceipt = await getInventoryChild_b(0,0,this.state,this.currentPage)
+					dataReceipt = await queryTInspectByParam_b(this.state,this.currentPage)
 				}
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list

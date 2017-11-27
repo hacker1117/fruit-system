@@ -40,7 +40,6 @@
 						<el-submenu style="background-color: #009a76;" index="11">
 							<template  slot="title"><i class="el-icon-plus"></i><span style="color:#333;">库存管理</span></template>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('22')" index="/dailyWaste">日常损耗管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('23')" index="/branchHouse">分库管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('24')" index="/stockBalance">库存余额表</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('46')" index="/Inventory_b">盘点</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('49')" index="/packagingManagement_b">包装管理</el-menu-item>
@@ -65,11 +64,12 @@
 						</el-submenu>
 					</el-submenu>
 					<el-submenu  style="background-color: #009a76;" index="5"  v-if="getRole('38')">
-						<template  slot="title"><i class="el-icon-edit"></i><span style="color:#333;">用户管理</span></template>
+						<template  slot="title"><i class="el-icon-edit"></i><span style="color:#333;">配置管理</span></template>
 						<!-- <el-menu-item index="uploadImg">上传图片</el-menu-item> -->
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('39')" index="/person">人员管理</el-menu-item>
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('41')" index="/group">组管理</el-menu-item>
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('42')" index="/role">角色权限</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('23')" index="/branchHouse">分库管理</el-menu-item>
 					</el-submenu>
 				</el-menu>
 			</el-col>

@@ -30,7 +30,7 @@
 	    	<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>
-					<el-button style="float: left;" @click="confirmationInventory" type="primary">确认盘点</el-button>
+					<el-button style="float: left;" @click="confirmationInventory" type="primary" :disabled="toggle1">确认盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -73,6 +73,7 @@
 	                  label="盘盈数量">
 	               </el-table-column>
 	                <el-table-column
+	                v-if="toggle"
 					label="操作">
 						<template scope="scope">
 						<el-button
@@ -121,8 +122,10 @@
 					lossCount: '',
 					overageCount: '',
 				},
-				procode: '',
+				rets: 0,
 				ind: '',
+				toggle: true,
+				toggle1: false,
             }
         },
     	components: {
@@ -143,6 +146,8 @@
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
+                    this.toggle = this.tableData[0].isCreate === 1 ? false : true
+                    this.toggle1 = this.tableData[0].isCreate === 1 ? true : false
                     for(let i = 0;i<this.tableData.length;i++){
                         this.tableData[i].isDefault = this.tableData[i].isDefault == 0 ? '否' : '是'
                     }
@@ -157,24 +162,25 @@
 				this.ind=index
 			},
 			async confirmationInventory(){
-				console.log(this.id)
-				const resData = await getconfirmationInventory_a(this.id)
-				if(resData.data.code === '1111'){
-					this.$message(resData.data.message)
-				} else {
-					this.$message(resData.data.message)
+				for(let i = 0;i<this.tableData.length;i++){
+					console.log(this.tableData[i].checkdtailid)
+					console.log(this.tableData[i].infactcount)
+                    const resData = await getconfirmationInventory_a(this.tableData[i].checkdtailid,this.tableData[i].infactcount)
+                    if(resData.data.code === '1111'){
+						this.rets = this.rets+1
+					} else {
+						this.$message(resData.data.message)
+					}
+                }
+				if(this.rets === this.tableData.length){
+					this.$message("确认盘点成功")
+					this.initData()
+				}else{
+					this.$message("确认盘点失败")
 				}
 			},
 			async confirmAdd(){
-//				this.tableData[this.ind].infactcount=this.form.infactcount 
-				console.log(this.tableData[this.ind].checkdtailid)
-				const resData = await getupdateTInspect_a(this.tableData[this.ind].checkdtailid,this.tableData[this.ind].losscount,this.tableData[this.ind].overagecount,this.tableData[this.ind].accountcount,this.form.infactcount)
-				if(resData.data.code === '1111'){
-					this.$message(resData.data.message)
-					this.initData()
-				} else {
-					this.$message(resData.data.message)
-				}
+				this.tableData[this.ind].infactcount=this.form.infactcount 
 				this.dialogFormVisible = false
 			},
 			async exportEXCEL(){

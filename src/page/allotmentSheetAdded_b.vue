@@ -2,7 +2,7 @@
 	<div>
 	    <head-top></head-top>
 	    <div class="fruit-content">
-	        <el-dialog title="新增调拨单" v-model="dialogFormVisible">
+	        <el-dialog title="新增调拨单商品" v-model="dialogFormVisible">
 		        <el-form :model="form">
 		        	<el-form-item label="商品名称" :label-width="formLabelWidth">
 					<el-autocomplete
@@ -47,7 +47,7 @@
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 	                <el-button style="float: right;" @click="Preservation" type="primary">生成调拨单</el-button>
-	                <el-button style="float: left;" @click="dialogFormVisible = true">新增调拨单</el-button>
+	                <el-button style="float: left;" @click="dialogFormVisible = true">新增调拨单商品</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">

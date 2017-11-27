@@ -88,23 +88,23 @@ const routes = [
 		},{
 			path: '/person',
 			component: person,
-			meta: ['用户管理', '人员管理'],
+			meta: ['配置管理', '人员管理'],
 		},{
 			path: '/personDetails/:id',
 			component: personDetails,
-			meta: ['用户管理', '人员管理'],
+			meta: ['配置管理', '人员管理'],
 		},{
 			path: '/role',
 			component: role,
-			meta: ['用户管理', '角色权限'],
+			meta: ['配置管理', '角色权限'],
 		},{
 			path: '/roleDetails/:id',
 			component: roleDetails,
-			meta: ['用户管理', '角色权限'],
+			meta: ['配置管理', '角色权限'],
 		},{
 			path: '/group',
 			component: group,
-			meta: ['用户管理', '组管理'],
+			meta: ['配置管理', '组管理'],
 		},{
 			path: '/purchaseOrder',
 			component: purchaseOrder,
