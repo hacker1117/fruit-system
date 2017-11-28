@@ -264,6 +264,7 @@
 					this.count = dataReceipt.data.data.length
 				}else {
 					this.receiptData = []
+					this.count = 0
 				}
 			}
 		}

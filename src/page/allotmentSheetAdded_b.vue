@@ -27,13 +27,11 @@
 		            </el-select>
 	           </el-form-item>
 				<el-form-item label="调拨类型" :label-width="formLabelWidth">
-	                <el-select v-model="form.switchtype" placeholder="请选择调拨类型">
-					    <el-option
-					      v-for="item in options"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					</el-select>
+					<el-select v-model="form.switchtype" placeholder="请选择调拨类型">
+		                <el-option label="缺货调拨" value="1"></el-option>
+		                <el-option label="促销调拨" value="2"></el-option>
+		                <el-option label="转大宗出库" value="3"></el-option>
+		            </el-select>
 	           </el-form-item>
 				<el-form-item label="数量" :label-width="formLabelWidth">
 	                <el-input style="width: 195px" v-model="form.allocatecount" auto-complete="off"><template slot="append">{{this.pronuite}}</template></el-input>
@@ -117,16 +115,6 @@
 				ordercode:'',
 				pronuite: '',
 				classification: [],
-				options: [{
-		          value: '1',
-		          label: '缺货调拨'
-		        }, {
-		          value: '2',
-		          label: '促销调拨'
-		        }, {
-		          value: '3',
-		          label: '转大宗出库'
-		        }],
 		        inreponame: '',
 		        Warehouse: [],
 		        list: [],

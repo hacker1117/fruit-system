@@ -515,16 +515,21 @@ export const addSupplier = (supplierid,sname,supplytype,cmpanyaddress,ranks,link
 export const getGoodsAll = (pageNum = 1, pageSize = 10) => axio('/productmanager/findAllProduct',{pageNum, pageSize});
 
 /**
+ * B库-货品管理--选择供应商
+ */
+export const querySnameByTSupplierorder_a = () => axio('/productmanager/querySnameByTSupplierorder');
+
+/**
  * 添加商品信息
  */
 
-export const addGoods = (isStandard,proid,pname,prostandered,commodityattribute,storagetype,factories,brand,supplierid,referenceinprice,createman) => axio('/productmanager/insertProduct',{isStandard,proid,pname,prostandered,commodityattribute,storagetype,factories,brand,supplierid,referenceinprice,createman});
+export const addGoods = (isStandard,proid, pname, prostandered, pronuite, commodityattribute, storagetype, factories, brand, sname, referenceinprice, createman, modifyman) => axio('/productmanager/insertProduct',{isStandard,proid, pname, prostandered, pronuite, commodityattribute, storagetype, factories, brand, sname, referenceinprice, createman, modifyman});
 
 /**
  * 修改商品信息
  */
 
-export const updateGoods = (proid,pname,prostandered,commodityattribute,storagetype,factories,brand,supplierid,referenceinprice) => axio('/productmanager/updateProduct',{proid,pname,prostandered,commodityattribute,storagetype,factories,brand,supplierid,referenceinprice});
+export const updateGoods = (pname, prostandered, commodityattribute, storagetype, factories, brand, sname, referenceinprice, modifyman) => axio('/productmanager/updateProduct',{pname, prostandered, commodityattribute, storagetype, factories, brand, sname, referenceinprice, modifyman});
 
 /**
  * 获取入库单列表
@@ -850,7 +855,7 @@ export const queryTInspectByParam_b = (state, pageNum = 1, pageSize = 10, reposi
  * B库-查询盘点详情列表
  */
 
-export const getInventoryDetails_b = (checkid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryTInspectbyCheckid',{checkid,pageNum,pageSize,repositoryid});
+export const getInventoryDetails_b = (checkid, repositoryid = repoId) => axio('/tinspect/queryTInspectbyCheckid',{checkid,repositoryid});
 
 /**
  * B库-查询新增盘点列表
@@ -1046,7 +1051,7 @@ export const getinventoryPreservation_a = (repocode, repositoryposition = repoId
  * A库-查询盘点详情列表
  */
 
-export const getInventoryDetails_a = (checkid, pageNum = 1,pageSize = 10) => axio('/inspecta/checkdetailsBycheckid',{checkid,pageNum,pageSize});
+export const getInventoryDetails_a = (checkid) => axio('/inspecta/checkdetailsBycheckid',{checkid});
 
 /**
  * A库-盘点详情--确认盘点
@@ -1076,13 +1081,13 @@ export const deletevirtualLibrary_a = (repcode) => axio('/virtualrepomanager/del
  * A库供应商管理-禁用供应商
  */
 
-export const transmitDisable = (Supplierid) => axio('/supplierorder/deleteSupplierorder', {Supplierid});
+export const transmitDisable = (supplierid) => axio('/supplierorder/deleteSupplierorder', {supplierid});
 
 /**
  * A库供应商管理-启用供应商
  */
 
-export const transmitEnable = (Supplierid, isDelete = 0) => axio('/supplierorder/updateSupById', {Supplierid, isDelete});
+export const transmitEnable = (supplierid) => axio('/supplierorder/startSupplierorder', {supplierid});
 
 /**
  * A库出库单-无法出库商品
@@ -1108,13 +1113,39 @@ export const getcommodity = (storagename, storagetype, pageNum = 1,pageSize = 10
 
 export const getexport = (storagename, storagetype) => axio('/purchaseordera/exportExcel', {storagename, storagetype});
 
+/**
+ * A库出库单 审批修改
+ */
+
+export const gethandleEdit = (orderno, productcode, repositoryid = repoId) => axio('/repositoryb/examine',{orderno, productcode, repositoryid});
+
+/**
+ * A库库存余额表 查询库存大于零
+ */
+
+export const queryGreater_a = (pageNum = 1,pageSize = 10) => axio('/abalancerepository/selectcurrentexistnotnull',{pageNum,pageSize});
+
+/**
+ * A库-查询保质期提醒列表
+ */
+
+export const getByRepository_a = (pageNum = 1,pageSize = 10) => axio('/keepdate/getByRepository',{pageNum,pageSize});
+
+/**
+ * A库-按条件查询保质期提醒
+ */
+
+export const getByCondition_a = (pname, proid, startTime, endTime, pageNum = 1, pageSize = 10) => axio('/keepdate/getByCondition',{pname, proid, startTime, endTime, pageNum, pageSize});
+
+
+
+
 
 /**
  * B库 盘点-导出EXCEL
  */
 
 export const getExcleByTInspect = (checkid) => axio('/tinspect/ExcleByTInspect', {checkid});
-
 
 /**
  * B库-包装管理加载列表
@@ -1158,7 +1189,6 @@ export const numberadd_b = (packid,packcount,addcount, repositoryid = repoId) =>
 
 export const getregion = () => axio('/repositoryb/getAllFieldName');
 
-
 /**
  * B库采购单管理 待修改采购单
  */
@@ -1176,18 +1206,6 @@ export const getmodifyPurchasing_b = (orderno, productcode, buynumber, repositor
  */
 
 export const queryGreater_b = (pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/repositoryb/getGeratThenZero',{pageNum,pageSize, repositoryid});
-
-/**
- * A库出库单 审批修改
- */
-
-export const gethandleEdit = (orderno, productcode, repositoryid = repoId) => axio('/repositoryb/examine',{orderno, productcode, repositoryid});
-
-/**
- * A库库存余额表 查询库存大于零
- */
-
-export const queryGreater_a = (pageNum = 1,pageSize = 10) => axio('/abalancerepository/selectcurrentexistnotnull',{pageNum,pageSize});
 
 /**
  * 生产执行/生产线管理 获取生产线
@@ -1218,6 +1236,3 @@ export const modifyProduction = (id, repcode, pipeline, holenum, prioritylevel, 
  */
 
 export const DeleteProduction = (piplineId, pageNum = 1,pageSize = 10) => axio('/RepPipelineController/deletePipLine',{piplineId, pageNum,pageSize},'DELETE');
-
-
-

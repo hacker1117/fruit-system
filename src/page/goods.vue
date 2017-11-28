@@ -49,6 +49,14 @@
 			<el-form-item label="规格" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.prostandered" auto-complete="off"></el-input>
             </el-form-item>
+			<el-form-item label="单位" :label-width="formLabelWidth"v-if="this.form1.isStandard === 1">
+            	<el-select v-model="form1.pronuite" placeholder="请选择计量单位">
+	                <el-option label="个" value="个"></el-option>
+	                <el-option label="克" value="瓶"></el-option>
+	                <el-option label="份" value="份"></el-option>
+	                <el-option label="袋" value="袋"></el-option>
+	            </el-select>
+            </el-form-item>
 			<el-form-item label="商品属性" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.commodityattribute" auto-complete="off"></el-input>
             </el-form-item>
@@ -63,14 +71,24 @@
 			<el-form-item label="品牌" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.brand" auto-complete="off"></el-input>
             </el-form-item>
-			<el-form-item label="供应商编码" :label-width="formLabelWidth">
+			<!--<el-form-item label="供应商编码" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.supplierid" auto-complete="off"></el-input>
+            </el-form-item>-->
+			<el-form-item label="供应商" :label-width="formLabelWidth">
+				<el-select v-model="form1.sname" placeholder="请选择供应商">
+					<el-option v-for="(item,index) in batchData" :key="item.id" :label="item.sname" :value="item.supplierid"></el-option>
+				</el-select>
             </el-form-item>
 			<el-form-item label="参考进价" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.referenceinprice" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="创建人" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form1.createman" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
+            </el-form-item>
+			<el-form-item label="保质期时间" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form1.modifyman" auto-complete="off">
+            		<template slot="append">天</template>
+            	</el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -78,7 +96,7 @@
             <el-button type="primary" @click="confirmAdd">确 定</el-button>
         </div>
         </el-dialog>
-            <el-dialog title="编辑货品" v-model="dialogFormVisible2">
+            <el-dialog title="修改货品" v-model="dialogFormVisible2">
                 <el-form :model="form2">
                     <el-form-item label="商品名称" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.pname" auto-complete="off"></el-input>
@@ -100,12 +118,22 @@
                     <el-form-item label="品牌" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.brand" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="供应商编码" :label-width="formLabelWidth">
+                    <!--<el-form-item label="供应商编码" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.supplierid" auto-complete="off"></el-input>
-                    </el-form-item>
+                    </el-form-item>-->
+					<el-form-item label="供应商" :label-width="formLabelWidth">
+						<el-select v-model="form2.sname" placeholder="请选择供应商">
+							<el-option v-for="(item,index) in batchData" :key="item.id" :label="item.sname" :value="item.supplierid"></el-option>
+						</el-select>
+		            </el-form-item>
                     <el-form-item label="参考进价" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.referenceinprice" auto-complete="off"></el-input>
                     </el-form-item>
+					<el-form-item label="保质期时间" :label-width="formLabelWidth">
+		            	<el-input style="width: 195px" v-model="form2.modifyman" auto-complete="off">
+		            		<template slot="append">天</template>
+		            	</el-input>
+		            </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible2 = false">取 消</el-button>
@@ -184,7 +212,8 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getGoodsAll, queryGoodsList, addGoods, appGoodsList, bindAppGoods, updateGoods, getclassification} from '@/api/getData'
+    import {mapActions, mapState} from 'vuex'
+    import {getGoodsAll, queryGoodsList, addGoods, appGoodsList, bindAppGoods, updateGoods, getclassification, querySnameByTSupplierorder_a} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -208,17 +237,19 @@
 					appGoodsIndex:'',
 				},
 				form1:{
-					isStandard: "",
+					isStandard: 0,
 					proid: "",
 					pname: "",
 					prostandered: "",
+					pronuite: "",
 					commodityattribute: "",
 					storagetype: "",
 					factories: "",
 					brand: "",
-					supplierid: "",
+					sname: "",
 					referenceinprice: "",
 					createman: "",
+					modifyman: "",
 				},
 				form2:{
 					pname: "",
@@ -227,8 +258,9 @@
 					storagetype: "",
 					factories: "",
 					brand: "",
-					supplierid: "",
+					sname: "",
 					referenceinprice: "",
+					modifyman: "",
 				},
 				appBindId:'',
 				formLabelWidth: '120px',
@@ -239,6 +271,7 @@
 				confirmIndex: '',
 				currentPage: 1,
 				classification: [],
+				batchData: [],
     		}
     	},
     	components: {
@@ -246,6 +279,9 @@
     	},
     	mounted(){
     		this.initData();
+    	},
+    	computed: {
+    		...mapState(['adminInfo']),
     	},
         beforeRouteLeave (to, from, next) {
             this.$destroy()
@@ -260,6 +296,8 @@
 					this.count = dataReceipt.data.data.total
 					const classi = await getclassification()
 					this.classification = classi.data.data
+					const Sname = await querySnameByTSupplierorder_a()
+					this.batchData = Sname.data.data
 					const appGoodsInfo = await appGoodsList(1)
 					this.appGoodsList = appGoodsInfo.data.resultData.productList
 					console.log(this.appGoodsList)
@@ -292,20 +330,22 @@
 			},
 			async confirmAdd(){
 				console.log(this.form)
-                const goodsAdd = await addGoods(this.form1.isStandard,this.form1.proid,this.form1.pname,this.form1.prostandered,this.form1.commodityattribute,this.form1.storagetype,this.form1.factories,this.form1.brand,this.form1.supplierid,this.form1.referenceinprice,this.form1.createman)
+                const goodsAdd = await addGoods(this.form1.isStandard,this.form1.proid, this.form1.pname, this.form1.prostandered, this.form1.pronuite, this.form1.commodityattribute, this.form1.storagetype, this.form1.factories, this.form1.brand, this.form1.sname, this.form1.referenceinprice, this.adminInfo.uname, this.form1.modifyman)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('添加货品成功!')
                     this.form1.isStandard = 0
 					this.form1.proid = ""
 					this.form1.pname = ""
 					this.form1.prostandered = ""
+					this.form1.pronuite = ""
 					this.form1.commodityattribute = ""
 					this.form1.storagetype = ""
 					this.form1.factories = ""
 					this.form1.brand = ""
-					this.form1.supplierid = ""
+					this.form1.sname = ""
 					this.form1.referenceinprice = ""
-					this.form1.createman = ""
+//					this.form1.createman = ""
+					this.form1.modifyman = ""
                     this.dialogFormVisible = false
                     this.initData()
                 } else {
@@ -314,15 +354,18 @@
 			},
             async confirmEditOld(){
                 console.log(this.form)
-                const goodsAdd = await updateGoods(this.form2.proid,this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.storagetype,this.form2.factories,this.form2.brand,this.form2.supplierid,this.form2.referenceinprice)
+                const goodsAdd = await updateGoods(this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.storagetype,this.form2.factories,this.form2.brand,this.form2.sname,this.form2.referenceinprice,this.form2.modifyman)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('修改货品成功!')
-                    this.form2.commodityattribute = ""
-                    this.form2.storagetype = ""
+                	this.form2.pname = ""
+					this.form2.prostandered = ""
+					this.form2.commodityattribute = ""
+					this.form2.storagetype = ""
 					this.form2.factories = ""
 					this.form2.brand = ""
-					this.form2.supplierid = ""
+					this.form2.sname = ""
 					this.form2.referenceinprice = ""
+					this.form2.modifyman = ""
                     this.dialogFormVisible2 = false
                     this.initData()
                 } else {

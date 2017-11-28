@@ -22,6 +22,7 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('47')" index="/packagingManagement_a">包装管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('48')" index="/Inventory_a">盘点</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('50')" index="/securityThresholdManagement_a">安全阈值管理</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('53')" index="/shelfLifeReminder_a">保质期提醒</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="9">
 							<template  slot="title"><i class="el-icon-plus"></i><span style="color:#333;">出库管理</span></template>
@@ -45,7 +46,6 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('49')" index="/packagingManagement_b">包装管理</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('52')" index="/allotmentSheet_b">调出调拨单</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('54')" index="/transferBill_b">调入调拨单</el-menu-item>
-							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('53')" index="/shelfLifeReminder_b">保质期提醒</el-menu-item>
 						</el-submenu>
 					</el-submenu>
 					<el-submenu style="background-color: #009a76;" index="4" v-if="getRole('28')">

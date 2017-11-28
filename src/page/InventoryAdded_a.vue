@@ -87,12 +87,16 @@
 	                  label="商品编码">
 	               </el-table-column>
 	               <el-table-column
-	                  property="prounite"
+	                  property="currentexist"
+	                  label="系统数量">
+	               </el-table-column>
+	               <el-table-column
+	                  property="positioncode"
 	                  label="单位">
 	               </el-table-column>
 	               <el-table-column
-	                  property="existamount"
-	                  label="系统数量">
+	                  property="prostandard"
+	                  label="规格">
 	               </el-table-column>
 	               <!--<el-table-column
 	                  property="infactcount"

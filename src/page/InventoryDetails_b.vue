@@ -53,16 +53,20 @@
 	                  label="商品编码">
 	               </el-table-column>
 	               <el-table-column
-	                  property="prounite"
-	                  label="单位">
-	               </el-table-column>
-	               <el-table-column
 	                  property="accountcount"
 	                  label="账面数量">
 	               </el-table-column>
 	               <el-table-column
 	                  property="infactcount"
 	                  label="实际数量">
+	               </el-table-column>
+	               <el-table-column
+	                  property="prounite"
+	                  label="单位">
+	               </el-table-column>
+	               <el-table-column
+	                  property="prostandard"
+	                  label="规格">
 	               </el-table-column>
 	               <el-table-column
 	                  property="losscount"
@@ -82,15 +86,7 @@
 						</template>
 					</el-table-column>
 	            </el-table>
-	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-	                <el-pagination
-	                  @current-change="handleCurrentChange"
-	                  :current-page="currentPage"
-	                  :page-size="10"
-	                  layout="total, prev, pager, next"
-	                  :total="count">
-	                </el-pagination>
-	            </div>
+	            <div class="Pagination" style="text-align: left;margin-top: 10px;">共 {{this.count}} 条</div>
 	        </div>
 	    </div>
 	</div>
@@ -144,8 +140,8 @@
                     const countData = await getInventoryDetails_b(this.id);
                     console.log("id"+this.id)
                     console.log(countData.data)
-                    this.tableData = countData.data.data.list
-                    this.count = countData.data.data.total
+                    this.tableData = countData.data.data
+                    this.count = countData.data.data.length
                     this.toggle = this.tableData[0].isCreate === 1 ? false : true
                     this.toggle1 = this.tableData[0].isCreate === 1 ? true : false
                     for(let i = 0;i<this.tableData.length;i++){

@@ -68,7 +68,7 @@ const productionLine = r => require.ensure([], () => r(require('@/page/productio
 const allotmentSheet_b = r => require.ensure([], () => r(require('@/page/allotmentSheet_b')), 'allotmentSheet_b');
 const allotmentSheetDetails_b = r => require.ensure([], () => r(require('@/page/allotmentSheetDetails_b')), 'allotmentSheet_b');
 const allotmentSheetAdded_b = r => require.ensure([], () => r(require('@/page/allotmentSheetAdded_b')), 'allotmentSheet_b');
-const shelfLifeReminder_b = r => require.ensure([], () => r(require('@/page/shelfLifeReminder_b')), 'shelfLifeReminder_b');
+const shelfLifeReminder_a = r => require.ensure([], () => r(require('@/page/shelfLifeReminder_a')), 'shelfLifeReminder_a');
 const transferBill_b = r => require.ensure([], () => r(require('@/page/transferBill_b')), 'transferBill_b');
 const transferBillDetails_b = r => require.ensure([], () => r(require('@/page/transferBillDetails_b')), 'transferBill_b');
 
@@ -298,9 +298,9 @@ const routes = [
 			component: allotmentSheetAdded_b,
 			meta: ['B库进销存管理', '库存管理', '调出调拨单'],
 		},{
-			path: '/shelfLifeReminder_b',
-			component: shelfLifeReminder_b,
-			meta: ['B库进销存管理', '库存管理', '保质期提醒'],
+			path: '/shelfLifeReminder_a',
+			component: shelfLifeReminder_a,
+			meta: ['A库进销存管理', '库存管理', '保质期提醒'],
 		},{
 			path: '/transferBill_b',
 			component: transferBill_b,
