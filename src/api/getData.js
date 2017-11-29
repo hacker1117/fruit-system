@@ -523,13 +523,13 @@ export const querySnameByTSupplierorder_a = () => axio('/productmanager/querySna
  * 添加商品信息
  */
 
-export const addGoods = (isStandard,proid, pname, prostandered, pronuite, commodityattribute, storagetype, factories, brand, sname, referenceinprice, createman, modifyman) => axio('/productmanager/insertProduct',{isStandard,proid, pname, prostandered, pronuite, commodityattribute, storagetype, factories, brand, sname, referenceinprice, createman, modifyman});
+export const addGoods = (isStandard,proid, pname, prostandered, pronuite, commodityattribute, protype, factories, brand, supplierid, referenceinprice, createman, modifyman) => axio('/productmanager/insertProduct',{isStandard,proid, pname, prostandered, pronuite, commodityattribute, protype, factories, brand, supplierid, referenceinprice, createman, modifyman});
 
 /**
  * 修改商品信息
  */
 
-export const updateGoods = (proid,pname, prostandered, commodityattribute, storagetype, factories, brand, sname, referenceinprice, modifyman) => axio('/productmanager/updateProduct',{proid,pname, prostandered, commodityattribute, storagetype, factories, brand, sname, referenceinprice, modifyman});
+export const updateGoods = (proid,pname, prostandered, commodityattribute, protype, brand, supplierid, referenceinprice, modifyman) => axio('/productmanager/updateProduct',{proid,pname, prostandered, commodityattribute, protype, brand, supplierid, referenceinprice, modifyman});
 
 /**
  * 获取入库单列表

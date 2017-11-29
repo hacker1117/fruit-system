@@ -229,20 +229,22 @@
                 const addData = await addFatherCate(this.form.categoryname)
                 if(addData.data.code === '1111'){
                     this.$message('添加父级组成功')
+                    this.form.categoryname = ""
+                    this.dialogFormVisible = false
                     this.initData()
                 }else {
                     this.$message(addData.data.message)
-                    this.dialogFormVisible = true
                 }
             },
             async confirmAddChild(){
                 const addData = await addChildCate(this.form.childcategoryname,this.currentClass,this.currentClassId)
                 if(addData.data.code === '1111'){
                     this.$message('添加子类组成功')
+                    this.form.childcategoryname = ""
+                    this.dialogFormVisibleChild = false
                     this.initData()
                 }else {
                     this.$message(addData.data.message)
-                    this.dialogFormVisibleChild = false
                 }
             }
         },

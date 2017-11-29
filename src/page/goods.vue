@@ -61,13 +61,13 @@
             	<el-input style="width: 195px" v-model="form1.commodityattribute" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="商品分类" :label-width="formLabelWidth">
-            	<el-select v-model="form1.storagetype" placeholder="请选择分类">
+            	<el-select v-model="form1.protype" placeholder="请选择分类">
 		            <el-option v-for="classif in classification" :key="classif.id" :label="classif.categoryname" :value="classif.categorycode"></el-option>
 		        </el-select>
             </el-form-item>
-			<el-form-item label="厂家" :label-width="formLabelWidth">
+			<!--<el-form-item label="厂家" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.factories" auto-complete="off"></el-input>
-            </el-form-item>
+            </el-form-item>-->
 			<el-form-item label="品牌" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.brand" auto-complete="off"></el-input>
             </el-form-item>
@@ -75,7 +75,7 @@
             	<el-input style="width: 195px" v-model="form1.supplierid" auto-complete="off"></el-input>
             </el-form-item>-->
 			<el-form-item label="供应商" :label-width="formLabelWidth">
-				<el-select v-model="form1.sname" placeholder="请选择供应商">
+				<el-select v-model="form1.supplierid" placeholder="请选择供应商">
 					<el-option v-for="(item,index) in batchData" :key="item.id" :label="item.sname" :value="item.supplierid"></el-option>
 				</el-select>
             </el-form-item>
@@ -108,7 +108,7 @@
                         <el-input style="width: 195px" v-model="form2.commodityattribute" auto-complete="off"></el-input>
                     </el-form-item>
 					<el-form-item label="商品分类" :label-width="formLabelWidth">
-		            	<el-select v-model="form2.storagetype" placeholder="请选择分类">
+		            	<el-select v-model="form2.protype" placeholder="请选择分类">
 				            <el-option v-for="classif2 in classification" :key="classif2.id" :label="classif2.categoryname" :value="classif2.categoryname"></el-option>
 				        </el-select>
 		            </el-form-item>
@@ -122,7 +122,7 @@
                         <el-input style="width: 195px" v-model="form2.supplierid" auto-complete="off"></el-input>
                     </el-form-item>-->
 					<el-form-item label="供应商" :label-width="formLabelWidth">
-						<el-select v-model="form2.sname" placeholder="请选择供应商">
+						<el-select v-model="form2.supplierid" placeholder="请选择供应商">
 							<el-option v-for="(item,index) in batchData" :key="item.id" :label="item.sname" :value="item.supplierid"></el-option>
 						</el-select>
 		            </el-form-item>
@@ -243,10 +243,10 @@
 					prostandered: "",
 					pronuite: "",
 					commodityattribute: "",
-					storagetype: "",
+					protype: "",
 					factories: "",
 					brand: "",
-					sname: "",
+					supplierid: "",
 					referenceinprice: "",
 					createman: "",
 					modifyman: "",
@@ -256,10 +256,10 @@
 					pname: "",
 					prostandered: "",
 					commodityattribute: "",
-					storagetype: "",
+					protype: "",
 					factories: "",
 					brand: "",
-					sname: "",
+					supplierid: "",
 					referenceinprice: "",
 					modifyman: "",
 				},
@@ -331,7 +331,7 @@
 			},
 			async confirmAdd(){
 				console.log(this.form)
-                const goodsAdd = await addGoods(this.form1.isStandard,this.form1.proid, this.form1.pname, this.form1.prostandered, this.form1.pronuite, this.form1.commodityattribute, this.form1.storagetype, this.form1.factories, this.form1.brand, this.form1.sname, this.form1.referenceinprice, this.adminInfo.uname, this.form1.modifyman)
+                const goodsAdd = await addGoods(this.form1.isStandard,this.form1.proid, this.form1.pname, this.form1.prostandered, this.form1.pronuite, this.form1.commodityattribute, this.form1.protype, this.form1.factories, this.form1.brand, this.form1.supplierid, this.form1.referenceinprice, this.adminInfo.uname, this.form1.modifyman)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('添加货品成功!')
                     this.form1.isStandard = 0
@@ -340,12 +340,10 @@
 					this.form1.prostandered = ""
 					this.form1.pronuite = ""
 					this.form1.commodityattribute = ""
-					this.form1.storagetype = ""
-					this.form1.factories = ""
+					this.form1.protype = ""
 					this.form1.brand = ""
-					this.form1.sname = ""
+					this.form1.supplierid = ""
 					this.form1.referenceinprice = ""
-//					this.form1.createman = ""
 					this.form1.modifyman = ""
                     this.dialogFormVisible = false
                     this.initData()
@@ -355,17 +353,17 @@
 			},
             async confirmEditOld(){
                 console.log(this.form)
-                const goodsAdd = await updateGoods(this.form2.proid,this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.storagetype,this.form2.factories,this.form2.brand,this.form2.sname,this.form2.referenceinprice,this.form2.modifyman)
+                const goodsAdd = await updateGoods(this.form2.proid,this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.protype,this.form2.brand,this.form2.supplierid,this.form2.referenceinprice,this.form2.modifyman)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('修改货品成功!')
                     this.form2.proid = ""
                 	this.form2.pname = ""
 					this.form2.prostandered = ""
 					this.form2.commodityattribute = ""
-					this.form2.storagetype = ""
+					this.form2.protype = ""
 					this.form2.factories = ""
 					this.form2.brand = ""
-					this.form2.sname = ""
+					this.form2.supplierid = ""
 					this.form2.referenceinprice = ""
 					this.form2.modifyman = ""
                     this.dialogFormVisible2 = false
@@ -377,15 +375,18 @@
             handleEditOld(index, row) {
                 this.dialogFormVisible2 = true
 //              this.form2 = row
+				console.log(row.modifyman)
 				this.form2.proid = row.proid
                 this.form2.pname = row.pname
 				this.form2.prostandered = row.prostandered
 				this.form2.commodityattribute = row.commodityattribute
-				this.form2.storagetype = row.storagetype
+				this.form2.protype = row.storagetype
 				this.form2.factories = row.factories
 				this.form2.brand = row.brand
+				this.form2.sname = row.sname
 				this.form2.supplierid = row.supplierid
 				this.form2.referenceinprice = row.referenceinprice
+				this.form2.modifyman = row.modifyman
             },
 			async confirmBind(){
 				console.log(this.appGoodsList)

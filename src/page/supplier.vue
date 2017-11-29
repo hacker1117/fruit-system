@@ -52,7 +52,7 @@
             	<el-input style="width: 195px" v-model="form.taxratenum" auto-complete="off" placeholder="请输入数字"></el-input>
             </el-form-item>
 			<el-form-item label="创建人" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.createman" auto-complete="off"></el-input>
+            	<el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
            </el-form-item>
 			<el-form-item label="备注" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
@@ -139,6 +139,7 @@
 
 <script>
     import headTop from '@/components/headTop'
+    import {mapActions, mapState} from 'vuex'
     import {getSupplierAll, querySupplierList, addSupplier,transmitDisable,transmitEnable} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
@@ -165,6 +166,9 @@
     	},
     	mounted(){
     		this.initData();
+    	},
+    	computed: {
+    		...mapState(['adminInfo']),
     	},
         beforeRouteLeave (to, from, next) {
             this.$destroy()
@@ -238,7 +242,7 @@
 				return res
 			},
 			async confirmAdd() {
-				console.log(this.form)
+				this.form.createman = this.adminInfo.uname
                 const supplierAdd = await addSupplier(this.form.supplierid,this.form.sname,this.form.supplytype,this.form.cmpanyaddress,this.form.ranks,this.form.linkman,this.form.mantelephone,this.form.mobiletelephone,this.form.taxrate,this.form.createman,this.form.createtime,this.form.remarkable,this.form.taxratenum)
                 if(supplierAdd.data.code === '1111') {
                     this.$message('添加供应商成功!')
