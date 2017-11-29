@@ -48,6 +48,9 @@
 			<el-form-item label="税率" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.taxrate" auto-complete="off" placeholder="请输入数字"></el-input>
             </el-form-item>
+			<el-form-item label="税号" :label-width="formLabelWidth">
+            	<el-input style="width: 195px" v-model="form.taxratenum" auto-complete="off" placeholder="请输入数字"></el-input>
+            </el-form-item>
 			<el-form-item label="创建人" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.createman" auto-complete="off"></el-input>
            </el-form-item>
@@ -104,12 +107,14 @@
 			<el-table-column
 			prop="taxrate" width="120px"
 			label="税率">
-			</el-table-column><el-table-column
+			</el-table-column>
+			<el-table-column
+			prop="taxratenum" width="120px"
+			label="税号">
+			</el-table-column>
+			<el-table-column
 			label="操作" fixed="right" width="120px">
                 <template scope="scope">
-                    <!--<el-button
-                    size="mini"
-                    @click="delete(scope.$index, scope.row)">删除</el-button>-->
                     <el-button
                     size="mini"
                     @click="disable(scope.$index, scope.row)">禁用</el-button>
@@ -234,7 +239,7 @@
 			},
 			async confirmAdd() {
 				console.log(this.form)
-                const supplierAdd = await addSupplier(this.form.supplierid,this.form.sname,this.form.supplytype,this.form.cmpanyaddress,this.form.ranks,this.form.linkman,this.form.mantelephone,this.form.mobiletelephone,this.form.taxrate,this.form.createman,this.form.createtime,this.form.remarkable)
+                const supplierAdd = await addSupplier(this.form.supplierid,this.form.sname,this.form.supplytype,this.form.cmpanyaddress,this.form.ranks,this.form.linkman,this.form.mantelephone,this.form.mobiletelephone,this.form.taxrate,this.form.createman,this.form.createtime,this.form.remarkable,this.form.taxratenum)
                 if(supplierAdd.data.code === '1111') {
                     this.$message('添加供应商成功!')
 					this.form.supplierid = ""

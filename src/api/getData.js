@@ -506,7 +506,7 @@ export const getSupplierDetails = (supplierid) => axio('/supplierorder/findDetal
  * 添加供应商
  */
 
-export const addSupplier = (supplierid,sname,supplytype,cmpanyaddress,ranks,linkman,mantelephone,mobiletelephone,taxrate,createman,createtime,remarkable) => axio('/supplierorder/InsertSupplierOrder',{supplierid,sname,supplytype,cmpanyaddress,ranks,linkman,mantelephone,mobiletelephone,taxrate,createman,createtime,remarkable},'POST');
+export const addSupplier = (supplierid,sname,supplytype,cmpanyaddress,ranks,linkman,mantelephone,mobiletelephone,taxrate,createman,createtime,remarkable,taxratenum) => axio('/supplierorder/InsertSupplierOrder',{supplierid,sname,supplytype,cmpanyaddress,ranks,linkman,mantelephone,mobiletelephone,taxrate,createman,createtime,remarkable,taxratenum},'POST');
 
 /**
  * 获取货品列表
@@ -813,7 +813,7 @@ export const makeStockOut = (respositysource) => axio('/outputordera/insertOutpu
  * 新增入库单
  */
 
-export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, ordernumber, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, ordernumber, storagetype});
+export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, ordernumber, createtime, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, ordernumber, createtime, storagetype});
 
 /**
  * 完善入库单信息

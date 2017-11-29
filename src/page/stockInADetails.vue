@@ -40,6 +40,14 @@
                     <el-option v-for="repos in virtualRepoList" :key="repos.id" :label="repos.reponame" :value="repos.reponame"></el-option>
                 </el-select>
             </el-form-item>
+			<el-form-item label="生产日期" :label-width="formLabelWidth" v-if="this.form.isStandard === 1">
+                <el-date-picker
+				v-model="form.createtime"
+				type="date"
+				format="yyyy-MM-dd"
+				placeholder="选择日期">
+				</el-date-picker>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -160,6 +168,7 @@
 					netweight: "",
 					perprice: "",
 					totalmoney: "",
+					createtime: "",
 				},
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
@@ -208,6 +217,7 @@
     			}
     		},
 			handleEdit(index,row) {
+				console.log(row.isStandard)
 				this.dialogFormVisible = true
 				this.form.ordercode=row.ordercode
 				this.form.storagename=row.storagename
@@ -218,6 +228,7 @@
 				this.storageproducttype = row.storageproducttype
 				this.prostandered = row.prostandered
 				this.prounite = row.prounite
+				this.form.isStandard = row.isStandard
 				this.ind = index
 			},
 			async handleSearch(){
@@ -243,13 +254,14 @@
 			async confirmAdd() {
 				console.log(this.form.netweight)
 				console.log(this.receiptData[this.ind].prostandared)
-				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid, this.receiptData[this.ind].prostandared, this.form.ordercode)
+				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid, this.receiptData[this.ind].prostandared, this.form.ordercode, this.form.createtime)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善入库单成功')
 					this.form.grossweight = ""
 					this.form.tare = ""
 					this.form.perprice = ""
 					this.form.visualreposity = ""
+					this.form.createtime = ""
 					this.dialogFormVisible = false
 					this.initData()
 				}else {

@@ -43,7 +43,7 @@
 	                  label="商品编码">
 	               </el-table-column>
 	               <el-table-column
-	                  property="prounite"
+	                  property="positioncode"
 	                  label="单位">
 	               </el-table-column>
 				</el-table>

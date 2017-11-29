@@ -49,7 +49,7 @@
 			<el-form-item label="规格" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.prostandered" auto-complete="off"></el-input>
             </el-form-item>
-			<el-form-item label="单位" :label-width="formLabelWidth"v-if="this.form1.isStandard === 1">
+			<el-form-item label="单位" :label-width="formLabelWidth" v-if="this.form1.isStandard === 1">
             	<el-select v-model="form1.pronuite" placeholder="请选择计量单位">
 	                <el-option label="个" value="个"></el-option>
 	                <el-option label="克" value="瓶"></el-option>
