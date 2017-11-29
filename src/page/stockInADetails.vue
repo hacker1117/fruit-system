@@ -254,7 +254,8 @@
 			async confirmAdd() {
 				console.log(this.form.netweight)
 				console.log(this.receiptData[this.ind].prostandared)
-				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid, this.receiptData[this.ind].prostandared, this.form.ordercode, this.form.createtime)
+				let sTime = this.form.createtime === '' ? '' : this.formatter(this.form.createtime)
+				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid, this.receiptData[this.ind].prostandared, this.form.ordercode, sTime)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善入库单成功')
 					this.form.grossweight = ""

@@ -529,7 +529,7 @@ export const addGoods = (isStandard,proid, pname, prostandered, pronuite, commod
  * 修改商品信息
  */
 
-export const updateGoods = (pname, prostandered, commodityattribute, storagetype, factories, brand, sname, referenceinprice, modifyman) => axio('/productmanager/updateProduct',{pname, prostandered, commodityattribute, storagetype, factories, brand, sname, referenceinprice, modifyman});
+export const updateGoods = (proid,pname, prostandered, commodityattribute, storagetype, factories, brand, sname, referenceinprice, modifyman) => axio('/productmanager/updateProduct',{proid,pname, prostandered, commodityattribute, storagetype, factories, brand, sname, referenceinprice, modifyman});
 
 /**
  * 获取入库单列表

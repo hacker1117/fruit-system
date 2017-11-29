@@ -252,6 +252,7 @@
 					modifyman: "",
 				},
 				form2:{
+					proid: "",
 					pname: "",
 					prostandered: "",
 					commodityattribute: "",
@@ -354,9 +355,10 @@
 			},
             async confirmEditOld(){
                 console.log(this.form)
-                const goodsAdd = await updateGoods(this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.storagetype,this.form2.factories,this.form2.brand,this.form2.sname,this.form2.referenceinprice,this.form2.modifyman)
+                const goodsAdd = await updateGoods(this.form2.proid,this.form2.pname,this.form2.prostandered,this.form2.commodityattribute,this.form2.storagetype,this.form2.factories,this.form2.brand,this.form2.sname,this.form2.referenceinprice,this.form2.modifyman)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('修改货品成功!')
+                    this.form2.proid = ""
                 	this.form2.pname = ""
 					this.form2.prostandered = ""
 					this.form2.commodityattribute = ""
@@ -375,6 +377,7 @@
             handleEditOld(index, row) {
                 this.dialogFormVisible2 = true
 //              this.form2 = row
+				this.form2.proid = row.proid
                 this.form2.pname = row.pname
 				this.form2.prostandered = row.prostandered
 				this.form2.commodityattribute = row.commodityattribute
