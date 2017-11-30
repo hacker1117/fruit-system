@@ -813,7 +813,7 @@ export const makeStockOut = (respositysource) => axio('/outputordera/insertOutpu
  * 新增入库单
  */
 
-export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, ordernumber, createtime, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, ordernumber, createtime, storagetype});
+export const makeStockIn = (ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, ordernumber, createtime, pronumber, isStandard, storagetype = 'A库入库') => axio('/storageordera/insertStorageordera',{ordercode, visualreposity, storagename, goodscode, storageproducttype, prostandered, prounite, grossweight, tare, perprice, totalmoney, netweight, supplierid, prostandared, ordernumber, createtime, pronumber, isStandard, storagetype});
 
 /**
  * 完善入库单信息
@@ -926,6 +926,12 @@ export const getWarehouse_b = () => axio('/switch/getAllRepoName');
  */
 
 export const queryWarehouse_b = (pageNum = 1,pageSize = 10, repositoryid = repoId, username = unames) => axio('/switch/queryDaiSee',{pageNum,pageSize, repositoryid, username});
+
+/**
+ * B库 删除新增调拨单商品
+ */
+
+export const getdeleteOne_b = (allocatedetailid,pageNum = 1,pageSize = 10, repositoryid = repoId, username = unames) => axio('/switch/deleteOne',{allocatedetailid,pageNum,pageSize, repositoryid, username});
 
 /**
  * B库 新增调拨单 生成调拨单

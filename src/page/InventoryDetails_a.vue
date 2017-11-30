@@ -185,7 +185,7 @@
 			},
             handleAdd() {
 				this.$destroy()
-				this.$router.push('/Inventory_b')
+				this.$router.push('/Inventory_a')
             },
 			async handleCurrentChange(num){
 				console.log(this.get)

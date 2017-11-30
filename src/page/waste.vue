@@ -27,10 +27,10 @@
                 <el-input style="width: 195px" v-model="form.unite" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
 			<el-form-item label="损耗类型" :label-width="formLabelWidth">
-                <!--<el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>-->
-                <el-select v-model="form.wastetype" placeholder="请选择虚拟库">
+                <el-input style="width: 195px" v-model="form.wastetype" auto-complete="off" :disabled="true"></el-input>
+                <!--<el-select v-model="form.wastetype" placeholder="请选择虚拟库">
                     <el-option v-for="repos in virtualRepoList" :key="repos.id" :label="repos.reponame" :value="repos.reponame"></el-option>
-                </el-select>
+                </el-select>-->
            </el-form-item>
 			<el-form-item label="备注" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.productcount" auto-complete="off"></el-input>
@@ -64,7 +64,7 @@
 		<el-row>
 			<el-col :span="24">
                 <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
-                <el-button style="float: right; margin-right:10px;" @click="dialogFormVisible = true" type="primary">新增</el-button>
+                <el-button style="float: left;" @click="dialogFormVisible = true">新增</el-button>
             </el-col>
 		</el-row>
 		<el-table
@@ -142,10 +142,10 @@
 				form:{
 					pname: '',
 					goodsIndex: '',
-					reporttime: ''
+					reporttime: '',
+					wastetype: '日常损耗',
 				},
 				confirmIndex: '',
-				goodsList:[],
 				pronuite: '',
 				virtualRepoList: [],
     		}
@@ -249,6 +249,7 @@
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.receiptData = []
+					this.count = 0
 				}
 			}
 		}

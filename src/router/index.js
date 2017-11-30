@@ -184,7 +184,7 @@ const routes = [
 		},{
 			path: '/classification',
 			component: classification,
-			meta: ['生产执行管理', '资源分配管理', '货品分类'],
+			meta: ['配置管理', '货品分类'],
 		},{
 			path: '/addBom',
 			component: addBom,
@@ -244,7 +244,7 @@ const routes = [
 		},{
 			path: '/branchHouse',
 			component: branchHouse,
-			meta: ['B库进销存管理', '库存管理', '分库管理']
+			meta: ['配置管理', '分库管理']
 		},{
 			path: '/stockBalance',
 			component: stockBalance,

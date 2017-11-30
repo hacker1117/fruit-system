@@ -2,13 +2,6 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
-		<!--<el-row style="margin-top: 20px;">
-            <el-col :span="2" style="text-align:right;">单据编号：</el-col>
-			<el-col :span="4"><el-input v-model="ordernumber" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
-		<el-row>
-			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
-		</el-row>-->
         <el-dialog title="完善入库信息" v-model="dialogFormVisible">
         <el-form :model="form">
             <el-form-item label="采购订单编号" :label-width="formLabelWidth">
@@ -20,15 +13,18 @@
             <el-form-item label="商品编码" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.storagecode" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="毛重" :label-width="formLabelWidth">
+            <el-form-item label="毛重" :label-width="formLabelWidth" v-if="this.form.isStandard === 0">
                 <el-input style="width: 195px" v-model="form.grossweight" auto-complete="off"></el-input> 克/g
             </el-form-item>
-            <el-form-item label="皮重" :label-width="formLabelWidth">
+            <el-form-item label="皮重" :label-width="formLabelWidth" v-if="this.form.isStandard === 0">
                 <el-input style="width: 195px" v-model="form.tare" auto-complete="off"></el-input> 克/g
             </el-form-item>
-			<el-form-item label="净重量" :label-width="formLabelWidth">
+			<el-form-item label="净重量" :label-width="formLabelWidth" v-if="this.form.isStandard === 0">
                 <el-input style="width: 195px" v-model="form.netweight" auto-complete="off">{{this.netweight}}</el-input> 克/g
 			</el-form-item>
+            <el-form-item label="入库数量" :label-width="formLabelWidth" v-if="this.form.isStandard === 1">
+                <el-input style="width: 195px" v-model="form.pronumber" auto-complete="off"></el-input>
+            </el-form-item>
 			<el-form-item label="单价" :label-width="formLabelWidth">
                 <el-input style="width: 195px" v-model="form.perprice" auto-complete="off"></el-input> RMB/￥
             </el-form-item>
@@ -169,6 +165,7 @@
 					perprice: "",
 					totalmoney: "",
 					createtime: "",
+					pronumber: "",
 				},
 				dialogFormVisible: false,
 				formLabelWidth: '120px',
@@ -194,7 +191,12 @@
         		return this.form.netweight
         	},
         	totalmoney:function(){
-        		this.form.totalmoney = Number(this.form.grossweight) * Number(this.form.perprice)
+        		console.log(this.form.grossweight)
+        		if(this.form.grossweight === ""){
+        			this.form.totalmoney = Number(this.form.pronumber) * Number(this.form.perprice)
+        		}else{
+        			this.form.totalmoney = Number(this.form.grossweight) * Number(this.form.perprice)
+        		}
         		this.form.totalmoney = this.form.totalmoney.toFixed(2); 
         		return this.form.totalmoney
         	}
@@ -230,16 +232,12 @@
 				this.prounite = row.prounite
 				this.form.isStandard = row.isStandard
 				this.ind = index
-			},
-			async handleSearch(){
-				// let sTime = this.formatter(this.value1)
-				// let eTime = this.formatter(this.value2)
-				// console.log(sTime)
-				// console.log(eTime)
-				// console.log(this.input)
-				// const resData = await queryStockIn(this.input,sTime,eTime,1,10)
-				// this.receiptData = resData.data.data.list
-				// console.log(resData.data)
+				this.form.grossweight = ""
+				this.form.tare = ""
+				this.form.netweight = ""
+				this.form.pronumber = ""
+				this.form.perprice = ""
+				this.form.totalmoney = ""
 			},
 			formatter(date){
 				console.log(date.getMonth())
@@ -254,8 +252,9 @@
 			async confirmAdd() {
 				console.log(this.form.netweight)
 				console.log(this.receiptData[this.ind].prostandared)
+				console.log(this.receiptData[this.ind].isStandard)
 				let sTime = this.form.createtime === '' ? '' : this.formatter(this.form.createtime)
-				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid, this.receiptData[this.ind].prostandared, this.form.ordercode, sTime)
+				const addInfo = await makeStockIn(this.ordernumber, this.form.visualreposity, this.storagename, this.goodscode, this.storageproducttype, this.prostandered, this.prounite, this.form.grossweight, this.form.tare, this.form.perprice, this.form.totalmoney, this.form.netweight, this.supplierid, this.receiptData[this.ind].prostandared, this.form.ordercode, sTime, this.form.pronumber, this.receiptData[this.ind].isStandard)
 				if(addInfo.data.code === '1111'){
 					this.$message('完善入库单成功')
 					this.form.grossweight = ""

@@ -7,11 +7,9 @@
 			<el-col :span="4"><el-input v-model="productcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
             <el-col :span="2" style="text-align:right;">商品名称：</el-col>
 			<el-col :span="4"><el-input v-model="pname" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">损耗商品编码：</el-col>
+            <el-col :span="3" style="text-align:right;">损耗商品编码：</el-col>
 			<el-col :span="4"><el-input v-model="wasteproductcode" siez="mini" placeholder="请输入内容"></el-input></el-col>
-            <el-col :span="2" style="text-align:right;">制单员：</el-col>
-			<el-col :span="4"><el-input v-model="createhuman" siez="mini" placeholder="请输入内容"></el-input></el-col>
-		</el-row>
+        </el-row>
 		<el-row>
             <el-col :span="2" style="text-align:right;">报损时间：</el-col>
 			<el-col :span="4">
@@ -26,7 +24,7 @@
 		<el-row>
 			<el-col :span="24">
                 <el-button style="float: right; margin-left:10px;" @click="handleSearch" type="primary">查询</el-button>
-                <el-button style="float: right;" @click="dialogFormVisible = true" type="primary">新增</el-button>
+                <el-button style="float: left;" @click="dialogFormVisible = true">新增</el-button>
             </el-col>
 		</el-row>
         <el-dialog title="新增日常损耗" v-model="dialogFormVisible">
@@ -50,23 +48,17 @@
             	<el-input style="width: 195px" v-model="form.productunite" auto-complete="off" :disabled="true"></el-input>
            </el-form-item>
             <el-form-item label="损耗类别" :label-width="formLabelWidth">
-                <!--<el-input style="width: 195px" v-model="form.wastetype" auto-complete="off"></el-input>-->
-                <el-select v-model="form.wastetype" placeholder="请选择损耗类别">
+                <el-input style="width: 195px" v-model="form.wastetype" auto-complete="off" :disabled="true"></el-input>
+                <!--<el-select v-model="form.wastetype" placeholder="请选择损耗类别">
                     <el-option v-for="repos in virtualRepoList" :key="repos.id" :label="repos.reponame" :value="repos.reponame"></el-option>
-                </el-select>
+                </el-select>-->
             </el-form-item>
 			<el-form-item label="备注" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="损耗数量" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.productnumber" auto-complete="off"><template slot="append">{{this.pronuite}}</template></el-input>
-          </el-form-item>
-			<!--<el-form-item label="制单员" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.createhuman" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="报损时间" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.timeofreport" auto-complete="off"></el-input>
-           </el-form-item>-->
+         </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -141,7 +133,10 @@
 				createhuman: '',
 				timeofreport: '',
 				city: {},
-				form: {},
+				form: {
+					pname: '',
+					wastetype: '日常损耗',
+				},
 				receiptData: [],
 				currentPage: 1,
 				count: 0,
@@ -168,7 +163,7 @@
 					const dataReceipt = await getDailyLossList()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
-						this.count = dataReceipt.data.data.total
+					this.count = dataReceipt.data.data.total
     			}catch(err){
     				console.log(err);
     			}
@@ -251,11 +246,8 @@
 					this.count = dataReceipt.data.data.total
 				}else {
 					this.receiptData = []
+					this.count = 0
 				}
-			},
-			async handleInsert(){
-
-
 			}
 		}
     }

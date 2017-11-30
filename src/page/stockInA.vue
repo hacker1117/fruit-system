@@ -53,6 +53,10 @@
 			stripe
 			style="width: 100%;text-align:left;">
 			<el-table-column
+			prop="isStandard" width="120px"
+			label="分类">
+			</el-table-column>
+			<el-table-column
 			prop="storgeaid" width="120px"
 			label="单据编号">
 			</el-table-column>
@@ -188,15 +192,26 @@
 					const dataReceipt = await getStockInaAll()
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+					for(let i = 0;i<this.receiptData.length;i++){
+                        this.receiptData[i].isStandard = this.receiptData[i].isStandard === 0 ? "非标品" : "标品"
+                    }
 					console.log(this.receiptData)
     			}catch(err){
     				console.log(err);
     			}
     		},
 			 handleEdit(index,row) {
-			 	this.dialogFormVisible = true
-			 	this.form=row
-			 	this.ind=index
+				 this.ind=index
+				 if(row.isStandard === "标品"){
+				 	this.$message('标品没有加工损耗')
+				 }else{
+				 	if(row.wastecount === null){
+				 		this.dialogFormVisible = true
+					 	this.form=row
+				 	}else{
+				 		this.$message('已添加加工损耗')
+				 	}
+				 }
 			 },
 			async confirmAdd(){
 				const resData = await addStockInaA(this.receiptData[this.ind].goodscode,this.receiptData[this.ind].storgeaid,this.receiptData[this.ind].storagename,this.receiptData[this.ind].visualreposity,this.receiptData[this.ind].netweight,this.receiptData[this.ind].prounite,this.receiptData[this.ind].perprice,this.receiptData[this.ind].totalmoney,this.receiptData[this.ind].prostandered,this.receiptData[this.ind].ordertime,this.receiptData[this.ind].storagetype,this.receiptData[this.ind].supplierid,this.receiptData[this.ind].remarkable,this.form.workwastecount)
@@ -217,6 +232,9 @@
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
+					for(let i = 0;i<this.receiptData.length;i++){
+                        this.receiptData[i].isStandard = this.receiptData[i].isStandard === 0 ? "非标品" : "标品"
+                    }
 				} else {
 					this.$message(resData.data.message)
 					this.receiptData =""
@@ -240,6 +258,9 @@
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+					for(let i = 0;i<this.receiptData.length;i++){
+                        this.receiptData[i].isStandard = this.receiptData[i].isStandard === 0 ? "非标品" : "标品"
+                    }
 				}else {
 					this.receiptData = []
 					this.count = 0

@@ -112,9 +112,9 @@
 				            <el-option v-for="classif2 in classification" :key="classif2.id" :label="classif2.categoryname" :value="classif2.categoryname"></el-option>
 				        </el-select>
 		            </el-form-item>
-                    <el-form-item label="厂家" :label-width="formLabelWidth">
+                    <!--<el-form-item label="厂家" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.factories" auto-complete="off"></el-input>
-                    </el-form-item>
+                    </el-form-item>-->
                     <el-form-item label="品牌" :label-width="formLabelWidth">
                         <el-input style="width: 195px" v-model="form2.brand" auto-complete="off"></el-input>
                     </el-form-item>

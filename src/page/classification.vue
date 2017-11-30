@@ -58,10 +58,9 @@
             </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
                 <el-pagination
-                  @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
-                  :page-size="5"
+                  :page-size="10"
                   layout="total, prev, pager, next"
                   :total="count">
                 </el-pagination>
@@ -100,16 +99,7 @@
                 </template>
                 </el-table-column>
             </el-table>
-            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="5"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
-            </div>
+            <div class="Pagination" style="text-align: left;margin-top: 10px;"> 共 {{this.count1}} 条</div>
         </div>
     </div>
 </template>
@@ -125,6 +115,7 @@
                 offset: 0,
                 limit: 5,
                 count: 0,
+                count1: 0,
                 currentPage: 1,
                 childData:[],
                 currentClass: '',
@@ -161,8 +152,10 @@
                 const classData = await getCategoryChild(row.categorycode)
                 if(classData.data.code === '1111'){
                     this.childData = classData.data.data.list
+                    this.count1 = classData.data.data.total
                 }else {
                     this.childData = []
+                    this.count1 = 0
                 }
                 this.currentClass = row.categoryname
                 this.currentClassId = row.categorycode
@@ -206,14 +199,17 @@
             handleEditChild() {
 
             },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
-            handleCurrentChange(val) {
-                this.currentPage = val;
-                this.offset = (val - 1)*this.limit;
-                this.getUsers()
-            },
+			async handleCurrentChange(num){
+				this.currentPage = num
+				const dataReceipt =await getCategoryAll(this.currentPage)
+				if(dataReceipt.data.code === '1111'){
+					this.tableData = dataReceipt.data.data.list
+                    this.count = dataReceipt.data.data.total
+				}else {
+					this.tableData = []
+					this.count = 0
+				}
+			},
             async getUsers(){
                 const Users = await getUserList({offset: this.offset, limit: this.limit});
                 this.tableData = [];

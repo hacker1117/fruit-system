@@ -55,7 +55,6 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('29')" index="/receiptCount">销售订单汇总</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('31')" index="/plannation">生产计划汇总</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('32')" index="/bomManage">BOM管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('35')" index="/classification">货品分类</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('51')" index="/productionLine">生产线管理</el-menu-item>
 						</el-submenu>
 						<el-submenu  style="background-color: #009a76;" index="14">
@@ -69,7 +68,8 @@
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('39')" index="/person">人员管理</el-menu-item>
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('41')" index="/group">组管理</el-menu-item>
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('42')" index="/role">角色权限</el-menu-item>
-							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('23')" index="/branchHouse">分库管理</el-menu-item>
+						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('23')" index="/branchHouse">分库管理</el-menu-item>
+						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('35')" index="/classification">货品分类</el-menu-item>
 					</el-submenu>
 				</el-menu>
 			</el-col>

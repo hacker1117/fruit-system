@@ -112,6 +112,7 @@
                     this.count = countData.data.data.total
 //                  console.log(this.tableData)
                     for(let i = 0;i<this.tableData.length;i++){
+                    	this.tableData[i].outstate = this.tableData[i].outstate === 1 ? "已出库" : "未出库"
                     	if(this.tableData[i].switchtype === 1){
                     		this.tableData[i].switchtype = "缺货调拨"
                     	}else if(this.tableData[i].switchtype === 2){

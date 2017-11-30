@@ -78,6 +78,14 @@
 	                  property="inreponame"
 	                  label="调入仓库">
 	               </el-table-column>
+					<el-table-column fixed="right"
+					label="操作" width="120px">
+					<template scope="scope">
+						<el-button
+						size="small"
+						@click="deletes(scope.$index, scope.row)">删除</el-button>
+					</template>
+					</el-table-column>
 	            </el-table>
 	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
 	            	共 {{this.count}} 条
@@ -90,7 +98,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getaddAllocate_b, getWarehouse_b, queryWarehouse_b, getProList, getInventoryChild_b,getupdateTswitch_b} from '@/api/getData'
+    import {getaddAllocate_b, getWarehouse_b, queryWarehouse_b, getProList, getInventoryChild_b,getupdateTswitch_b, getdeleteOne_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -181,6 +189,15 @@
 					this.$message(resData.data.message)
 				}
         	},
+			async deletes(index,row) {
+				const resDatas = await getdeleteOne_b(row.allocatedetailid)
+				if(resDatas.data.code === '1111'){
+					this.$message(resDatas.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+				}
+			 },
 			async Preservation(){//post
 				console.log(this.tableData)
 				for(let i=0;i<this.tableData.length;i++){
@@ -240,15 +257,6 @@
 					}
 				}
 			},
-//			async handleWarehouse(){
-//				console.log(11111)
-//				for(let i = 0; i<this.Warehouse.length; i++){
-//					if(this.form.repocode == this.Warehouse[i].repocode) {
-//						this.inreponame = this.Warehouse[i].inreponame
-//					}
-//				}
-//				console.log(this.inreponame)
-//			}
         },
     }
 </script>
