@@ -23,7 +23,7 @@
 		</el-dialog>
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
-	                <el-button style="float: left;" @click="confirmationSlip" type="primary">确认调拨单</el-button>
+	                <el-button style="float: left;" @click="confirmationSlip" :disabled="toggle1">确认调拨单</el-button>
 	                <el-button style="float: right;" @click="Return" type="primary">返回</el-button>
 	            </el-col>
 			</el-row>
@@ -115,6 +115,7 @@
 				prou: '',
 				lists: '',
 				toggle: true,
+				toggle1: true,
             }
         },
     	components: {
@@ -135,6 +136,7 @@
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
                     this.toggle = this.tableData[0].isReportWaste === 1? false : true
+                    this.toggle1 = this.tableData[0].isReportWaste === 1? true : false
                     console.log(this.toggle)
                     for(let i = 0;i<this.tableData.length;i++){
                     	if(this.tableData[i].switchtype === 1){
