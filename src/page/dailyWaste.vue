@@ -178,13 +178,12 @@
 				this.count = 0
 				let sTime = this.timeofreport === '' ? '' : this.formatter(this.timeofreport)
 				const resData = await queryDailyLossList(this.productcode,this.pname,this.wasteproductcode,this.createhuman,sTime)
-				console.log(resData.data.data.list)
 				if(resData.data.code === '1111'){
 					this.receiptData = resData.data.data.list
 					this.count = resData.data.data.total
-				} else {
+				}else {
 					this.$message(resData.data.message)
-					this.receiptData =""
+					this.receiptData = []
 					this.count = 0
 				}
 			},

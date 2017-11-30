@@ -128,7 +128,7 @@ const routes = [
 		},{
 			path: '/goods',
 			component: goods,
-			meta: ['A库进销存管理', '采购订单管理', '货品管理'],
+			meta: ['配置管理', '货品管理'],
 		},{
 			path: '/goodsDetails/:id',
 			component: goodsDetails,

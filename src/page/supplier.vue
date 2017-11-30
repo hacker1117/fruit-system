@@ -150,7 +150,20 @@
 				input: '',
 				city: {},
 				receiptData: [],
-				form: {},
+				form: {
+					supplierid: '',
+					sname: '',
+					supplytype: '',
+					cmpanyaddress: '',
+					ranks: '',
+					linkman: '',
+					mantelephone: '',
+					mobiletelephone: '',
+					taxrate: '',
+					createman: '',
+					createtime: '',
+					remarkable: '',
+				},
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
 				supplytype: '',
@@ -242,27 +255,72 @@
 				return res
 			},
 			async confirmAdd() {
-				this.form.createman = this.adminInfo.uname
-                const supplierAdd = await addSupplier(this.form.supplierid,this.form.sname,this.form.supplytype,this.form.cmpanyaddress,this.form.ranks,this.form.linkman,this.form.mantelephone,this.form.mobiletelephone,this.form.taxrate,this.form.createman,this.form.createtime,this.form.remarkable,this.form.taxratenum)
-                if(supplierAdd.data.code === '1111') {
-                    this.$message('添加供应商成功!')
-					this.form.supplierid = ""
-					this.form.sname = ""
-					this.form.supplytype = ""
-					this.form.cmpanyaddress = ""
-					this.form.ranks = ""
-					this.form.linkman = ""
-					this.form.mantelephone = ""
-					this.form.mobiletelephone = ""
-					this.form.taxrate = ""
-					this.form.createman = ""
-					this.form.createtime = ""
-					this.form.remarkable = ""
-                    this.dialogFormVisible = false
-                    this.initData()
-                } else {
-                    this.$message(supplierAdd.data.message)
-                }
+				console.log(this.form.supplierid)
+				if(this.form.supplierid === ""){
+					this.$message('供应商编码不能为空!')
+				}else{
+					if(this.form.sname === ""){
+						this.$message('供应商名称不能为空!')
+					}else{
+						if(this.form.supplytype === ""){
+							this.$message('公司性质不能为空!')
+						}else{
+							if(this.form.cmpanyaddress === ""){
+								this.$message('供应商地址不能为空!')
+							}else{
+								if(this.form.ranks === ""){
+									this.$message('供应商级别不能为空!')
+								}else{
+									if(this.form.linkman === ""){
+										this.$message('联系人姓名不能为空!')
+									}else{
+										if(this.form.mantelephone === ""){
+											this.$message('联系人电话不能为空!')
+										}else{
+											if(this.form.mobiletelephone === ""){
+												this.$message('联系人手机号不能为空!')
+											}else{
+												if(this.form.taxrate === ""){
+													this.$message('税率不能为空!')
+												}else{
+													if(this.form.taxratenum === ""){
+														this.$message('税号不能为空!')
+													}else{
+														if(this.form.remarkable === ""){
+															this.$message('备注不能为空!')
+														}else{
+															this.form.createman = this.adminInfo.uname
+											                const supplierAdd = await addSupplier(this.form.supplierid,this.form.sname,this.form.supplytype,this.form.cmpanyaddress,this.form.ranks,this.form.linkman,this.form.mantelephone,this.form.mobiletelephone,this.form.taxrate,this.form.createman,this.form.createtime,this.form.remarkable,this.form.taxratenum)
+											                if(supplierAdd.data.code === '1111') {
+											                    this.$message('添加供应商成功!')
+																this.form.supplierid = ""
+																this.form.sname = ""
+																this.form.supplytype = ""
+																this.form.cmpanyaddress = ""
+																this.form.ranks = ""
+																this.form.linkman = ""
+																this.form.mantelephone = ""
+																this.form.mobiletelephone = ""
+																this.form.taxrate = ""
+																this.form.createman = ""
+																this.form.createtime = ""
+																this.form.remarkable = ""
+											                    this.dialogFormVisible = false
+											                    this.initData()
+											                } else {
+											                    this.$message(supplierAdd.data.message)
+											                }
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			},
 			async handleCurrentChange(num){
 				this.currentPage = num

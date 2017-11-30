@@ -11,7 +11,6 @@
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('01')" index="/purchaseOrder">采购单</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('04')" index="/purchaseSum">采购汇总单</el-menu-item>
 							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('03')" index="/supplier">供应商管理</el-menu-item>
-							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('05')" index="/goods">货品管理</el-menu-item>
 						</el-submenu>
 						<el-submenu style="background-color: #009a76;" index="8">
 							<template  slot="title"><i class="el-icon-plus"></i><span style="color:#333;">库存管理</span></template>
@@ -70,6 +69,7 @@
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('42')" index="/role">角色权限</el-menu-item>
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('23')" index="/branchHouse">分库管理</el-menu-item>
 						<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('35')" index="/classification">货品分类</el-menu-item>
+							<el-menu-item style="background-color: #009a76;color: #333;" v-if="getRole('05')" index="/goods">货品管理</el-menu-item>
 					</el-submenu>
 				</el-menu>
 			</el-col>

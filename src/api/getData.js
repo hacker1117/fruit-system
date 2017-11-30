@@ -476,7 +476,7 @@ export const getDailyLossList = (pageNum = 1, pageSize = 10, repositoryid = repo
  * 查询B库日常损耗管理
  */
 
-export const queryDailyLossList = (productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('repositoryb/queryDailyWaste',{productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum , pageSize, repositoryid});
+export const queryDailyLossList = (productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/queryDailyWaste',{productcode, pname, wasteproductcode, createhuman, timeofreport, pageNum , pageSize, repositoryid});
 
 /**
  * 新增B库日常损耗管理
