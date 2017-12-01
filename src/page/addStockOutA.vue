@@ -144,6 +144,7 @@
 				return res
 			},
 			async chooseRepo() {
+				this.toggle1 = false
 				const dataReceipt = await getAddPurchase(this.form.respositysource)
 				if(dataReceipt.data.code === '1111'){
 					this.receiptData = dataReceipt.data.data

@@ -46,7 +46,9 @@
             	<el-input style="width: 195px" v-model="form.mobiletelephone" auto-complete="off" placeholder="请输入数字"></el-input>
             </el-form-item>
 			<el-form-item label="税率" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.taxrate" auto-complete="off" placeholder="请输入数字"></el-input>
+            	<el-input style="width: 195px" v-model="form.taxrate" auto-complete="off" placeholder="请输入数字">
+            		<template slot="append">%</template>
+            	</el-input>
             </el-form-item>
 			<el-form-item label="税号" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form.taxratenum" auto-complete="off" placeholder="请输入数字"></el-input>
@@ -106,7 +108,7 @@
 			</el-table-column>
 			<el-table-column
 			prop="taxrate" width="120px"
-			label="税率">
+			label="税率%">
 			</el-table-column>
 			<el-table-column
 			prop="taxratenum" width="120px"
