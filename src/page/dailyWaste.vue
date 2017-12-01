@@ -57,7 +57,7 @@
             	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
             </el-form-item>
 			<el-form-item label="损耗数量" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.productnumber" auto-complete="off"><template slot="append">{{this.pronuite}}</template></el-input>
+            	<el-input style="width: 195px" v-model="form.wasteweight" auto-complete="off"><template slot="append">{{this.pronuite}}</template></el-input>
          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -90,7 +90,7 @@
 			label="损耗商品编码">
 			</el-table-column>
 			<el-table-column
-			prop="productnumber"
+			prop="wasteweight"
 			label="数量">
 			</el-table-column>
 			<el-table-column
@@ -189,13 +189,13 @@
 			},
 			async confirmAdd() {
 				console.log(this.form)
-                const supplierAdd = await addTransportWaste(this.form.pname,this.form.productcode,this.form.procuctstanderd,this.form.productunite,this.form.wastetype,this.form.remarkable,this.form.productnumber)
+                const supplierAdd = await addTransportWaste(this.form.pname,this.form.productcode,this.form.procuctstanderd,this.form.productunite,this.form.wastetype,this.form.remarkable,this.form.wasteweight)
                 if(supplierAdd.data.code === '1111') {
                     this.$message('新增日常损耗成功!')
                     this.form.pname = ""
 					this.form.wastetype = ""
 					this.form.remarkable = ""
-					this.form.productnumber = ""
+					this.form.wasteweight = ""
                     this.dialogFormVisible = false
                     this.initData()
                 } else {

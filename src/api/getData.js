@@ -482,7 +482,7 @@ export const queryDailyLossList = (productcode, pname, wasteproductcode, createh
  * 新增B库日常损耗管理
  */
 
-export const addTransportWaste = (pname,productcode,procuctstanderd,productunite,wastetype,remarkable,productnumber, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/addDailyWaste',{pname,productcode,procuctstanderd,productunite,wastetype,remarkable,productnumber, pageNum , pageSize, repositoryid});
+export const addTransportWaste = (pname,productcode,procuctstanderd,productunite,wastetype,remarkable,wasteweight, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/repositoryb/addDailyWaste',{pname,productcode,procuctstanderd,productunite,wastetype,remarkable,wasteweight, pageNum , pageSize, repositoryid});
 
 /**
  * 获取采购单（A库）列表
