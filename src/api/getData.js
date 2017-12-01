@@ -547,7 +547,7 @@ export const queryStockInaAll = (storgeaid, ordertime, storagename, pageNum = 1,
  * 获取库存余额列表 -A库
  */
 
-export const getStockBalanceaAll = (pageNum = 1, pageSize = 10) => axio('/abalancerepository/selectAllDatas',{pageNum, pageSize});
+export const getStockBalanceaAll = (pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('/abalancerepository/selectAllDatas',{pageNum, pageSize, repositoryposition});
 
 /**
  * 获取库存余额列表 -B库
@@ -1051,7 +1051,7 @@ export const queryInventoryAdded_a = (proname, goodstype, pageNum = 1, pageSize 
  * A库-盘点新增--待盘点
  */
 
-export const getinventoryPreservation_a = (repocode, repositoryposition = repoId, username = unames) => axio('/tinspect/addInspects',{repocode,repositoryposition, username});
+export const getinventoryPreservation_a = (repocode, repositoryposition = repoId, username = unames) => axio('/inspecta/addInspects',{repocode,repositoryposition, username});
 
 /**
  * A库-查询盘点详情列表

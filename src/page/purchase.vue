@@ -297,6 +297,9 @@
 				if(addInfo.data.code === '1111'){
 					this.$message('添加采购单成功')
 					this.form.goodsName = ""
+					this.form.proid = ""
+					this.form.prostandered = ""
+					this.form.pronuite = ""
 					this.form.buynumber = ""
 					this.dialogFormVisible = false
 					this.initData()
