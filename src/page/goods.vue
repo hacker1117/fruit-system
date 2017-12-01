@@ -291,14 +291,17 @@
     	methods: {
     		async initData(){
     			try{
+//  				商品分类
+					const classi = await getclassification()
+					this.classification = classi.data.data
+//					供应商
+					const Sname = await querySnameByTSupplierorder_a()
+					this.batchData = Sname.data.data
+//					页面加载
 					const dataReceipt = await getGoodsAll(this.currentPage)
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
-					const classi = await getclassification()
-					this.classification = classi.data.data
-					const Sname = await querySnameByTSupplierorder_a()
-					this.batchData = Sname.data.data
 					const appGoodsInfo = await appGoodsList(1)
 					this.appGoodsList = appGoodsInfo.data.resultData.productList
 					console.log(this.appGoodsList)
