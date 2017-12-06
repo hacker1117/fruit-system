@@ -2,7 +2,12 @@
     <div>
         <head-top></head-top>
 		<div class="fruit-content">
-		<el-table
+			<el-row style="margin-top:20px;">
+				<el-col :span="24">
+					<a target="blank" :href="toPrint"><el-button style="float:right; margin-left:20px;" type="primary">预览打印</el-button></a>
+				</el-col>
+			</el-row>
+			<el-table
 			:data="receiptData"
 			stripe
 			style="text-align:left;margin-top:20px;">
@@ -60,7 +65,8 @@
                 form:{
                     respositysource: ''
 				},
-				id: this.$route.params.id
+				id: this.$route.params.id,
+				toPrint:'http://47.95.12.49:9002/print/z_print.html?' + this.$route.params.id
     		}
     	},
     	components: {
@@ -122,6 +128,10 @@
 				}
 			},
 			handleBack(){
+                this.$destroy()
+                this.$router.push('/stockOutA')
+			},
+			async Print(){
                 this.$destroy()
                 this.$router.push('/stockOutA')
 			}

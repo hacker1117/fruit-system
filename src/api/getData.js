@@ -280,6 +280,18 @@ export const getBomGroup = procode => axio('/Bom/queryOneGroup/' + procode);
 export const getProList = (proName) => axio('/repositoryb/queryProductByName',{proName})
 
 /**
+ * 根据name模糊查询商品列表2
+ */
+
+export const getProList2 = (productname) => axio('/switch/getProductManager',{productname})
+
+/**
+ * B库 调出调拨单 根据库存表现有商品 查询所有商品
+ */
+
+export const getProList3 = (proName, repositoryid = repoId) => axio('/switch/getAllExistGoodsByRepository',{proName, repositoryid})
+
+/**
  * 根据id获取BOM组
  */
 
@@ -911,10 +923,16 @@ export const getByPname_b = (pname, pageNum = 1, pageSize = 10, repositoryid = r
 export const getallotmentSheetDetails_b = (allocateid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/getInDetail',{allocateid,pageNum,pageSize,repositoryid});
 
 /**
- * B库-调拨单 新增调拨单
+ * B库-调拨单 新增调拨单 - 缺货调拨
  */
 
 export const getaddAllocate_b = (pname, proid, prostandard, ponunite, inrepocde, switchtype, allocatecount, inreponame, repositoryid = repoId, username = unames) => axio('/switch/insertOne',{pname, proid, prostandard, ponunite, inrepocde, switchtype, allocatecount, inreponame, repositoryid, username});
+
+/**
+ * B库-调拨单 新增调拨单 - 促销调拨
+ */
+
+export const getaddAllocate2_b = (outproid, inreponame, switchtype, allocateCount, inproid, repositoryid = repoId, username = unames) => axio('/switch/createSwitchTomyself',{outproid, inreponame, switchtype, allocateCount, inproid, repositoryid, username});
 
 /**
  * B库 查询仓库
@@ -1054,6 +1072,12 @@ export const queryInventoryAdded_a = (proname, goodstype, pageNum = 1, pageSize 
 export const getinventoryPreservation_a = (repocode, repositoryposition = repoId, username = unames) => axio('/inspecta/addInspects',{repocode,repositoryposition, username});
 
 /**
+ * A库-盘点新增--待盘点所有商品
+ */
+
+export const getinsertInspectAFromAll_a = (repositoryposition = repoId, username = unames) => axio('/inspecta/insertInspectAFromAll',{repositoryposition, username});
+
+/**
  * A库-查询盘点详情列表
  */
 
@@ -1061,6 +1085,12 @@ export const getInventoryDetails_a = (checkid) => axio('/inspecta/checkdetailsBy
 
 /**
  * A库-盘点详情--确认盘点
+ */
+
+export const getchangeStateAndInseptTwo_a = (checkid, repositoryposition = repoId, username = unames) => axio('/inspecta/createTInspect',{checkid, repositoryposition, username});
+
+/**
+ * A库-盘点详情--确认待盘点
  */
 
 export const getconfirmationInventory_a = (checkdtailId, infactCount) => axio('/inspecta/createTInspect',{checkdtailId, infactCount});

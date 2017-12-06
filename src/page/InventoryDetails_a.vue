@@ -30,7 +30,8 @@
 	    	<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>
-					<el-button style="float: left;" @click="confirmationInventory" type="primary" :disabled="toggle1">确认盘点</el-button>
+					<el-button style="float: left;" @click="CheckInventory" type="primary" :disabled="toggle1">确认盘点</el-button>
+					<el-button style="float: left;" @click="confirmationInventory" type="primary">确认待盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -94,7 +95,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventoryDetails_a,getconfirmationInventory_a,getupdateTInspect_a,getExcleByTInspect_a} from '@/api/getData'
+    import {getInventoryDetails_a,getconfirmationInventory_a,getupdateTInspect_a,getExcleByTInspect_a, getchangeStateAndInseptTwo_a} from '@/api/getData'
     export default {
         data(){
             return {
@@ -156,6 +157,14 @@
 //				this.form.infactcount =row.infactcount
 				this.form =row
 				this.ind=index
+			},
+			async CheckInventory(){
+				const resData = await getchangeStateAndInseptTwo_a(this.id)
+                if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
 			async confirmationInventory(){
 				for(let i = 0;i<this.tableData.length;i++){

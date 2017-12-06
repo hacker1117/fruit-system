@@ -48,11 +48,11 @@
 	                  label="盘点日期">
 	               </el-table-column>
 	               <el-table-column
-	                  property="sta"
+	                  property="result2"
 	                  label="盘点状态">
 	               </el-table-column>
 	               <el-table-column
-	                  property="result"
+	                  property="result1"
 	                  label="盘点结果">
 	               </el-table-column>
 	                <el-table-column
@@ -124,9 +124,9 @@
                     const countData = await getInventory_a(1,10);
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
-                    for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
-                    }
+//                  for(let i = 0;i<this.tableData.length;i++){
+//                      this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+//                  }
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -138,9 +138,9 @@
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
-                    for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
-                    }
+//                  for(let i = 0;i<this.tableData.length;i++){
+//                      this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+//                  }
 				} else {
 					this.$message(resData.data.message)
 					this.tableData = []
@@ -156,9 +156,9 @@
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
-                    for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
-                    }
+//                  for(let i = 0;i<this.tableData.length;i++){
+//                      this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+//                  }
 				} else {
 					this.$message(resData.data.message)
 					this.tableData = []
@@ -200,9 +200,9 @@
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
-                    for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
-                    }
+//                  for(let i = 0;i<this.tableData.length;i++){
+//                      this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
+//                  }
 				}else {
 					this.tableData = []
 					this.count = 0
