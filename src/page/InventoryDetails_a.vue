@@ -141,8 +141,8 @@
                     const countData = await getInventoryDetails_a(this.id);
                     console.log("id"+this.id)
                     console.log(countData.data)
-                    this.tableData = countData.data.data
-                    this.count = countData.data.data.length
+                    this.tableData = countData.data.data.list
+                    this.count = countData.data.data.total
                     this.toggle = this.tableData[0].isCreate === 1 ? false : true
                     this.toggle1 = this.tableData[0].isCreate === 1 ? true : false
                     for(let i = 0;i<this.tableData.length;i++){

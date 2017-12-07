@@ -920,7 +920,7 @@ export const getByPname_b = (pname, pageNum = 1, pageSize = 10, repositoryid = r
  * B库-调拨单 查询调拨单详情
  */
 
-export const getallotmentSheetDetails_b = (allocateid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/getInDetail',{allocateid,pageNum,pageSize,repositoryid});
+export const getallotmentSheetDetails_b = (allocateid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/getOutDetail',{allocateid,pageNum,pageSize,repositoryid});
 
 /**
  * B库-调拨单 新增调拨单 - 缺货调拨

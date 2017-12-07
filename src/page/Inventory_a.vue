@@ -48,11 +48,11 @@
 	                  label="盘点日期">
 	               </el-table-column>
 	               <el-table-column
-	                  property="result2"
+	                  property="result1"
 	                  label="盘点状态">
 	               </el-table-column>
 	               <el-table-column
-	                  property="result1"
+	                  property="result2"
 	                  label="盘点结果">
 	               </el-table-column>
 	                <el-table-column
