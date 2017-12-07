@@ -87,7 +87,16 @@
 						</template>
 					</el-table-column>
 	            </el-table>
-	            <div class="Pagination" style="text-align: left;margin-top: 10px;">共 {{this.count}} 条</div>
+	            <!--<div class="Pagination" style="text-align: left;margin-top: 10px;">共 {{this.count}} 条</div>-->
+	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
+	                <el-pagination
+	                  @current-change="handleCurrentChange"
+	                  :current-page="currentPage"
+	                  :page-size="10"
+	                  layout="total, prev, pager, next"
+	                  :total="count">
+	                </el-pagination>
+	            </div>
 	        </div>
 	    </div>
 	</div>

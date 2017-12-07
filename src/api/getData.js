@@ -283,7 +283,7 @@ export const getProList = (proName) => axio('/repositoryb/queryProductByName',{p
  * 根据name模糊查询商品列表2
  */
 
-export const getProList2 = (productname) => axio('/switch/getProductManager',{productname})
+export const getProList2 = (productname,proid) => axio('/switch/getProductManager',{productname,proid})
 
 /**
  * B库 调出调拨单 根据库存表现有商品 查询所有商品
@@ -985,6 +985,12 @@ export const addloss_b = (allocatedetailid, wastecount, repositoryid = repoId) =
 
 export const getconfirmationSlip_b = (list, repositoryid = repoId, username = unames) => axio('/switch/confirmSwitch',{list, repositoryid, username},'POST');
 
+/**
+ * B库-调入调拨单详情 查询调拨单详情
+ */
+
+export const getallotmentSheetDetails2_b = (allocateid, pageNum = 1,pageSize = 10, repositoryid = repoId) => axio('/switch/getInDetail',{allocateid,pageNum,pageSize,repositoryid});
+
 
 
 
@@ -1081,7 +1087,7 @@ export const getinsertInspectAFromAll_a = (repositoryposition = repoId, username
  * A库-查询盘点详情列表
  */
 
-export const getInventoryDetails_a = (checkid) => axio('/inspecta/checkdetailsBycheckid',{checkid});
+export const getInventoryDetails_a = (checkid, pageNum = 1,pageSize = 10) => axio('/inspecta/checkdetailsBycheckid',{checkid, pageNum,pageSize});
 
 /**
  * A库-盘点详情--确认盘点

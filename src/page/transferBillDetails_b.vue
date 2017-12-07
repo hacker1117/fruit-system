@@ -89,7 +89,7 @@
 </template>
 <script>
     import headTop from '../components/headTop'
-    import {getallotmentSheetDetails_b,addloss_b,getconfirmationSlip_b} from '@/api/getData'
+    import {getallotmentSheetDetails2_b,addloss_b,getconfirmationSlip_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -131,7 +131,7 @@
         methods: {
             async initData(){
                 try{
-                    const countData = await getallotmentSheetDetails_b(this.id);
+                    const countData = await getallotmentSheetDetails2_b(this.id);
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total

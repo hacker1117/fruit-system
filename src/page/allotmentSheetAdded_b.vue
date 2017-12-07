@@ -22,12 +22,12 @@
 		                <el-input style="width: 195px" v-model="form.ponunite" auto-complete="off" :disabled="true"></el-input>
 		        	</el-form-item>
 					<el-form-item label="调入仓库" :label-width="formLabelWidth">
-		                <el-select v-model="form.inrepocde" placeholder="请选择调入仓库">
+		                <el-select v-model="form.inrepocde" placeholder="请选择调入仓库" :disabled="toggle1">
 			                <el-option v-for="classif in classification" :key="classif.id" :label="classif.reponame" :value="classif.repocode"></el-option>
 			            </el-select>
 		        	</el-form-item>
 					<el-form-item label="调拨类型" :label-width="formLabelWidth">
-						<el-select v-model="form.switchtype" placeholder="请选择调拨类型" @change="handleSearch">
+						<el-select v-model="form.switchtype" placeholder="请选择调拨类型" @change="handleSearch" :disabled="toggle1">
 			                <el-option label="缺货调拨" value="1"></el-option>
 			                <el-option label="促销调拨" value="2"></el-option>
 			                <el-option label="转大宗出库" value="3"></el-option>
@@ -68,7 +68,7 @@
 			<el-row style="margin-top: 20px;">
 				<el-col :span="24">
 	                <el-button style="float: right;" @click="Preservation" type="primary">生成调拨单</el-button>
-	                <el-button style="float: left;" @click="dialogFormVisible = true">新增调拨单商品</el-button>
+	                <el-button style="float: left;" @click="allocation">新增调拨单商品</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -156,6 +156,7 @@
 		        list: [],
 		        lists: '',
 				toggle: false,
+				toggle1: false,
 				outproid: '',
         		allocateCount: '',
         		proid: '',
@@ -189,7 +190,7 @@
 						this.tableData = []
 						this.count = 0
 					}
-                	
+                	this.toggle1 = false
                 }catch(err){
                     console.log('获取数据失败', err);
                     this.tableData = []
@@ -212,14 +213,12 @@
 					}
 				}
         		let dataReceipt = {}
-        		if(this.form.switchtype == 1){
+        		if(this.form.switchtype == 1 || this.form.switchtype == 3){
         			dataReceipt = await getaddAllocate_b(this.form.pname, this.form.proid, this.form.prostandard, this.form.ponunite, this.form.inrepocde, this.form.switchtype, this.form.allocatecount, this.inreponame)
         		}else if(this.form.switchtype == 2){
         			this.outproid = this.form.proid
         			this.allocateCount = this.form.allocatecount
         			dataReceipt = await getaddAllocate2_b(this.outproid, this.form.inrepocde, this.form.switchtype, this.allocateCount, this.form.inproid)
-        		}else if(this.form.switchtype == 3){
-        			this.$message("暂无转大宗出库")
         		}
 //      		const resData = await getaddAllocate_b(this.form.pname, this.form.proid, this.form.prostandard, this.form.ponunite, this.form.inrepocde, this.form.switchtype, this.form.allocatecount, this.inreponame)
 				console.log(dataReceipt.data)
@@ -234,12 +233,10 @@
 					this.form.inrepocde = ""
 					this.form.allocatecount = ""
 					this.form.inreponame = ""
-					
 					this.form.productname = ""
 					this.form.inproid = ""
 					this.form.productprostandard = ""
 					this.form.productponunite = ""
-					
 					this.dialogFormVisible = false
 					this.initData()
 				} else {
@@ -271,11 +268,36 @@
 					this.$message(resData.data.message)
 				}
 			},
+			async allocation(){
+					this.form.pname = ""
+					this.form.proid = ""
+					this.form.prostandard = ""
+					this.form.ponunite = ""
+					this.form.inreponame = ""
+					this.form.switchtype = ""
+					this.form.inrepocde = ""
+					this.form.allocatecount = ""
+					this.form.inreponame = ""
+					this.form.productname = ""
+					this.form.inproid = ""
+					this.form.productprostandard = ""
+					this.form.productponunite = ""
+				this.dialogFormVisible = true
+				console.log(this.tableData.length)
+				if(this.tableData.length !== 0){
+					this.form.inrepocde = this.tableData[0].inrepocde
+					this.form.switchtype = this.tableData[0].switchtype
+					this.toggle1 = true
+				}else{
+					this.toggle = false
+					this.toggle1 = false
+				}
+			},
 			async handleSearch(){
 				console.log(this.form.switchtype)
 				if(this.form.switchtype == 2 || this.form.switchtype == 3){
 					this.toggle = true
-					const result2 = await getProList2(this.form.pname)
+					const result2 = await getProList2(this.form.pname,this.form.proid)
 					if(result2.data.code === '1111'){
 						this.classification2 = result2.data.data
 					}
@@ -327,6 +349,7 @@
 						this.pronuite=this.goodsList[i].prounite
 					}
 				}
+				this.handleSearch()
 			}
         },
     }
