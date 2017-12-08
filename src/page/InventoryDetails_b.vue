@@ -193,10 +193,10 @@
 					}
                 }
 				if(this.rets === this.tableData.length){
-					this.$message("确认盘点成功")
+					this.$message("待确认盘点成功")
 					this.initData()
 				}else{
-					this.$message("确认盘点失败")
+					this.$message("待确认盘点失败")
 				}
 			},
 			async confirmAdd(){
