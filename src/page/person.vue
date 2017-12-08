@@ -41,6 +41,10 @@
                 :data="tableData"
                 highlight-current-row
                 style="width: 100%">
+                <el-table-column width="80px"
+                  property="state"
+                  label="状态">
+                </el-table-column>
                 <el-table-column
                   property="uid"
                   label="编号">
@@ -63,9 +67,15 @@
                     <el-button
                     size="mini"
                     @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+                    <!--<el-button
+                    size="mini"
+                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>-->
                     <el-button
                     size="mini"
-                    @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                    @click="Disable(scope.$index, scope.row)">禁用</el-button>
+                    <el-button
+                    size="mini"
+                    @click="Enable(scope.$index, scope.row)">启用</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -84,7 +94,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {queryUserList, getRoleAll, addUserInfo, getRepoAll} from '@/api/getData'
+    import {queryUserList, getRoleAll, addUserInfo, getRepoAll, getstartUser, getdisableUser} from '@/api/getData'
     import md5 from 'md5'
     export default {
         data(){
@@ -108,6 +118,7 @@
                 },
                 roleList: [],
                 repoList: [],
+                state: ''
             }
         },
     	components: {
@@ -127,6 +138,9 @@
                     console.log(countData.data)
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                    	this.tableData[i].state = this.tableData[i].isDelete === 0 ? "启用" : "禁用"
+                    }
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -150,12 +164,33 @@
             handleDelete() {
 
             },
+			async Disable(index, row){
+				const roleList = await getdisableUser(row.uid)
+            	if(roleList.data.code === '1111') {
+                    this.$message(roleList.data.message)
+                    this.initData()
+                } else {
+                    this.$message(roleList.data.message)
+                }
+            },
+			async Enable(index, row){
+            	const roleList = await getstartUser(row.uid)
+            	if(roleList.data.code === '1111') {
+                    this.$message(roleList.data.message)
+                    this.initData()
+                } else {
+                    this.$message(roleList.data.message)
+                }
+            },
 			async handleCurrentChange(num) {
 				this.currentPage = num
 				const dataReceipt = await queryUserList(this.currentPage)
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+                    for(let i = 0;i<this.tableData.length;i++){
+                    	this.tableData[i].state = this.tableData[i].isDelete === 0 ? "启用" : "禁用"
+                    }
 				}else {
 					this.receiptData = []
 				}

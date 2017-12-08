@@ -26,6 +26,7 @@
 	                <el-button style="float: right; margin-right:10px;" @click="handleSearch" type="primary">查询</el-button>
 	                <el-button style="float: left;" @click="handleAdd" type="primary">新增</el-button>
 	                <el-button style="float: left;" @click="noInventory">未盘点</el-button>
+	                <el-button style="float: left;" @click="stayInventory">待确认盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -80,7 +81,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventory_b, getInventoryChild_b, queryTInspectByParam_b} from '@/api/getData'
+    import {getInventory_b, getInventoryChild_b, queryTInspectByParam_b, getsqueryStateAndInseptAndOne_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -165,6 +166,19 @@
 					this.count = 0
 				}
             },
+            async stayInventory(){
+				this.get = 3
+				this.count = 0
+            	const resData = await getsqueryStateAndInseptAndOne_b()
+				if(resData.data.code === '1111'){
+					this.tableData = resData.data.data.list
+					this.count = resData.data.data.total
+				} else {
+					this.$message(resData.data.message)
+					this.tableData = []
+					this.count = 0
+				}
+            },
 			async empty(){
 				this.startTime=""
 				this.endTime=""
@@ -196,6 +210,8 @@
 					dataReceipt = await getInventoryChild_b(times1,times2, this.currentPage)
 				}else if(this.get === 2){
 					dataReceipt = await queryTInspectByParam_b(this.state,this.currentPage)
+				}else if(this.get === 3){
+					dataReceipt = await getsqueryStateAndInseptAndOne_b(this.currentPage)
 				}
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list

@@ -66,6 +66,7 @@
 					<el-button style="float: right;margin-left: 20px;" @click="handleAdd" type="primary">返回</el-button>
 				<el-button style="float: right;" @click="Inventory" type="primary">待盘点</el-button>
 				<el-button style="float: left;" @click="dialogFormVisible1 = true" type="primary">添加</el-button>
+				<el-button style="float: left;" @click="allGoods" type="primary">待盘点所有商品</el-button>
 			</el-col>
 		</el-row>
 	        <div class="table_container">
@@ -120,7 +121,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getinventoryadd_b, getclassification_b, queryInventoryAdded_b, getinventoryPreservation_b} from '@/api/getData'
+    import {getinventoryadd_b, getclassification_b, queryInventoryAdded_b, getinventoryPreservation_b, getinsertInspectAFromAll_b} from '@/api/getData'
     export default {
         data(){
             return {
@@ -224,6 +225,14 @@
 					this.initData()
 				}else {
 					this.$message(resData.data.message)
+				}
+			},
+			async allGoods(){
+				const resDatas = await getinsertInspectAFromAll_b()
+				if(resDatas.data.code === '1111'){
+					this.$message(resDatas.data.message)
+				}else {
+					this.$message(resDatas.data.message)
 				}
 			},
             handleAdd() {

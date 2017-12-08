@@ -678,6 +678,18 @@ export const queryUserList = (pageNum = 1,pageSize = 10) => axio('/user/findAllU
 export const updateUser = (uid, upassword) => axio('/user/updateUser', {uid, upassword});
 
 /**
+ * 禁用用户
+ */
+
+export const getdisableUser = (uid) => axio('/user/disableUser', {uid});
+
+/**
+ * 启用用户
+ */
+
+export const getstartUser = (uid) => axio('/user/startUser', {uid});
+
+/**
  * 查询角色列表
  */
 
@@ -864,6 +876,12 @@ export const getInventoryChild_b = (startTime, endTime, pageNum = 1, pageSize = 
 export const queryTInspectByParam_b = (state, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryTInspectByParam2',{state, pageNum, pageSize, repositoryid});
 
 /**
+ *B库- 待确认盘点
+ */
+
+export const getsqueryStateAndInseptAndOne_b = (pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('inspecta/queryStateAndInseptAndOne',{pageNum, pageSize, repositoryposition});
+
+/**
  * B库-查询盘点详情列表
  */
 
@@ -893,10 +911,22 @@ export const queryInventoryAdded_b = (proname, goodstype, pageNum = 1,pageSize =
 export const getinventoryPreservation_b = (bpid, repositoryid = repoId, username = unames) => axio('/tinspect/addInspects',{bpid,repositoryid, username});
 
 /**
- * B库-盘点详情--确认盘点
+ * B库-盘点新增--待盘点所有商品
+ */
+
+export const getinsertInspectAFromAll_b = (repositoryid = repoId, username = unames) => axio('inspecta/insertInspectBFromAll',{repositoryid, username});
+
+/**
+ * B库-盘点详情--待确认盘点
  */
 
 export const getconfirmationInventory_b = (checkdtailId, infactCount, repositoryid = repoId, username = unames) => axio('/tinspect/createTInspect',{checkdtailId, infactCount, repositoryid, username});
+
+/**
+ * B库-盘点详情--确认盘点
+ */
+
+export const getchangeStateAndInseptTwo_b = (checkid, repositoryposition = repoId, username = unames) => axio('inspecta/changeStateAndInseptTwo2',{checkid, repositoryposition, username});
 
 /**
  * B库-盘点详情--修改实际数量
@@ -1055,6 +1085,12 @@ export const getInventoryChild_a = (starttime, endtime, pageNum = 1, pageSize = 
 export const getselectbetweenstart_a = (state, pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('/inspecta/selectbetweenstarttimeandendtime2',{state, pageNum, pageSize, repositoryposition});
 
 /**
+ * A库- 待确认盘点
+ */
+
+export const getsqueryStateAndInseptAndOne_a = (pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('/inspecta/queryStateAndInseptAndOne',{pageNum, pageSize, repositoryposition});
+
+/**
  * A库-查询新增盘点--仓库
  */
 export const getclassification_a = () => axio('/inspecta/getAllCategoryname');
@@ -1093,7 +1129,7 @@ export const getInventoryDetails_a = (checkid, pageNum = 1,pageSize = 10) => axi
  * A库-盘点详情--确认盘点
  */
 
-export const getchangeStateAndInseptTwo_a = (checkid, repositoryposition = repoId, username = unames) => axio('/inspecta/createTInspect',{checkid, repositoryposition, username});
+export const getchangeStateAndInseptTwo_a = (checkid, repositoryposition = repoId, username = unames) => axio('/inspecta/changeStateAndInseptTwo2',{checkid, repositoryposition, username});
 
 /**
  * A库-盘点详情--确认待盘点

@@ -31,7 +31,7 @@
 				<el-col :span="24">
 					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>
 					<el-button style="float: left;" @click="CheckInventory" type="primary" :disabled="toggle1">确认盘点</el-button>
-					<el-button style="float: left;" @click="confirmationInventory" type="primary">确认待盘点</el-button>
+					<el-button style="float: left;" @click="confirmationInventory" type="primary"  :disabled="toggle1">待确认盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -150,12 +150,19 @@
                     const countData = await getInventoryDetails_a(this.id);
                     console.log("id"+this.id)
                     console.log(countData.data)
-                    this.tableData = countData.data.data.list
-                    this.count = countData.data.data.total
-                    this.toggle = this.tableData[0].isCreate === 1 ? false : true
-                    this.toggle1 = this.tableData[0].isCreate === 1 ? true : false
-                    for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].isDefault = this.tableData[i].isDefault == 0 ? '否' : '是'
+                    if(countData.data.code === '1111'){
+	                    this.tableData = countData.data.data.list
+	                    this.count = countData.data.data.total
+	                    if(this.tableData[0].isCreate === 0){
+	                    	this.toggle = true
+	                    }else if(this.tableData[0].isCreate === 2){
+	                    	this.toggle = false
+	                    	this.toggle1 = true
+	                    }
+                    }else{
+                    	this.$message(countData.data.message)
+                    	this.tableData = []
+						this.count = 0
                     }
                 }catch(err){
                     console.log('获取数据失败', err);
@@ -171,6 +178,7 @@
 				const resData = await getchangeStateAndInseptTwo_a(this.id)
                 if(resData.data.code === '1111'){
 					this.$message(resData.data.message)
+					this.initData()
 				} else {
 					this.$message(resData.data.message)
 				}
@@ -187,10 +195,12 @@
 					}
                 }
 				if(this.rets === this.tableData.length){
-					this.$message("确认盘点成功")
+					this.$message("待确认盘点成功")
 					this.initData()
+					this.rets = 0
 				}else{
-					this.$message("确认盘点失败")
+					this.$message("待确认盘点失败")
+					this.rets = 0
 				}
 			},
 			async confirmAdd(){
@@ -212,6 +222,14 @@
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+                    this.toggle = this.tableData[0].isCreate === 1 ? false : true
+                    this.toggle1 = this.tableData[0].isCreate === 1 ? true : false
+                    if(this.tableData[0].isCreate === 0){
+	                    	this.toggle = true
+	                    }else if(this.tableData[0].isCreate === 2){
+	                    	this.toggle = false
+	                    	this.toggle1 = true
+	                    }
 				}else {
 					this.tableData = []
 					this.count = 0
