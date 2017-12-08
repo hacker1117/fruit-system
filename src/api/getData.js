@@ -885,7 +885,7 @@ export const getsqueryStateAndInseptAndOne_b = (pageNum = 1, pageSize = 10, repo
  * B库-查询盘点详情列表
  */
 
-export const getInventoryDetails_b = (checkid, repositoryid = repoId) => axio('/tinspect/queryTInspectbyCheckid',{checkid,repositoryid});
+export const getInventoryDetails_b = (checkid, pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryTInspectbyCheckid',{checkid, pageNum, pageSize, repositoryid});
 
 /**
  * B库-查询新增盘点列表
