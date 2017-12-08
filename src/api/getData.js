@@ -879,7 +879,7 @@ export const queryTInspectByParam_b = (state, pageNum = 1, pageSize = 10, reposi
  *B库- 待确认盘点
  */
 
-export const getsqueryStateAndInseptAndOne_b = (pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('inspecta/queryStateAndInseptAndOne',{pageNum, pageSize, repositoryposition});
+export const getsqueryStateAndInseptAndOne_b = (pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('/inspecta/queryStateAndInseptAndOne',{pageNum, pageSize, repositoryposition});
 
 /**
  * B库-查询盘点详情列表
@@ -914,7 +914,7 @@ export const getinventoryPreservation_b = (bpid, repositoryid = repoId, username
  * B库-盘点新增--待盘点所有商品
  */
 
-export const getinsertInspectAFromAll_b = (repositoryid = repoId, username = unames) => axio('inspecta/insertInspectBFromAll',{repositoryid, username});
+export const getinsertInspectAFromAll_b = (repositoryid = repoId, username = unames) => axio('/inspecta/insertInspectBFromAll',{repositoryid, username});
 
 /**
  * B库-盘点详情--待确认盘点
@@ -926,7 +926,7 @@ export const getconfirmationInventory_b = (checkdtailId, infactCount, repository
  * B库-盘点详情--确认盘点
  */
 
-export const getchangeStateAndInseptTwo_b = (checkid, repositoryposition = repoId, username = unames) => axio('inspecta/changeStateAndInseptTwo2',{checkid, repositoryposition, username});
+export const getchangeStateAndInseptTwo_b = (checkid, repositoryposition = repoId, username = unames) => axio('/inspecta/changeStateAndInseptTwo2',{checkid, repositoryposition, username});
 
 /**
  * B库-盘点详情--修改实际数量
