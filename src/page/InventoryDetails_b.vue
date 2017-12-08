@@ -31,7 +31,6 @@
 				<el-col :span="24">
 					<el-button style="float: right;" @click="handleAdd" type="primary">返回</el-button>
 					<el-button style="float: left;" @click="CheckInventory" type="primary" :disabled="toggle1">确认盘点</el-button>
-					<el-button style="float: left;" @click="confirmationInventory" type="primary"  :disabled="toggle1">待确认盘点</el-button>
 	            </el-col>
 			</el-row>
 	        <div class="table_container">
@@ -97,6 +96,11 @@
 	                  :total="count">
 	                </el-pagination>
 	            </div>
+	    	<el-row>
+				<el-col :span="24">
+					<el-button style="float: right;" @click="confirmationInventory" type="primary"  :disabled="toggle1">待确认盘点</el-button>
+	            </el-col>
+			</el-row>
 	        </div>
 	    </div>
 	</div>

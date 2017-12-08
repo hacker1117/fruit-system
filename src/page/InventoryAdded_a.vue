@@ -63,10 +63,10 @@
        </el-dialog>
 		<el-row>
 			<el-col :span="24" style="margin-top: 20px;">
-					<el-button style="float: right;margin-left: 20px;" @click="handleAdd" type="primary">返回</el-button>
-				<el-button style="float: right;" @click="Inventory" type="primary">待盘点</el-button>
 				<el-button style="float: left;" @click="dialogFormVisible1 = true" type="primary">添加</el-button>
-				<el-button style="float: left;" @click="allGoods" type="primary">待盘点所有商品</el-button>
+					<el-button style="float: left;margin-left: 20px;" @click="handleAdd" type="primary">返回</el-button>
+				<el-button style="float: right;" @click="allGoods" type="primary">待盘点所有商品</el-button>
+				<el-button style="float: right;" @click="Inventory" type="primary">待盘点</el-button>
 			</el-col>
 		</el-row>
 	        <div class="table_container">
@@ -214,6 +214,7 @@
 				const resDatas = await getinsertInspectAFromAll_a()
 				if(resDatas.data.code === '1111'){
 					this.$message(resDatas.data.message)
+					this.handleAdd()
 				}else {
 					this.$message(resDatas.data.message)
 				}
@@ -233,7 +234,7 @@
 					this.$message(resData.data.message)
 				}
 			},
-            handleAdd() {
+            async handleAdd() {
 				this.$destroy()
 				this.$router.push('/Inventory_a')
             },
