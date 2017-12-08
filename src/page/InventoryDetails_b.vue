@@ -87,7 +87,16 @@
 						</template>
 					</el-table-column>
 	            </el-table>
-	            <div class="Pagination" style="text-align: left;margin-top: 10px;">共 {{this.count}} 条</div>
+	            <!--<div class="Pagination" style="text-align: left;margin-top: 10px;">共 {{this.count}} 条</div>-->
+	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
+	                <el-pagination
+	                  @current-change="handleCurrentChange"
+	                  :current-page="currentPage"
+	                  :page-size="10"
+	                  layout="total, prev, pager, next"
+	                  :total="count">
+	                </el-pagination>
+	            </div>
 	        </div>
 	    </div>
 	</div>
@@ -143,11 +152,12 @@
                     console.log(countData.data)
                     this.tableData = countData.data.data
                     this.count = countData.data.data.length
-                    this.toggle = this.tableData[0].isCreate === 1 ? false : true
-                    this.toggle1 = this.tableData[0].isCreate === 1 ? true : false
-                    for(let i = 0;i<this.tableData.length;i++){
-                        this.tableData[i].isDefault = this.tableData[i].isDefault === 0 ? '否' : '是'
-                    }
+	                    if(this.tableData[0].isCreate === 0){
+	                    	this.toggle = true
+	                    }else if(this.tableData[0].isCreate === 2){
+	                    	this.toggle = false
+	                    	this.toggle1 = true
+	                    }
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -204,6 +214,12 @@
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
+	                    if(this.tableData[0].isCreate === 0){
+	                    	this.toggle = true
+	                    }else if(this.tableData[0].isCreate === 2){
+	                    	this.toggle = false
+	                    	this.toggle1 = true
+	                    }
 				}else {
 					this.tableData = []
 					this.count = 0

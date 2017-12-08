@@ -222,9 +222,7 @@
 				if(dataReceipt.data.code === '1111'){
 					this.tableData = dataReceipt.data.data.list
 					this.count = dataReceipt.data.data.total
-                    this.toggle = this.tableData[0].isCreate === 1 ? false : true
-                    this.toggle1 = this.tableData[0].isCreate === 1 ? true : false
-                    if(this.tableData[0].isCreate === 0){
+	                    if(this.tableData[0].isCreate === 0){
 	                    	this.toggle = true
 	                    }else if(this.tableData[0].isCreate === 2){
 	                    	this.toggle = false

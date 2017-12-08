@@ -879,7 +879,7 @@ export const queryTInspectByParam_b = (state, pageNum = 1, pageSize = 10, reposi
  *B库- 待确认盘点
  */
 
-export const getsqueryStateAndInseptAndOne_b = (pageNum = 1, pageSize = 10, repositoryposition = repoId) => axio('/tinspect/queryStateAndInseptAndOne',{pageNum, pageSize, repositoryposition});
+export const getsqueryStateAndInseptAndOne_b = (pageNum = 1, pageSize = 10, repositoryid = repoId) => axio('/tinspect/queryStateAndInseptAndOne',{pageNum, pageSize, repositoryid});
 
 /**
  * B库-查询盘点详情列表
