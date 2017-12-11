@@ -62,6 +62,9 @@
 						<el-button
 						size="mini"
 						@click="handleEdit(scope.$index, scope.row)">查看详情</el-button>
+						<el-button
+						size="mini"
+						@click="CheckInventory(scope.$index, scope.row)" type="primary" v-if="toggle">确认盘点</el-button>
 						</template>
 					</el-table-column>
 	            </el-table>
@@ -81,7 +84,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {getInventory_a, getInventoryChild_a, getselectbetweenstart_a, getsqueryStateAndInseptAndOne_a} from '@/api/getData'
+    import {getInventory_a, getInventoryChild_a, getselectbetweenstart_a, getsqueryStateAndInseptAndOne_a, getchangeStateAndInseptTwo_a} from '@/api/getData'
     export default {
         data(){
             return {
@@ -107,6 +110,7 @@
 				endTime:'',
 				get: 0,
 				state:'未盘点',
+				toggle: false,
             }
         },
     	components: {
@@ -135,6 +139,7 @@
             async stayInventory(){
 				this.get = 3
 				this.count = 0
+				this.toggle = true
             	const resData = await getsqueryStateAndInseptAndOne_a()
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
@@ -148,6 +153,7 @@
             async noInventory(){
 				this.get = 2
 				this.count = 0
+				this.toggle = false
             	const resData = await getselectbetweenstart_a(this.state)
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
@@ -164,6 +170,7 @@
 			async handleSearch(){
 				this.get = 1
 				this.count = 0
+				this.toggle = false
 				let times1 = this.startTime === '' ? '' : this.formatter(this.startTime)
 				let times2 = this.endTime === '' ? '' : this.formatter(this.endTime)
 				const resData = await getInventoryChild_a(times1,times2)
@@ -187,6 +194,15 @@
 				console.log(index, row)
 				this.$destroy()
 				this.$router.push('/InventoryDetails_a/'+ row.checkid)
+			},
+			async CheckInventory(index,row){
+				const resData = await getchangeStateAndInseptTwo_a(row.checkid)
+                if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
             handleAdd() {
 				this.$destroy()

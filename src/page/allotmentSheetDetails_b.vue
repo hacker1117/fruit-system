@@ -41,6 +41,10 @@
 	                  property="inreponame"
 	                  label="调入仓库">
 	               </el-table-column>
+	               <el-table-column
+	                  property="wastecount"
+	                  label="调入方报损数量">
+	               </el-table-column>
 	            </el-table>
 	            <div class="Pagination" style="text-align: left;margin-top: 10px;">
 	                <el-pagination
