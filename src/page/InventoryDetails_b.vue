@@ -195,8 +195,10 @@
 				if(this.rets === this.tableData.length){
 					this.$message("待确认盘点成功")
 					this.initData()
+					this.rets = 0
 				}else{
 					this.$message("待确认盘点失败")
+					this.rets = 0
 				}
 			},
 			async confirmAdd(){
