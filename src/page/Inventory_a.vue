@@ -129,6 +129,7 @@
                     const countData = await getInventory_a(1,10);
                     this.tableData = countData.data.data.list
                     this.count = countData.data.data.total
+					this.toggle = false
 //                  for(let i = 0;i<this.tableData.length;i++){
 //                      this.tableData[i].sta = this.tableData[i].isCreate === 0? "未盘点" : "已盘点"
 //                  }
@@ -139,11 +140,11 @@
             async stayInventory(){
 				this.get = 3
 				this.count = 0
-				this.toggle = true
             	const resData = await getsqueryStateAndInseptAndOne_a()
 				if(resData.data.code === '1111'){
 					this.tableData = resData.data.data.list
 					this.count = resData.data.data.total
+					this.toggle = true
 				} else {
 					this.$message(resData.data.message)
 					this.tableData = []
