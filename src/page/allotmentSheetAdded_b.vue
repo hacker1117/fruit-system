@@ -295,7 +295,7 @@
 			},
 			async handleSearch(){
 				console.log(this.form.switchtype)
-				if(this.form.switchtype == 2 || this.form.switchtype == 3){
+				if(this.form.switchtype == 2){
 					this.toggle = true
 					const result2 = await getProList2(this.form.pname,this.form.proid)
 					if(result2.data.code === '1111'){
@@ -307,17 +307,6 @@
 				}else{
 					this.toggle = false
 				}
-				
-//				const resData = await getInventoryChild_b(times1,times2)
-//				console.log(resData.data)
-//				if(resData.data.code === '1111'){
-//					this.tableData = resData.data.data
-//					this.count = resData.data.data.length
-//				} else {
-//					this.$message(resData.data.message)
-//					this.tableData =""
-//					this.count = 0
-//				}
 			},
             async Return() {
 				this.$destroy()

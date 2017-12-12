@@ -34,22 +34,22 @@
 		</el-row>
         <el-dialog title="新增货品" v-model="dialogFormVisible">
         <el-form :model="form1">
-			<el-form-item label="标品" :label-width="formLabelWidth">
+			<el-form-item label="标品*" :label-width="formLabelWidth">
             	<el-radio-group v-model="form1.isStandard">
 					<el-radio :label="0">否</el-radio>
 					<el-radio :label="1">是</el-radio>
 				</el-radio-group>
             </el-form-item>
-			<el-form-item label="商品编码" :label-width="formLabelWidth">
+			<el-form-item label="商品编码*" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.proid" auto-complete="off"></el-input>
             </el-form-item>
-			<el-form-item label="商品名称" :label-width="formLabelWidth">
+			<el-form-item label="商品名称*" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.pname" auto-complete="off"></el-input>
             </el-form-item>
-			<el-form-item label="规格" :label-width="formLabelWidth">
+			<el-form-item label="规格*" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.prostandered" auto-complete="off"></el-input>
             </el-form-item>
-			<el-form-item label="单位" :label-width="formLabelWidth" v-if="this.form1.isStandard === 1">
+			<el-form-item label="单位*" :label-width="formLabelWidth" v-if="this.form1.isStandard === 1">
             	<el-select v-model="form1.pronuite" placeholder="请选择计量单位">
 	                <el-option label="个" value="个"></el-option>
 	                <el-option label="瓶" value="瓶"></el-option>
@@ -60,7 +60,7 @@
 			<el-form-item label="商品属性" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.commodityattribute" auto-complete="off"></el-input>
             </el-form-item>
-			<el-form-item label="商品分类" :label-width="formLabelWidth">
+			<el-form-item label="商品分类*" :label-width="formLabelWidth">
             	<el-select v-model="form1.protype" placeholder="请选择分类">
 		            <el-option v-for="classif in classification" :key="classif.id" :label="classif.categoryname" :value="classif.categorycode"></el-option>
 		        </el-select>
@@ -74,7 +74,7 @@
 			<!--<el-form-item label="供应商编码" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.supplierid" auto-complete="off"></el-input>
             </el-form-item>-->
-			<el-form-item label="供应商" :label-width="formLabelWidth">
+			<el-form-item label="供应商*" :label-width="formLabelWidth">
 				<el-select v-model="form1.supplierid" placeholder="请选择供应商">
 					<el-option v-for="(item,index) in batchData" :key="item.id" :label="item.sname" :value="item.supplierid"></el-option>
 				</el-select>
@@ -85,7 +85,7 @@
 			<el-form-item label="创建人" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
             </el-form-item>
-			<el-form-item label="保质期时间" :label-width="formLabelWidth">
+			<el-form-item label="保质期时间*" :label-width="formLabelWidth">
             	<el-input style="width: 195px" v-model="form1.modifyman" auto-complete="off">
             		<template slot="append">天</template>
             	</el-input>
@@ -109,7 +109,7 @@
                     </el-form-item>
 					<el-form-item label="商品分类" :label-width="formLabelWidth">
 		            	<el-select v-model="form2.protype" placeholder="请选择分类">
-				            <el-option v-for="classif2 in classification" :key="classif2.id" :label="classif2.categoryname" :value="classif2.categoryname"></el-option>
+				            <el-option v-for="classif2 in classification" :key="classif2.id" :label="classif2.categoryname" :value="classif2.categorycode"></el-option>
 				        </el-select>
 		            </el-form-item>
                     <!--<el-form-item label="厂家" :label-width="formLabelWidth">
@@ -161,6 +161,10 @@
 			label="规格">
 			</el-table-column>
 			<el-table-column
+			prop="helpcode" width="120px"
+			label="商品分类">
+			</el-table-column>
+			<el-table-column
 			prop="commodityattribute" width="120px"
 			label="商品属性">
 			</el-table-column>
@@ -174,8 +178,8 @@
 			</el-table-column>
 			</el-table-column>
 			<el-table-column
-			prop="supplierid" width="120px"
-			label="供应商编码">
+			prop="barcode" width="120px"
+			label="供应商">
 			</el-table-column>
 			<el-table-column
 			prop="referenceinprice" width="120px"
@@ -273,6 +277,8 @@
 				currentPage: 1,
 				classification: [],
 				batchData: [],
+				helpcode: '',
+				barcode: '',
     		}
     	},
     	components: {
@@ -333,8 +339,19 @@
 				return res
 			},
 			async confirmAdd(){
-				console.log(this.form)
-                const goodsAdd = await addGoods(this.form1.isStandard,this.form1.proid, this.form1.pname, this.form1.prostandered, this.form1.pronuite, this.form1.commodityattribute, this.form1.protype, this.form1.factories, this.form1.brand, this.form1.supplierid, this.form1.referenceinprice, this.adminInfo.uname, this.form1.modifyman)
+				for(let i=0;i<this.classification.length;i++){
+					if(this.form1.protype === this.classification[i].categorycode){
+						this.helpcode = this.classification[i].categoryname
+					}
+					
+				}
+				for(let i=0;i<this.batchData.length;i++){
+					if(this.form1.supplierid === this.batchData[i].supplierid){
+						this.barcode = this.batchData[i].sname
+					}
+					
+				}
+                const goodsAdd = await addGoods(this.form1.isStandard,this.form1.proid, this.form1.pname, this.form1.prostandered, this.form1.pronuite, this.form1.commodityattribute, this.form1.protype, this.form1.factories, this.form1.brand, this.form1.supplierid, this.form1.referenceinprice, this.adminInfo.uname, this.form1.modifyman, this.helpcode, this.barcode)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('添加货品成功!')
                     this.form1.isStandard = 0
@@ -348,6 +365,8 @@
 					this.form1.supplierid = ""
 					this.form1.referenceinprice = ""
 					this.form1.modifyman = ""
+					this.helpcode = ""
+					this.barcode = ""
                     this.dialogFormVisible = false
                     this.initData()
                 } else {
@@ -383,7 +402,7 @@
                 this.form2.pname = row.pname
 				this.form2.prostandered = row.prostandered
 				this.form2.commodityattribute = row.commodityattribute
-				this.form2.protype = row.storagetype
+				this.form2.protype = row.protype
 				this.form2.factories = row.factories
 				this.form2.brand = row.brand
 				this.form2.sname = row.sname

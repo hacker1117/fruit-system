@@ -535,7 +535,7 @@ export const querySnameByTSupplierorder_a = () => axio('/productmanager/querySna
  * 添加商品信息
  */
 
-export const addGoods = (isStandard,proid, pname, prostandered, pronuite, commodityattribute, protype, factories, brand, supplierid, referenceinprice, createman, modifyman) => axio('/productmanager/insertProduct',{isStandard,proid, pname, prostandered, pronuite, commodityattribute, protype, factories, brand, supplierid, referenceinprice, createman, modifyman});
+export const addGoods = (isStandard,proid, pname, prostandered, pronuite, commodityattribute, protype, factories, brand, supplierid, referenceinprice, createman, modifyman, helpcode, barcode) => axio('/productmanager/insertProduct',{isStandard,proid, pname, prostandered, pronuite, commodityattribute, protype, factories, brand, supplierid, referenceinprice, createman, modifyman, helpcode, barcode});
 
 /**
  * 修改商品信息
