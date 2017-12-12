@@ -9,7 +9,7 @@
 	            <el-col :span="4" style="text-align:right;">商品分类：</el-col>
 				<el-col :span="7">
 					<el-select v-model="goodstype" placeholder="请选择商品分类">
-						<el-option v-for="item in batchData" :key="item.id" :label="item.categoryname" :value="item.categorycode"></el-option>
+						<el-option v-for="item in batchData" :key="item.id" :label="item.categoryname" :value="item.categoryname"></el-option>
 					</el-select>
 				</el-col>
 			</el-row>
