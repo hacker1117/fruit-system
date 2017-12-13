@@ -210,8 +210,14 @@
                 try{
                     const countData = await getPacking_a(1,10);
                     console.log(countData.data)
-                    this.tableData = countData.data.data.list
-                    this.count = countData.data.data.total
+                    if(countData.data.code === '1111') {
+	                    this.tableData = countData.data.data.list
+	                    this.count = countData.data.data.total
+	                }else {
+                    	this.$message(countData.data.message)
+						this.tableData = []
+						this.count = 0
+					}
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -221,6 +227,11 @@
                 const goodsAdd = await addcategory_a(this.form.packid,this.form.packagename,this.form.prostandard,this.form.packcount,this.form.prounite)
                 if(goodsAdd.data.code === '1111') {
                     this.$message('添加品类成功!')
+                    this.form.packid = ""
+                    this.form.packagename = ""
+                    this.form.prostandard = ""
+                    this.form.packcount = ""
+                    this.form.prounite = ""
 					this.dialogFormVisible = false
                     this.initData()
                 } else {

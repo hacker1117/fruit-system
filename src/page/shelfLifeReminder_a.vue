@@ -45,7 +45,7 @@
 	        </el-table-column>
 			<el-table-column
 			prop="keepdate" width="180px"
-			label="保质期时间">
+			label="过期时间">
 			</el-table-column>
 			<el-table-column
 			prop="productbatch" width="150px"
@@ -71,14 +71,14 @@
 			prop="prounite" width="120px"
 			label="单位">
 			</el-table-column>
-			<el-table-column
+			<!--<el-table-column
 			prop="remainCount" width="120px"
 			label="现存量">
 			</el-table-column>
 			<el-table-column
 			prop="inrepotimeb" width="150px"
 			label="入库时间">
-			</el-table-column>
+			</el-table-column>-->
 			<el-table-column
 			prop="createtime" width="150px"
 			label="生产时间">

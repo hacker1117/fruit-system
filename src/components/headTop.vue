@@ -7,7 +7,8 @@
 		</el-breadcrumb>
 		<el-dropdown @command="handleCommand" menu-align='start'>
 			<span style="float: left;height: 36px; line-height: 36px;"><h3>您好,{{adminInfo.uname}}&nbsp;&nbsp;&nbsp;</h3></span>
-			<img :src="baseImgPath + adminInfo.avatar" class="avator">
+			<!--<img :src="baseImgPath + adminInfo.avatar" class="avator">-->
+			<img src="http://47.95.12.49:9002/print/log.png" class="avator">
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item command="home">首页</el-dropdown-item>
 				<el-dropdown-item command="singout">退出</el-dropdown-item>

@@ -521,6 +521,12 @@ export const getSupplierDetails = (supplierid) => axio('/supplierorder/findDetal
 export const addSupplier = (supplierid,sname,supplytype,cmpanyaddress,ranks,linkman,mantelephone,mobiletelephone,taxrate,createman,createtime,remarkable,taxratenum) => axio('/supplierorder/InsertSupplierOrder',{supplierid,sname,supplytype,cmpanyaddress,ranks,linkman,mantelephone,mobiletelephone,taxrate,createman,createtime,remarkable,taxratenum},'POST');
 
 /**
+ * 修改供应商
+ */
+
+export const getupdateSupById = (supplierid, sname, supplytype, cmpanyaddress, ranks, linkman, mantelephone, mobiletelephone, taxrate, taxratenum, remarkable) => axio('/supplierorder/updateSupById',{supplierid, sname, supplytype, cmpanyaddress, ranks, linkman, mantelephone, mobiletelephone, taxrate, taxratenum, remarkable});
+
+/**
  * 获取货品列表
  */
 
@@ -694,6 +700,18 @@ export const getstartUser = (uid) => axio('/user/startUser', {uid});
  */
 
 export const getRoleAll = () => axio('/user/addUserOnload');
+
+/**
+ * 配置管理-角色权限 禁用
+ */
+
+export const getdisbaledRole = (roleid) => axio('/RoleManage/disbaledRole', {roleid});
+
+/**
+ * 配置管理-角色权限 启用
+ */
+
+export const getenabledRole = (roleid) => axio('/RoleManage/enabledRole', {roleid});
 
 /**
  * 添加用户

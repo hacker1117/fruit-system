@@ -23,6 +23,10 @@
 			stripe
 			style="margin-top:20px;text-align:left;">
 			<el-table-column
+			prop="state" width="120px"
+			label="角色权限状态">
+			</el-table-column>
+			<el-table-column
 			prop="roleid"
 			label="角色ID">
 			</el-table-column>
@@ -36,9 +40,12 @@
 				<el-button
 				size="small"
 				@click="handleEdit(scope.$index, scope.row)">绑定页面</el-button>
+                 <el-button
+                size="mini"
+                @click="disable(scope.$index, scope.row)">禁用</el-button>
                 <el-button
-				size="small"
-				@click="handleEdit(scope.$index, scope.row)">删除</el-button>
+                size="mini"
+                @click="enable(scope.$index, scope.row)">启用</el-button>
 			</template>
 			</el-table-column>
 		</el-table>
@@ -48,7 +55,7 @@
 
 <script>
     import headTop from '@/components/headTop'
-    import {getRoleAll, addRole} from '@/api/getData'
+    import {getRoleAll, addRole, getdisbaledRole, getenabledRole} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -90,6 +97,9 @@
 					const dataReceipt = await getRoleAll()
 					console.log('re: ',dataReceipt.data.data)
 					this.receiptData = dataReceipt.data.data
+					for(let i = 0;i<this.receiptData.length;i++){
+                       	 this.receiptData[i].state = this.receiptData[i].isDelete=== 0 ? "启用" : "禁用"
+                    	}
     			}catch(err){
     				console.log(err);
     			}
@@ -98,6 +108,26 @@
 				console.log(index,row)
 				this.$destroy()
 				this.$router.push('/roleDetails/'+ row.roleid)
+			},
+			async disable(index,row) {
+				console.log(row.roleid)
+				const resData = await getdisbaledRole(row.roleid)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+				}
+			},
+			async enable(index,row) {
+				console.log(row.roleid)
+				const resData = await getenabledRole(row.roleid)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+				}
 			},
 			formatter(date){
 				console.log(date.getMonth())

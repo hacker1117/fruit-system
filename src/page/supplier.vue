@@ -10,7 +10,6 @@
             <el-col :span="2" style="text-align:right;">联系人电话：</el-col>
 			<el-col :span="4"><el-input v-model="mantelephone" siez="mini" placeholder="请输入内容"></el-input></el-col>
 		</el-row>
-
 		<el-row>
 			<el-col :span="24"><el-button style="float: right;" @click="handleSearch" type="primary">查询</el-button></el-col>
 		</el-row>
@@ -20,50 +19,93 @@
 			</el-col>
 		</el-row>
         <el-dialog title="新增供应商" v-model="dialogFormVisible">
-        <el-form :model="form">
-			<el-form-item label="供应商编码" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.supplierid" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="供应商名称" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.sname" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="公司性质" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.supplytype" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="供应商地址" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.cmpanyaddress" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="供应商级别" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.ranks" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="联系人姓名" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.linkman" auto-complete="off"></el-input>
-            </el-form-item>
-			<el-form-item label="联系人电话" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.mantelephone" auto-complete="off" placeholder="请输入数字"></el-input>
-            </el-form-item>
-			<el-form-item label="联系人手机号" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.mobiletelephone" auto-complete="off" placeholder="请输入数字"></el-input>
-            </el-form-item>
-			<el-form-item label="税率" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.taxrate" auto-complete="off" placeholder="请输入数字">
-            		<template slot="append">%</template>
-            	</el-input>
-            </el-form-item>
-			<el-form-item label="税号" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.taxratenum" auto-complete="off" placeholder="请输入数字"></el-input>
-            </el-form-item>
-			<el-form-item label="创建人" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
-           </el-form-item>
-			<el-form-item label="备注" :label-width="formLabelWidth">
-            	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="confirmAdd">确 定</el-button>
-        </div>
+	        <el-form :model="form">
+				<el-form-item label="供应商编码" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.supplierid" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="供应商名称" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.sname" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="公司性质" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.supplytype" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="供应商地址" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.cmpanyaddress" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="供应商级别" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.ranks" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="联系人姓名" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.linkman" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="联系人电话" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.mantelephone" auto-complete="off" placeholder="请输入数字"></el-input>
+	            </el-form-item>
+				<el-form-item label="联系人手机号" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.mobiletelephone" auto-complete="off" placeholder="请输入数字"></el-input>
+	            </el-form-item>
+				<el-form-item label="税率" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.taxrate" auto-complete="off" placeholder="请输入数字">
+	            		<template slot="append">%</template>
+	            	</el-input>
+	            </el-form-item>
+				<el-form-item label="税号" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.taxratenum" auto-complete="off" placeholder="请输入数字"></el-input>
+	            </el-form-item>
+				<el-form-item label="创建人" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="adminInfo.uname" auto-complete="off" :disabled="true"></el-input>
+	           </el-form-item>
+				<el-form-item label="备注" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form.remarkable" auto-complete="off"></el-input>
+	            </el-form-item>
+	        </el-form>
+	        <div slot="footer" class="dialog-footer">
+	            <el-button @click="dialogFormVisible = false">取 消</el-button>
+	            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+	        </div>
+        </el-dialog>
+        <el-dialog title="修改供应商" v-model="dialogFormVisible1">
+	        <el-form :model="form1">
+				<el-form-item label="供应商编码" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.supplierid" auto-complete="off" :disabled="true"></el-input>
+	            </el-form-item>
+				<el-form-item label="供应商名称" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.sname" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="公司性质" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.supplytype" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="供应商地址" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.cmpanyaddress" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="供应商级别" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.ranks" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="联系人姓名" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.linkman" auto-complete="off"></el-input>
+	            </el-form-item>
+				<el-form-item label="联系人电话" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.mantelephone" auto-complete="off" placeholder="请输入数字"></el-input>
+	            </el-form-item>
+				<el-form-item label="联系人手机号" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.mobiletelephone" auto-complete="off" placeholder="请输入数字"></el-input>
+	            </el-form-item>
+				<el-form-item label="税率" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.taxrate" auto-complete="off" placeholder="请输入数字">
+	            		<template slot="append">%</template>
+	            	</el-input>
+	            </el-form-item>
+				<el-form-item label="税号" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.taxratenum" auto-complete="off" placeholder="请输入数字"></el-input>
+	           </el-form-item>
+				<el-form-item label="备注" :label-width="formLabelWidth">
+	            	<el-input style="width: 195px" v-model="form1.remarkable" auto-complete="off"></el-input>
+	            </el-form-item>
+	        </el-form>
+	        <div slot="footer" class="dialog-footer">
+	            <el-button @click="dialogFormVisible1 = false">取 消</el-button>
+	            <el-button type="primary" @click="AscertainingModification">确 定</el-button>
+	        </div>
         </el-dialog>
 		<el-table
 			:data="receiptData"
@@ -115,8 +157,15 @@
 			label="税号">
 			</el-table-column>
 			<el-table-column
-			label="操作" fixed="right" width="120px">
+			prop="remarkable" width="120px"
+			label="备注">
+			</el-table-column>
+			<el-table-column
+			label="操作" fixed="right" width="170px">
                 <template scope="scope">
+                    <el-button
+                    size="mini"
+                    @click="modify(scope.$index, scope.row)">修改</el-button>
                     <el-button
                     size="mini"
                     @click="disable(scope.$index, scope.row)">禁用</el-button>
@@ -142,7 +191,7 @@
 <script>
     import headTop from '@/components/headTop'
     import {mapActions, mapState} from 'vuex'
-    import {getSupplierAll, querySupplierList, addSupplier,transmitDisable,transmitEnable} from '@/api/getData'
+    import {getSupplierAll, querySupplierList, addSupplier,transmitDisable,transmitEnable, getupdateSupById} from '@/api/getData'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
     	data(){
@@ -166,8 +215,23 @@
 					createtime: '',
 					remarkable: '',
 				},
+				form1: {
+					supplierid: '',
+					sname: '',
+					supplytype: '',
+					cmpanyaddress: '',
+					ranks: '',
+					linkman: '',
+					mantelephone: '',
+					mobiletelephone: '',
+					taxrate: '',
+					createman: '',
+					createtime: '',
+					remarkable: '',
+				},
 				formLabelWidth: '120px',
 				dialogFormVisible: false,
+				dialogFormVisible1: false,
 				supplytype: '',
 				sname: '',
 				mantelephone: '',
@@ -208,6 +272,22 @@
 				this.$destroy()
 				this.$router.push('/supplierDetails/'+ row.supplierid)
 			},
+			async AscertainingModification(){
+				const resData = await getupdateSupById(this.form1.supplierid, this.form1.sname, this.form1.supplytype, this.form1.cmpanyaddress, this.form1.ranks, this.form1.linkman, this.form1.mantelephone, this.form1.mobiletelephone, this.form1.taxrate, this.form1.taxratenum, this.form1.remarkable)
+				if(resData.data.code === '1111'){
+					this.$message(resData.data.message)
+					this.dialogFormVisible1 = false
+					this.initData()
+				} else {
+					this.$message(resData.data.message)
+					this.receiptData = []
+					this.count = 0
+				}
+			},
+			async modify(index,row){
+				this.dialogFormVisible1 = true
+				this.form1 = row
+			},
 			async disable(index,row) {
 //				console.log(index,row)
 				console.log(row.supplierid)
@@ -217,8 +297,6 @@
 					this.initData()
 				} else {
 					this.$message(resData.data.message)
-					this.receiptData = []
-					this.count = 0
 				}
 			},
 			async enable(index,row) {
@@ -230,8 +308,6 @@
 					this.initData()
 				} else {
 					this.$message(resData.data.message)
-					this.receiptData = []
-					this.count = 0
 				}
 			},
 			async handleSearch(){
